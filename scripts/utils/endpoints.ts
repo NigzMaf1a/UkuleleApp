@@ -23,6 +23,15 @@ const endpoints = {
     updateContacts:'/api/contacts/add',
     updateUser:'/api/',
     addUser:'/api/customer/add',
-    loggedUser:'/api/admin/logged'
+    loggedUser:'/api/admin/logged',
+    bookBand:'/api/customer/',
+    hireSound:'/api/customer/',
+    makePayment:'/api/customer/',
+    addFeedback:'/api/customer/',
+    getFeedback:'/api/customer/',
+    getBookingHistory:'/api/customer/',
+    getHireHistory:'/api/customer/',
+    getPaymentHistory:'/api/customer/',
+    penaltyHistory:'/api/customer/'
 };
 export default endpoints;

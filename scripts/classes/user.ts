@@ -1,10 +1,12 @@
 import classApiFetch from "../utils/classApiFetch";
 import link from "../utils/links";
+import endpoints from "../utils/endpoints";
 
 export default class User {
   private readonly regID: number;
   private readonly token: string;
   public url: string;
+  public endpoints: typeof endpoints;
 
   constructor(regID: number, token: string, backendUrl: string = link) {
     if (!token || !regID) {
@@ -15,6 +17,7 @@ export default class User {
     this.regID = regID;
     this.token = token;
     this.url = backendUrl;
+    this.endpoints = endpoints;
   }
 
   getToken(): string {
@@ -25,7 +28,7 @@ export default class User {
     return this.regID;
   }  
 
-  private apiFetch = async <T = unknown>(
+  public apiFetch = async <T = unknown>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> => {
