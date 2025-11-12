@@ -1,37 +1,83 @@
+import { add } from "react-native/types_generated/Libraries/Animated/AnimatedExports";
+
 const endpoints = {
     login:'/api/',
     logout:'/api/',
-    fetchPendingUsers:'/api/admin/users/pending',
-    fetchApprovedUsers:'/api/admin/users/approved',
-    fetchInactiveUsers:'/api/admin/users/inactive',
-    fetchAllUsers:'/api/admin/users/all',
-    approveUser: '/api/admin/approve',      // PATCH /approve/:regID
-    deactivateUser: '/api/admin/deactivate',// PATCH /deactivate/:regID
-    reactivateUser: '/api/admin/activate',
-    fetchFeedback:'/api/admin/feedback',
-    fetchAbout:'/api/admin/about',
-    fetchContacts:'/api/admin/contacts',
-    fetchBookings:'/api/admin/bookings',
-    fetchLending:'/api/admin/lending',
-    fetchPenalties:'/api/admin/penalties',
-    fetchInpections:'/api/admin/inspection',
-    fetchInventory:'/api/admin/inventory',
-    fetchFinances:'/api/admin/finances',
-    fetchSupplies:'/api/admin/supplies',
-    addFeedbackResponse:'/api/feedback/put',
-    updateAbout:'/api/admin/about/update',
-    updateContacts:'/api/contacts/add',
-    updateUser:'/api/',
-    addUser:'/api/customer/add',
-    loggedUser:'/api/admin/logged',
-    bookBand:'/api/customer/',
-    hireSound:'/api/customer/',
-    makePayment:'/api/customer/',
-    addFeedback:'/api/customer/',
-    getFeedback:'/api/customer/',
-    getBookingHistory:'/api/customer/',
-    getHireHistory:'/api/customer/',
-    getPaymentHistory:'/api/customer/',
-    penaltyHistory:'/api/customer/'
+
+    //inventory
+    addEquipment:'/api/inventory/add',
+    getAllEquipment:'/api/inventory/get',
+    getEquipmentById:'/api/inventory/get/byid/',
+    updateEquipment:'/api/inventory/put/',
+    deleteEquipment:'/api/inventory/delete/',
+
+    //payments
+    addPayment:'/api/payment/add',
+    getAllPayments:'/api/payment/get',
+    getPaymentById:'/api/payment/get/',
+    updatePayment:'/api/payment/put/',
+    deletePayment:'/api/payment/delete/',
+
+    //contacts
+    addContact:'/api/contacts/add',
+    getContacts:'/api/contacts/get',
+
+    //services - check up dis ones man
+    addService:'/api/services/add',
+    getAllServices:'/api/services/get',
+    getServiceById:'/api/services/get/byid/',
+    updateService:'/api/services/put/',
+    updateServiceStatus:'/api/services/',
+    updatePaymentStatus:'/api/services/',
+    deleteService:'/api/services/delete/',
+
+    //booking
+    bookBand:'/api/booking/add',
+    getAllBookings:'/api/booking/get',
+    getBookingById:'/api/booking/get/byid/',
+    updateBooking:'/api/booking/put/',
+    deleteBooking:'/api/booking/delete/',
+
+    //lending
+    lendEquipment:'/api/lending/add',
+    getAllLentEquipment:'/api/lending/get',
+    getLentEquipmentById:'/api/lending/get/byid/',
+    updateLentEquipment:'/api/lending/put/',
+    deleteLentEquipment:'/api/lending/delete/',
+
+    //dispatch
+    addDispatch:'/api/dispatch/add',
+    getAllDispatches:'/api/dispatch/get',
+    getDispatchById:'/api/dispatch/get/byid/',
+    updateDispatch:'/api/dispatch/put/',
+    deleteDispatch:'/api/dispatch/delete/',
+
+    //feedback
+    addFeedback:'/api/feedback/add',
+    getAllFeedback:'/api/feedback/get',
+    updateFeedback:'/api/feedback/put/',
+    deleteFeedback:'/api/feedback/delete/',
+
+    //finance
+    addFinance:'/api/finance/add',
+    getAllFinance:'/api/finance/get',
+    getFinanceById:'/api/finance/get/byid/',
+    updateFinance:'/api/finance/put/',
+    deleteFinance:'/api/finance/delete/',
+
+    //supply
+    addSupply:'/api/supply/add',
+    getAllSupplies:'/api/supply/get',
+    getSupplyById:'/api/supply/get/byid/',
+    updateSupply:'/api/supply/put/',
+    deleteSupply:'/api/supply/delete/',
+
+    //penalty
+    addPenalty:'/api/penalty/add',
+    getAllPenalties:'/api/penalty/get',
+    getPenaltyById:'/api/penalty/get/byid/',
+    updatePenalty:'/api/penalty/put',
+    deletePenalty:'/api/penalty/delete',
+
 };
 export default endpoints;
