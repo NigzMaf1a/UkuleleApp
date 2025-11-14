@@ -23,14 +23,14 @@ export default class Customer extends User{
     }
     async hireSound(): Promise<void>{
         try{
-            await this.apiFetch(this.endpoints.hireSound, {method: "POST"});
+            await this.apiFetch(this.endpoints.lendEquipment, {method: "POST"});
         }catch(error){
             console.error("Error hiring sound:", error);
         }
     }
     async makePayment():Promise<void>{
         try{
-            await this.apiFetch(this.endpoints.makePayment, {method: "POST"});
+            await this.apiFetch(this.endpoints.addFinance, {method: "POST"});
         }catch(error){
             console.error("Error making payment:", error);
         }
@@ -44,7 +44,7 @@ export default class Customer extends User{
     }
     async getFeedback(): Promise<Feedback[]>{
         try{
-            return await this.apiFetch<Feedback[]>(this.endpoints.getFeedback);
+            return await this.apiFetch<Feedback[]>(this.endpoints.getAllFeedback);
         }catch(error){
             console.error("Error getting feedback:", error);
             return [];
@@ -52,7 +52,7 @@ export default class Customer extends User{
     }
     async getBookingHistory(): Promise<Booking[]>{
         try{
-            return await this.apiFetch<Booking[]>(this.endpoints.getBookingHistory);
+            return await this.apiFetch<Booking[]>(this.endpoints.getAllBookings);
         }catch(error){
             console.error("Error getting booking history:", error);
             return [];
@@ -60,7 +60,7 @@ export default class Customer extends User{
     }
     async getHireHistory(): Promise<Lending[]>{
         try{
-            return await this.apiFetch<Lending[]>(this.endpoints.getHireHistory);
+            return await this.apiFetch<Lending[]>(this.endpoints.getAllLentEquipment);
         }catch(error){
             console.error("Error getting hire history:", error);
             return [];
@@ -68,7 +68,7 @@ export default class Customer extends User{
     }
     async getPaymentHistory(): Promise<Finance[]>{
         try{
-            return await this.apiFetch<Finance[]>(this.endpoints.getPaymentHistory);
+            return await this.apiFetch<Finance[]>(this.endpoints.getAllFinance);
         }catch(error){
             console.error("Error getting payment history:", error);
             return [];
@@ -76,7 +76,7 @@ export default class Customer extends User{
     }
     async getPenaltyHistory(): Promise<Penalty[]>{
         try{
-            return await this.apiFetch<Penalty[]>(this.endpoints.penaltyHistory);
+            return await this.apiFetch<Penalty[]>(this.endpoints.getAllPenalties);
         }catch(error){
             console.error("Error getting penalty history:", error);
             return [];

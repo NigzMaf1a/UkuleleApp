@@ -1,5 +1,3 @@
-import { add } from "react-native/types_generated/Libraries/Animated/AnimatedExports";
-
 const endpoints = {
     login:'/api/',
     logout:'/api/',
