@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-const styles = StyleSheet.create({
+const structure = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center"
   }
-  
+
 });
-export default styles;
+
+export default structure;
