@@ -1,9 +1,12 @@
+import { Genre } from "../enums/services";
+
 export default interface Booking {
     BookingID: number;
-    Genre: 'Reggae' | 'Rhumba' | 'Zilizopendwa' | 'Benga' | 'Soul' | 'RnB';
+    Genre: Genre;
     BookingDate: number;
     Cost: number;
     Hours: number;
     ServiceID: number;
-    BookingStatus: 'Done' | 'Yet';
+    BookStatus: 'Tick' | 'Untick';
+    Performed: 'Yes' | 'No';
 }

@@ -1,3 +1,4 @@
+import { Status } from "./finance";
 export default interface Services {
     ServiceID: number;
     CustomerID: number;
@@ -6,5 +7,5 @@ export default interface Services {
     Hours: number;
     ServiceType:'Lending' | 'Booking';
     ServiceStatus: 'Approved' | 'Pending';
-    PaymentStatus: 'Paid' | 'Not Paid';
+    PaymentStatus: Status;
 }

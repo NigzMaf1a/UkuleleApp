@@ -3,6 +3,11 @@ import link from '../utils/links';
 
 //interfaces
 import Supply from '../interfaces/supply';
+import Order from '../interfaces/orders';
+import { OrderStatus } from '../enums/order';
+
+//utils
+import errorLogger from '../utils/errorLogger';
 
 export default class Supplier extends User{
     constructor(regId:number, token:string, backendUrl:string = link){
@@ -39,6 +44,30 @@ export default class Supplier extends User{
             await this.apiFetch(`${this.endpoints.deleteSupply}/${supplyId}`,  {method: 'DELETE'});
         } catch(error){
             throw error;
+        }
+    }
+
+    async getOrders():Promise<Order[]>{
+        try {
+            return await this.apiFetch<Order[]>(this.endpoints.getAllOrders);
+        } catch(err) {
+            errorLogger(err);
+            return [];
+        }
+    }
+    async updateOrder(id:number){
+        let order_status:Partial<Order> = {
+            OrderStatus:OrderStatus.Hauled
+        }
+        try{
+            await this.apiFetch(this.endpoints.updateOrder(id), 
+                {
+                    method:"PUT",
+                    body:JSON.stringify(order_status)
+                }
+            );
+        } catch(err){
+            errorLogger(err);
         }
     }
 }

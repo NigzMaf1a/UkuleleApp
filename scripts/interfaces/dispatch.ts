@@ -1,3 +1,5 @@
+import DispatchStatus from "../enums/dispatch";
+
 export default interface Dispatch {
     DispatchID: number;
     CustomerID: number;
@@ -5,6 +7,6 @@ export default interface Dispatch {
     dLocation: string;
     ServiceID: number;
     PhoneNo: string;
-    Dispatched: 'Yes' | 'No';
+    Dispatched: DispatchStatus;
     DispatchDate: string;
 }

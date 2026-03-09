@@ -7,5 +7,12 @@ export default interface Finance {
     TransactionDate: string;
     Amount: number;
     TransactType:'Deposit' | 'Payment';
+    TransactionStatus:Status;
     ServiceID:number;
+}
+
+export enum Status{
+    Pending = 'Pending',
+    Approved = 'Approved',
+    Rejected = 'Rejected'
 }

@@ -1,0 +1,44 @@
+import React from 'react';
+import { View } from 'react-native';
+
+//components
+import Button from '../components/Button';
+import Input from '../components/Input';
+
+//styles
+import { cardStyles } from '../styles/cardStyles';
+
+interface InputPlusButtonProps{
+    inputPlaceholder:string;
+    inputPlaceholderTextColor?:string;
+    inputValue:string;
+    onInputChange:(par:string) => void;
+    btnLabel:string;
+    btnFun:(par:string) => Promise<void> | void;
+}
+
+export default function InputPlusButton({
+    inputPlaceholderTextColor,
+    inputValue,
+    inputPlaceholder,
+    onInputChange,
+    btnLabel,
+    btnFun
+}:InputPlusButtonProps) {
+
+  return (
+    <View style={cardStyles.strip}>
+        <Input
+            placeholder={inputPlaceholder}
+            placeholderTextColor={inputPlaceholderTextColor}
+            value={inputValue}
+            onChange={onInputChange}
+        />
+
+        <Button
+            label={btnLabel}
+            onPress={() => btnFun(inputValue)}
+        />
+    </View>
+  );
+}

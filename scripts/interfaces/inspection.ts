@@ -1,8 +1,10 @@
+import { EquipmentCondition } from "../enums/equipment";
+
 export default interface Inspection {
     EquipmentID:number;
     ServiceID:number;
     InspectionID:number;
     InspectionDate:string;
     InspectorName:string;
-    dCondition: 'CAT1' | 'CAT2' | 'CAT3' | 'CAT4';
+    dCondition: EquipmentCondition;
 }
