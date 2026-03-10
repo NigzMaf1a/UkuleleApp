@@ -1,18 +1,20 @@
-import React, {useState} from 'react';
-import { StyleSheet, Text } from 'react-native';
+import React from "react";
+import { Text, StyleSheet } from "react-native";
+import { typography } from "../styles/typography";
 
-import { typography } from '../styles/typography';
-
-interface DispTextProps{
+interface DispTextProps {
   text: string;
-  textColor?:string;
+  textColor?: string;
 }
 
-const styles = StyleSheet.create({});
-
-export default function DispText({text, textColor}:DispTextProps) {
+export default function DispText({ text, textColor }: DispTextProps) {
   return (
-    <Text style={[typography.h1.fontSize]}>
+    <Text
+      style={[
+        typography.h1,
+        textColor && { color: textColor }
+      ]}
+    >
       {text}
     </Text>
   );
