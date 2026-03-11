@@ -7,5 +7,5 @@ export default interface Services {
     Hours: number;
     ServiceType:'Lending' | 'Booking';
     ServiceStatus: 'Approved' | 'Pending';
-    PaymentStatus: Status;
+    PaymentStatus?: Status;
 }

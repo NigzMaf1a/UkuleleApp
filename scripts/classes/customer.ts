@@ -8,10 +8,12 @@ import Lending from "../interfaces/lending";
 import Finance from "../interfaces/finance";
 import Penalty from "../interfaces/penalty";
 import Services from "../interfaces/services";
+import { PenaltyPayment } from "../interfaces/penaltyPayment";
 
 //utils
 import errorLogger from "../utils/errorLogger";
 import { PenaltyStatus } from "../enums/penalty";
+import date from "../utils/date";
 
 
 export default class Customer extends User{
@@ -118,11 +120,18 @@ export default class Customer extends User{
         }
     }
 
-    async payPenalty(id:number, amount:number){
+    async payPenalty(id:number, code:string, amount:number){
         let penalty_status:PenaltyStatus = PenaltyStatus.Processing;
         let penalty_pay:Partial<Penalty> = {
             Penalty:amount,
             PenaltyStatus:penalty_status
+        }
+
+        let penaltyPayment:PenaltyPayment = {
+            PenaltyID:id,
+            PaymentCode:code,
+            PaymentDate:date(),
+            Amount:amount
         }
 
         try{
@@ -132,6 +141,11 @@ export default class Customer extends User{
                     body:JSON.stringify(penalty_pay)
                 }
             );
+
+            await this.apiFetch(this.endpoints.addPenaltyPayment, {
+                method:"POST",
+                body:JSON.stringify(penaltyPayment)
+            });
         } catch(err){
             errorLogger(err);
         }

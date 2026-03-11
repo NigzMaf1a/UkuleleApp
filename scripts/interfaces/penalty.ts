@@ -1,7 +1,7 @@
 import { PenaltyStatus } from "../enums/penalty";
 
 export default interface Penalty {
-    PenaltyID: number;
+    PenaltyID?: number;
     EquipmentID: number;
     CustomerID:number;
     Description: 'Speaker' | 'Microphone' | 'Mixer' | 'CDJ' | 'Cable' | 'Wireless';

@@ -9,7 +9,10 @@ interface ScreenProps{
 
 export default function ScrollScreen({children}:ScreenProps) {
   return (
-    <ScrollView style={containerStyles.screen}>
+    <ScrollView style={containerStyles.screen}
+                showsVerticalScrollIndicator = {false}
+                showsHorizontalScrollIndicator = {false}
+    >
         {children}
     </ScrollView>
   );

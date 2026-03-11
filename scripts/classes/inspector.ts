@@ -5,6 +5,7 @@ import link from "../utils/links";
 import Inspection from "../interfaces/inspection";
 import Inventory from "../interfaces/inventory";
 import AllocatedEquipment from "../interfaces/allocatedEquipment";
+import Penalty from "../interfaces/penalty";
 
 //utils
 import errorLogger from "../utils/errorLogger";
@@ -57,6 +58,19 @@ export default class Inspector extends User {
                 {
                     method:"PUT",
                     body:JSON.stringify(inspected)
+                }
+            );
+        } catch(err){
+            errorLogger(err);
+        }
+    }
+
+    async penalizeDamage(pen:Penalty){
+        try{
+            await this.apiFetch(this.endpoints.addPenalty, 
+                {
+                    method:"POST",
+                    body:JSON.stringify(pen)
                 }
             );
         } catch(err){

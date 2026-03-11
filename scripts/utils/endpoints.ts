@@ -106,7 +106,26 @@ const endpoints = {
     //registration
     addUser:'/api/user/add',
     getAllUsers:'/api/user/get',
-    updateUser:(id:number) => `/api/user/update/${id}`
+    updateUser:(id:number) => `/api/user/update/${id}`,
+
+    //penalty payment
+    addPenaltyPayment: '/api/penaltyPayment/add',
+    getPenaltyPayment: '/api/penaltyPayment/get',
+    getPenaltyPaymentById:(id:number) => `/api/penaltyPayment/get/${id}`,
+    updatePenaltyPayment:(id:number) => `/api/penaltyPayment/update/${id}`,
+
+    //order payment
+    addOrderPayment: '/api/orderPayment/add',
+    getOrderPayment: '/api/orderPayment/get',
+    getOrderPaymentById:(id:number) => `/api/orderPayment/get/${id}`,
+    updateOrderPayment:(id:number) => `/api/orderPayment/update/${id}`,
+
+    //order item
+    addOrderItem: '/api/orderItem/add',
+    getOrderItem: '/api/orderItem/get',
+    getOrderItemById:(id:number) => `/api/orderItem/get/${id}`,
+    updateOrderItem:(id:number) => `/api/orderItem/update/${id}`
+
 
 };
 export default endpoints;

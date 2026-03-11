@@ -5,9 +5,12 @@ import link from "../utils/links";
 import Finance from "../interfaces/finance";
 import Services from "../interfaces/services";
 import { Status } from "../interfaces/finance";
+import Penalty from "../interfaces/penalty";
 
 //enums
 import { PaymentStatus } from "../enums/services";
+import { PenaltyStatus } from "../enums/penalty";
+import errorLogger from "../utils/errorLogger";
 
 export default class Accountant extends User{
     constructor(regID: number, token: string, backendUrl: string = link){
@@ -33,6 +36,22 @@ export default class Accountant extends User{
 
         }catch(error){
             console.error("Error approving payment:", error);
+        }
+    }
+
+    async approvePenaltyPayment(id:number){
+        let status:Partial<Penalty> = {
+            PenaltyStatus:PenaltyStatus.Paid
+        }
+        try{
+            await this.apiFetch(this.endpoints.updatePenalty(id),
+                {
+                    method:"PUT",
+                    body:JSON.stringify(status)
+                }
+            );
+        } catch(err){
+            errorLogger(err);
         }
     }
 

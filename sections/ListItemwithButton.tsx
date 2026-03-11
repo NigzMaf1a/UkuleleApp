@@ -17,7 +17,7 @@ interface ItemProps{
   buttonLabel:string;
   rowOneData:Row;
   rowTwoData:Row;
-  fun:(par?:string | number) => Promise<void>
+  fun:(par?:string | number) => Promise<void> | void;
 }
 
 export default function ListItemWithButton({buttonLabel, rowOneData, rowTwoData, fun}:ItemProps) {

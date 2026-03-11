@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-//interfaces
+// interfaces
 import User from "../interfaces/user";
 
 /**
@@ -26,15 +26,20 @@ function jsonParser<T>(val: string | null): T | null {
 const storage = {
 
     /**
-     * Store token and user profile safely
+     * Store token, role and user profile safely
      */
-    set: async function (token: string, thisUser: User): Promise<void> {
+    set: async function (
+        token: string,
+        role: string,
+        thisUser: User
+    ): Promise<void> {
 
         // remove sensitive data
         const { password, ...safeUser } = thisUser;
 
         await AsyncStorage.multiSet([
-            ['token', token], // store raw string
+            ['token', token],
+            ['role', role],
             ['profile', jsonStringifier(safeUser)]
         ]);
     },
@@ -42,13 +47,23 @@ const storage = {
     get: {
 
         /**
-         * Get token safely
+         * Get token
          */
         key: async function (): Promise<string | null> {
 
             const token = await AsyncStorage.getItem('token');
 
-            return token; // already string | null
+            return token;
+        },
+
+        /**
+         * Get stored role
+         */
+        role: async function (): Promise<string | null> {
+
+            const role = await AsyncStorage.getItem('role');
+
+            return role;
         },
 
         /**
@@ -63,11 +78,15 @@ const storage = {
     },
 
     /**
-     * Clear all storage
+     * Clear stored session
      */
     clear: async function (): Promise<void> {
 
-        await AsyncStorage.multiRemove(['token', 'profile']);
+        await AsyncStorage.multiRemove([
+            'token',
+            'role',
+            'profile'
+        ]);
 
     }
 };

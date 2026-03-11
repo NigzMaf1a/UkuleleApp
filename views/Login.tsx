@@ -25,7 +25,7 @@ export default function Login() {
 
   const handleLogin = async () => {
     const {token, user}:LoginResponse = await loginUser({email, password});
-    if(user !== undefined) await storage.set(token, user);
+    if(user !== undefined) await storage.set(token, user, user.regType);
   };
 
   return (
