@@ -1,5 +1,5 @@
 export default interface OrderPayment{
-    OrderPayID: number;
+    OrderPayID?: number;
     OrderID:number;
     PaymentCode:string;
     PaymentDate:Date;

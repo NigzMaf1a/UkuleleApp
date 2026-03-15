@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
-function MceeApprovePerformance() {
+import SoundSystemApproveLending from '../../../sections/SoundSystemApproveLending';
+
+export default function MceeApprovePerformance() {
   return (
-    <div>MceeApprovePerformance</div>
-  )
+    <SoundSystemApproveLending/>
+  );
 }
-
-export default MceeApprovePerformance

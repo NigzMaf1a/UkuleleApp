@@ -2,9 +2,9 @@ export default interface Finance {
     CustomerID: number;
     Name: string;
     PhoneNo: string;
-    TransactionID: number;
+    TransactionID?: number;
     TransactionName:string;
-    TransactionDate: string;
+    TransactionDate: Date;
     Amount: number;
     TransactType:'Deposit' | 'Payment';
     TransactionStatus:Status;

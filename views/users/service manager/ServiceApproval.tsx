@@ -44,7 +44,7 @@ export default function ServiceApproval() {
                                                                           buttonLabel={'Approve'}
                                                                           rowOneData={{label:'Type', text:s.ServiceType}}
                                                                           rowTwoData={{label:'Amount', text:String(s.Cost)}}
-                                                                          fun={() => approveService(s.ServiceID)}
+                                                                          fun={() => approveService(s.ServiceID as number)}
             />) : <DispText text={'No unapproved services found'}/>
         }
     </ScrollScreen>

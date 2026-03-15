@@ -42,7 +42,7 @@ export default function InspectorDashboard(){
                 {
                     inspections.length > 0 ? inspections.map((i) => <ListItem key={i.InspectionID}
                                                                               rowOneData={{label:'Inspection Id:', text:String(i.InspectionID)}}
-                                                                              rowTwoData={{label:'Date', text:i.InspectionDate}}
+                                                                              rowTwoData={{label:'Date', text:String(i.InspectionDate)}}
                                                                               rightSideText={describer(i.dCondition)}                                                      
                     />) : <DispText text="No current inspections"/>           
                 }

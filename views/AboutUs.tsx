@@ -11,7 +11,7 @@ import About from '../scripts/interfaces/about';
 import User from '../scripts/classes/user';
 
 //styles
-import texts from '../styles/text';
+import { typography } from '../styles/typography';
 
 //auth
 import storage from '../scripts/auth/storage';
@@ -33,7 +33,7 @@ export default function AboutUs() {
     }, []);
   return (
     <ScrollScreen>
-        <Text style={texts.text_normal}>{about?.detail}</Text>
+        <Text style={typography.body}>{about?.detail}</Text>
     </ScrollScreen>
   );
 }

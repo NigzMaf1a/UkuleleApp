@@ -9,6 +9,7 @@ import InputPlusButton from '../../../sections/InputPlusButton';
 
 //interfaces
 import Feedback from '../../../scripts/interfaces/feedback';
+import Users from '../../../scripts/interfaces/user';
 
 //scripts
 import Customer from '../../../scripts/classes/customer';
@@ -20,9 +21,20 @@ export default function CustomerFeedback() {
     const[customer, setCustomer] = useState<Customer>();
     const[feedback, setFeedback] = useState<Feedback[]>([]);
     const[newFeedback, setNewFeedback] = useState<string>('');
+    const [user, setUser] = useState<Users>();
+    const [rating] = useState<number>(4);
 
     async function addFeedback(feed:Feedback){
         await customer?.addFeedback(feed);
+    }
+
+    async function getCurrentUser(){
+        if(customer){
+            const thisUser = await customer.getUser();
+            if(thisUser !== undefined){
+                setUser(thisUser);
+            }
+        }
     }
 
     useEffect(()=>{
@@ -34,36 +46,39 @@ export default function CustomerFeedback() {
                 const feed = await cust?.getFeedback();
 
                 setCustomer(cust);
-                setFeedback(feed);                
+                setFeedback(feed);  
+                await getCurrentUser();
             }
         })();
     }, []);
 
   return (
     <Screen>
-<InputPlusButton
-    inputPlaceholder='Enter feedback here'
-    inputValue={newFeedback}
-    onInputChange={setNewFeedback}
-    btnLabel='Submit'
-    btnFun={async (text:string) => {
+        <InputPlusButton
+            inputPlaceholder='Enter feedback here'
+            inputValue={newFeedback}
+            onInputChange={setNewFeedback}
+            btnLabel='Submit'
+            btnFun={async () => {
 
-        if (!customer) return;
+                if (!customer) return;
 
-        const feed: Feedback = {
-            CustomerID: customer.getRegID(),
-            Comments: text,
-        };
+                const feed: Feedback = {
+                    CustomerID: customer.getRegID(),
+                    Comments: newFeedback,
+                    Name:user?.name as string,
+                    Rating:rating as 1 | 2 | 3 | 4 | 5
+                };
 
-        await addFeedback(feed);
+                await addFeedback(feed);
 
-        // optional UI update
-        setFeedback(prev => [...prev, feed]);
+                // optional UI update
+                setFeedback(prev => [...prev, feed]);
 
-        // clear input
-        setNewFeedback('');
-    }}
-/>
+                // clear input
+                setNewFeedback('');
+            }}
+        />
         <ScrollScreen>
             {
                 feedback.length > 0 ?  feedback.map((f)=> <CustomerFeedbackItem key={f.FeedbackID} feedback={f}/>) : <DispText text='No feedback found'/>

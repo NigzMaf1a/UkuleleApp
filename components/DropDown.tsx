@@ -4,7 +4,7 @@ import { Picker } from "@react-native-picker/picker";
 
 export interface DropDownItem{
     label:string;
-    value:string;
+    value:string | number;
 }
 
 interface DropDownProps{

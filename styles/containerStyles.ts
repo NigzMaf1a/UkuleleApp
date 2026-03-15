@@ -11,6 +11,12 @@ export const containerStyles = StyleSheet.create({
     paddingVertical: spacing.sm
   },
 
+  smallForm:{},
+
+  bigForm:{},
+
+  formStrip:{},
+
   center: {
     flex: 1,
     justifyContent: "center",

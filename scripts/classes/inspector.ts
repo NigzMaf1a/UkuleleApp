@@ -6,6 +6,8 @@ import Inspection from "../interfaces/inspection";
 import Inventory from "../interfaces/inventory";
 import AllocatedEquipment from "../interfaces/allocatedEquipment";
 import Penalty from "../interfaces/penalty";
+import Services from "../interfaces/services";
+import Lending from "../interfaces/lending";
 
 //utils
 import errorLogger from "../utils/errorLogger";
@@ -40,6 +42,15 @@ export default class Inspector extends User {
         }
     }
 
+    async getAllLendings():Promise<Lending[]>{
+        try {
+            return await this.apiFetch<Lending[]>(this.endpoints.getAllLendingRequests);
+        } catch(err){
+            errorLogger(err);
+            return [];
+        }
+    }    
+
     async getAllAllocatedEquipment():Promise<AllocatedEquipment[]>{
         try {
             return await this.apiFetch<AllocatedEquipment[]>(this.endpoints.getAllAllocatedEquipment);
@@ -48,6 +59,24 @@ export default class Inspector extends User {
             return [];
         }
     }
+
+    async getAllEquipment():Promise<Inventory[]>{
+        try {
+            return await this.apiFetch<Inventory[]>(this.endpoints.getAllEquipment);
+        } catch(err){
+            errorLogger(err);
+            return [];
+        }
+    }    
+
+    async getAllServices():Promise<Services[]>{
+        try {
+            return await this.apiFetch<Services[]>(this.endpoints.getAllServices);
+        } catch(err){
+            errorLogger(err);
+            return [];
+        }
+    }     
 
     async markAllocatedEquipmentInspected(id:number){
         let inspected:Partial<AllocatedEquipment> = {

@@ -16,6 +16,7 @@ import Booking from "../../../scripts/interfaces/booking";
 //enums
 import { Status } from "../../../scripts/interfaces/finance";
 import BookingStatus from "../../../scripts/enums/bookStatus";
+import { PaymentStatus } from "../../../scripts/enums/services";
 
 //scripts
 import Band from "../../../scripts/classes/band";
@@ -39,7 +40,7 @@ export default function BandDashboard(){
                     const served = await band.getAllServices();
                     const bookings = await band.getAllBookings();
 
-                    setServices(served.filter(s => s.PaymentStatus !== Status.Approved && s.ServiceType === 'Booking'));
+                    setServices(served.filter(s => s.PaymentStatus !== PaymentStatus.Paid && s.ServiceType === 'Booking'));
                     setBookings(bookings.filter(b => b.BookStatus !== BookingStatus.Tick))
                 }        
         })();

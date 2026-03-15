@@ -6,6 +6,12 @@ import endpoints from "../utils/endpoints";
 import Contact from "../interfaces/contact";
 import About from "../interfaces/about";
 import Users from "../interfaces/user";
+import Dispatch from "../interfaces/dispatch";
+import Lending from "../interfaces/lending";
+
+//enums
+import RegType from "../enums/regType";
+import DispatchStatus from "../enums/dispatch";
 
 
 //utils
@@ -62,12 +68,90 @@ export default class User {
     }
   }
 
-  public async getUser():Promise<Users>{
+  public async getUser():Promise<Users | undefined>{
     try {
       const allUsers = await this.apiFetch<Users[]>(this.endpoints.getAllUsers);
-      return allUsers.find(u => u.regID === this.getRegID())
+      if(allUsers !== undefined && allUsers.length > 0) {
+        return allUsers.find(u => u.regID === this.getRegID());
+      }
     }catch(err){
       errorLogger(err);
+      return undefined;
+    }
+  }
+
+  public async soundSystemDispatches():Promise<Dispatch[] | undefined>{
+    const user = await this.getUser();
+    if(user){
+      switch(user.regType){
+        case RegType.DJ || RegType.Mcee || RegType.Band:
+          {
+            try {
+              return this.apiFetch<Dispatch[]>(this.endpoints.getAllDispatches);
+            } catch (error) {
+              errorLogger(error);
+              return [];
+            }            
+          }
+        default:
+          if(!RegType.DJ || !RegType.Mcee || !RegType.Band){
+            return [];
+          }
+      }
+    } 
+  }
+
+  public async packForDispatch(dispatch_id:number){
+    let status:Partial<Dispatch> = {
+      Dispatched:DispatchStatus.Packed
+    }
+
+    if(await this.getUser() !== undefined){
+      switch(await this.getUser().then(p => p?.regType)){
+        case RegType.DJ || RegType.Mcee || RegType.Band:
+          {
+            try {
+              await this.apiFetch(this.endpoints.updateDispatch(dispatch_id), 
+                {
+                  method:"PUT",
+                  body:JSON.stringify(status)
+                }
+              );
+            } catch (error) {
+              errorLogger(error);
+            }
+          }
+        default:
+          if(!RegType.DJ || !RegType.Mcee || !RegType.Band){
+            errorLogger('Invalid registration type');
+          }
+      }
+    }
+  }
+
+  public async soundSystemGetLending():Promise<Lending[]>{
+    try {
+      return await this.apiFetch<Lending[]>(this.endpoints.getAllLendingRequests);
+    } catch (error) {
+      errorLogger(error);
+      return [];
+    }
+  }
+
+  public async soundSystemApproveLending(id:number){
+    let status:Partial<Lending> = {
+      Performed:'Yes'
+    }
+
+    try {
+      await this.apiFetch(this.endpoints.updateLending(id), 
+        {
+          method:'PUT',
+          body:JSON.stringify(status)
+        }
+      );
+    } catch (error) {
+      errorLogger(error);
     }
   }
 }

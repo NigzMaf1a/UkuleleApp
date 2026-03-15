@@ -7,6 +7,8 @@ import Strip from "../components/Strip";
 import LabelledInput from "../sections/LabelledInput";
 import Button from "../components/Button";
 import DispText from "../components/DispText";
+import SmallForm from "../components/SmallForm";
+import FormStrip from "../components/FormStript";
 
 //auth
 import storage from "../scripts/auth/storage";
@@ -16,8 +18,7 @@ import loginUser from "../scripts/auth/loginUser";
 import LoginResponse from "../scripts/interfaces/login";
 
 //styles
-import viewStyles from "../styles/views";
-import colourStyles from "../styles/colours";
+import { typography } from "../styles/typography";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -30,28 +31,26 @@ export default function Login() {
 
   return (
     <Screen>
-      <View style={viewStyles.login_form}>
-        <Strip>
+      <SmallForm>
+        <FormStrip>
           <DispText text="Login"/>
-        </Strip>
+        </FormStrip>
 
         <LabelledInput label="Email"
                        inputPlaceholder="Enter email here"
-                       placeholderTextColor={String(colourStyles.text_tertiary)}
                        value={email}
                        onChange={setEmail}
         />
         <LabelledInput label="Password"
                        inputPlaceholder="Enter password here"
-                       placeholderTextColor={String(colourStyles.text_tertiary)}
                        value={password}
                        onChange={setPassword}
         /> 
 
-        <Strip>
+        <FormStrip>
           <Button label="Login" fun={()=> handleLogin()}/>
-        </Strip>       
-      </View>
+        </FormStrip>       
+      </SmallForm>
     </Screen>
   );
 }

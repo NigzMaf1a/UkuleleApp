@@ -21,6 +21,19 @@ export default class Customer extends User{
         super(regID, token, backendUrl);
     }
 
+    async requestService(service:Services){
+        try {
+           await this.apiFetch(this.endpoints.addService,
+            {
+                method:"POST",
+                body:JSON.stringify(service)
+            }
+           );
+        } catch (error) {
+            errorLogger(error);
+        }
+    }
+
     async bookBand(booking:Booking): Promise<void>{
         try{
             await this.apiFetch(this.endpoints.bookBand, 

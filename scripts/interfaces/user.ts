@@ -1,3 +1,6 @@
+//enums
+import RegType from "../enums/regType";
+
 export default interface Users {
     regID: number;
     name: string;
@@ -5,7 +8,7 @@ export default interface Users {
     email:string;
     password?: string;
     gender: string;
-    regType: string;
+    regType: RegType;
     dLocation: string;
     accStatus: string;
 }

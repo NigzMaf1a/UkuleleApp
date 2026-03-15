@@ -2,26 +2,46 @@ import React, {useState, useEffect} from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
-import CustomerPenaltyItem from '../../../sections/CustomerPenaltyItem';
+import ListItemWithButton from '../../../sections/ListItemwithButton';
+import ListItem from '../../../sections/ListItem';
 import DispText from '../../../components/DispText';
+import DashTray from '../../../sections/DashTray';
+import MyModal from '../../../components/MyModal';
+import BigForm from '../../../components/BigForm';
+import SmallForm from '../../../components/SmallForm';
+import LabelledInput from '../../../sections/LabelledInput';
+import LabelledText from '../../../components/LabelledText';
+import FormStrip from '../../../components/FormStript';
+import Button from '../../../components/Button';
 
 //interfaces
 import Penalty from '../../../scripts/interfaces/penalty';
 
+//enums
+import { PenaltyStatus } from '../../../scripts/enums/penalty';
+import { EquipmentCondition } from '../../../scripts/enums/equipment';
+
 //scripts
 import Customer from '../../../scripts/classes/customer';
+import describer from '../../../scripts/utils/describer';
+import stringToNumber from '../../../scripts/utils/stringToNumber';
+import toaster from '../../../scripts/utils/toaster';
 
 //auth
 import storage from '../../../scripts/auth/storage';
 
+
 export default function CustomerPenalty() {
     const[penalties, setPenalties] = useState<Penalty[]>([]);
+    const [paid] = useState<Penalty[]>(penalties.filter(p => p.PenaltyStatus === PenaltyStatus.Paid || p.PenaltyStatus === PenaltyStatus.Processing));
+    const [unpaid] = useState<Penalty[]>(penalties.filter(p => p.PenaltyStatus === PenaltyStatus.NotPaid));
     const[customer, setCustomer] = useState<Customer>();
     const[penaltyAmount, setPenaltyAmount] = useState<string>('');
-
-    async function payPenaltyAmount(id:number){
-        if(Number(penaltyAmount) !== 0) await customer?.payPenalty(id,Number(penaltyAmount));
-    }
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [showModalTwo, setShowModalTwo] = useState<boolean>(false);
+    const [selectedPenaltyId, setSelectedPenaltyId] = useState<number>(0);
+    const [selectedPenalty, setSelectedPenalty] = useState<Penalty | undefined>();
+    const [code, setCode] = useState<string>('');
 
     useEffect(()=>{
         (async ()=>{
@@ -37,15 +57,156 @@ export default function CustomerPenalty() {
         })();
     }, []);
 
+    function toggleModal(){
+        setShowModal(prev => !prev);
+    }
+
+    function toggleModalTwo(){
+        setShowModalTwo(prev => !prev);
+    }
+
+    function mountModal(id:number){
+        setSelectedPenaltyId(id);
+        toggleModal();
+    }
+
+    function mountModalTwo(id:number){
+        setSelectedPenaltyId(id);
+        toggleModalTwo();
+    }
+
+    function unMountModal(){
+        setSelectedPenaltyId(0);
+        toggleModal();
+    }    
+
+    function unMountModalTwo(){
+        setSelectedPenaltyId(0);
+        toggleModalTwo();
+    }  
+
+    function payload():{id:number, code:string, amount:number}{
+        return {
+            id:selectedPenalty?.PenaltyID as number,
+            code: code,
+            amount: stringToNumber(penaltyAmount)
+        }
+    }
+
+    function selectedRecordFinder():Penalty | undefined{
+        if(penalties !== undefined && penalties.length > 0 && typeof selectedPenaltyId === 'number' && selectedPenaltyId === 0){
+            return penalties.find(p => p.PenaltyID === selectedPenaltyId) as Penalty;
+        }
+    }
+
+    async function initiatePaymentRequest(){
+        try {
+            let mzigo = payload();
+            await customer?.payPenalty(mzigo.id, mzigo.code, mzigo.amount);
+        } catch (error) {
+            toaster(`Error ${error} occurred`, 'info');
+            return;
+        }
+    }
+
+    useEffect(()=>{
+        setSelectedPenalty(selectedRecordFinder())
+    }, [selectedPenaltyId]);
+
   return (
     <ScrollScreen>
-        {
-            penalties.length > 0 ? penalties.map((p) => <CustomerPenaltyItem key={p.PenaltyID}
-                                                                             penalty={p}
-                                                                             amountInput={penaltyAmount}
-                                                                             onAmountInputChange={}
-            />) : <DispText text='No penalty records found'/>
-        }
+        <DashTray>
+            {
+                unpaid.length > 0 ? unpaid.map((u) => <ListItemWithButton
+                                                                key={u.PenaltyID}
+                                                                rowOneData={{label:'ID', text:String(u.PenaltyID)}}
+                                                                rowTwoData={{label:'Amount', text:String(u.Penalty)}}
+                                                                buttonLabel='Pay'
+                                                                fun={() => mountModal(u.PenaltyID as number)}
+                />) : <DispText text='No penalty records found'/>
+            }
+        </DashTray>
+        <DashTray>
+            {
+                paid.length > 0 ? paid.map((p) => <ListItemWithButton
+                                                        key={p.PenaltyID}
+                                                        rowOneData={{label:'ID', text:String(p.PenaltyID)}}
+                                                        rowTwoData={{label:'Amount', text:String(p.Penalty)}}
+                                                        buttonLabel='View'
+                                                        fun={() => mountModalTwo(p.PenaltyID as number)}
+                />) : <DispText text='No paid penalties found'/>
+            }
+        </DashTray>
+        <MyModal
+            visible = {showModal}
+            onClose={() => unMountModal()}
+            title='Pay Penalty'
+        >
+            <SmallForm>
+                <LabelledInput
+                    label='Transaction Code'
+                    inputPlaceholder='Please enter your transaction code here'
+                    value={code}
+                    onChange={setCode}
+                />
+
+                <LabelledInput
+                    label='Amount'
+                    inputPlaceholder='Enter the transaction amount here'
+                    value={penaltyAmount}
+                    onChange={() => setPenaltyAmount}
+                /> 
+                <FormStrip>
+                    <Button
+                        label='Close'
+                        fun={() => unMountModal()}
+                    />
+                    <Button
+                        label='Pay'
+                        fun={async () => initiatePaymentRequest()}
+                    />
+                </FormStrip> 
+            </SmallForm>   
+        </MyModal>
+
+        <MyModal
+            visible = {showModalTwo}
+            onClose={() => unMountModalTwo()}
+            title='View Penalty'        
+        >
+            <BigForm>
+                <LabelledText
+                    label='Penalty ID'
+                    text={String(selectedPenalty?.PenaltyID)}
+                />
+                <LabelledText
+                    label='Equipment ID'
+                    text={String(selectedPenalty?.EquipmentID)}
+                />    
+                <LabelledText
+                    label='Description'
+                    text={String(selectedPenalty?.Description)}
+                />
+                <LabelledText
+                    label='Condition'
+                    text={String(describer(selectedPenalty?.dCondition as EquipmentCondition))}
+                />    
+                <LabelledText
+                    label='Penalty Amount'
+                    text={String(selectedPenalty?.Penalty)}
+                />                
+                <LabelledText
+                    label='Penalty Status'
+                    text={String(selectedPenalty?.PenaltyStatus)}
+                />                             
+                <FormStrip>
+                    <Button
+                        label='Close'
+                        fun={() => unMountModalTwo()}
+                    />
+                </FormStrip>
+            </BigForm>
+        </MyModal>
     </ScrollScreen>
   );
 }

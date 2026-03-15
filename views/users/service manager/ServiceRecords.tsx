@@ -33,7 +33,7 @@ export default function ServiceRecords() {
         {
             records.length > 0 ? records.map((r) => <ListItem key={r.ServiceID}
                                                               rowOneData={{label:'Type', text:r.ServiceType}}
-                                                              rowTwoData={{label:'Status', text:r.PaymentStatus}}
+                                                              rowTwoData={{label:'Status', text:String(r.PaymentStatus)}}
                                                               rightSideText={r.ServiceStatus}
             />) : <DispText text = {'No service records found'}/>
         }

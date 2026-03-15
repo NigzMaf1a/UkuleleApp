@@ -19,7 +19,7 @@ interface CustomerPenaltyProps{
     penalty:Penalty;
     fun:(id:number) => Promise<void> | void;
     amountInput:string;
-    onAmountInputChange:(par?:number | string) => Promise<void> | void;
+    onAmountInputChange:(par?:string) => Promise<void> | void;
     payPenaltyFun:(par?:string | number) => Promise<void> | void
 }
 

@@ -18,6 +18,7 @@ import Accountant from "../../../scripts/classes/accountant";
 
 //enums
 import { Status } from "../../../scripts/interfaces/finance";
+import { PaymentStatus } from "../../../scripts/enums/services";
 
 export default function AccountantDashboard(){
     let [views, setViews] = useState<number>(1);
@@ -56,7 +57,7 @@ export default function AccountantDashboard(){
                 const serv = await accountant.getAllServices();
 
                 setPayments(pay.filter(p => p.TransactionStatus === Status.Pending));
-                setServices(serv.filter(s => s.PaymentStatus === Status.Pending));
+                setServices(serv.filter(s => s.PaymentStatus === PaymentStatus.NotPaid));
             }
         })();
     }, []);
@@ -72,7 +73,7 @@ export default function AccountantDashboard(){
                     {
                         payments.length > 0 && payments.map((p) => <ListItem key={p.TransactionID} 
                                                                              rowOneData={{label:'Code', text:p.TransactionName}}
-                                                                             rowTwoData={{label:'Date', text:p.TransactionDate}}
+                                                                             rowTwoData={{label:'Date', text:String(p.TransactionDate)}}
                                                                              rightSideText={String(p.Amount)}
                         />)
                     }

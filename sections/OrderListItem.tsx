@@ -57,9 +57,7 @@ export default function OrderListItem({order, supplies, fun}:OrderListItemProps)
                     <LabelledText label='Supply ID:' text={String(order.SupplyID)}/>
                     <LabelledText label='Order Date:' text={String(order.OrderDate)}/>
                     <LabelledText label='Description:' text={description}/>
-                    <LabelledText label='Order Items:' text={String(order.OrderItems)}/>
                     <LabelledText label='Order Amount:' text={String(order.OrderAmount)}/>
-                    <LabelledText label='Amount:' text={String(order.TotalAmount)}/>
                     <LabelledText label='Order Status:' text={order.OrderStatus}/>
                     <Strip>
                         <Button label={'Close'} fun={() => toggleModal()}/>
