@@ -104,9 +104,9 @@ const endpoints = {
     deleteAbout:'/api/about/delete',
 
     //registration
-    addUser:'/api/user/add',
-    getAllUsers:'/api/user/get',
-    updateUser:(id:number) => `/api/user/update/${id}`,
+    addUser:'/api/registration/add',
+    getAllUsers:'/api/registration/get',
+    updateUser:(id:number) => `/api/registration/update/${id}`,
 
     //penalty payment
     addPenaltyPayment: '/api/penaltyPayment/add',

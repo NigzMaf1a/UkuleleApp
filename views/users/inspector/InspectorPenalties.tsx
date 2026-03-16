@@ -80,6 +80,8 @@ export default function InspectorPenalties() {
 
     function unmountModal(){
       setSelectedInspectionId(0);
+      setPenalty('');
+      setCondition('');
     }
 
     async function equipmentData(inspection_id:number):Promise<PenaltyData | undefined>{
@@ -112,7 +114,7 @@ export default function InspectorPenalties() {
         Description:itemData?.description as EquipmentDescription,
         dCondition: condition as EquipmentCondition,
         Penalty:stringToNumber(penalty),
-        PenaltyStatus:PenaltyStatus.Processing
+        PenaltyStatus:PenaltyStatus.Processing 
       }
     }
   return (
