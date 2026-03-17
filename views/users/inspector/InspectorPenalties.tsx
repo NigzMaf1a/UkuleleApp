@@ -47,6 +47,7 @@ export default function InspectorPenalties() {
   const [selectedInspectionId, setSelectedInspectionId] = useState<number>(0);
   const [condition, setCondition] = useState<string>('');
   const [penalty, setPenalty] = useState<string>('');
+  const [currentPenalty, setCurrentPenalty] = useState<Penalty>();
 
     useEffect(() =>{
         ( async ()=> {
@@ -70,18 +71,25 @@ export default function InspectorPenalties() {
       })();
     }, [selectedInspectionId]);
 
+    useEffect(()=>{
+      const pen = penaltyPayload();
+      setCurrentPenalty(pen);
+    }, [itemData, condition, penalty]);
+
     function toggleModal(){
       setShowModal(prev => !prev);
     }
 
     function mountModal(id:number){
       setSelectedInspectionId(id);
+      toggleModal();
     }
 
     function unmountModal(){
       setSelectedInspectionId(0);
       setPenalty('');
       setCondition('');
+      toggleModal();
     }
 
     async function equipmentData(inspection_id:number):Promise<PenaltyData | undefined>{
@@ -114,9 +122,16 @@ export default function InspectorPenalties() {
         Description:itemData?.description as EquipmentDescription,
         dCondition: condition as EquipmentCondition,
         Penalty:stringToNumber(penalty),
-        PenaltyStatus:PenaltyStatus.Processing 
+        PenaltyStatus:PenaltyStatus.NotPaid
       }
     }
+
+    async function penalize(penalty:Penalty){
+      if(inspector){
+        await inspector.penalizeDamage(penalty);
+      }
+    }
+
   return (
     <ScrollScreen>
       {
@@ -146,6 +161,11 @@ export default function InspectorPenalties() {
               inputPlaceholder='Please enter the penalty amount here'
               value={penalty}
               onChange={setPenalty}
+          />
+
+          <Button
+              label='Penalize'
+              fun={ async () => await penalize(currentPenalty as Penalty)}
           />
         </SmallForm>
       </MyModal>

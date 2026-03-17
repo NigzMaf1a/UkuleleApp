@@ -11,11 +11,30 @@ export const containerStyles = StyleSheet.create({
     paddingVertical: spacing.sm
   },
 
-  smallForm:{},
+  smallForm: {
+    width: "100%",
+    height: "40%",
+    justifyContent: "center",
+    alignItems: "stretch",
+    gap: spacing.md
+  },
 
-  bigForm:{},
+  bigForm: {
+    width: "100%",
+    height: "70%",
+    justifyContent: "center",
+    alignItems: "stretch",
+    gap: spacing.md
+  },
 
-  formStrip:{},
+  formStrip: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center", // default when only one button
+    paddingVertical: spacing.xs, // minimal extra vertical space
+    paddingHorizontal: spacing.md
+  },
 
   center: {
     flex: 1,
@@ -32,6 +51,14 @@ export const containerStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center"
-  }
+  },
+  val: {
+    width: "100%",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "center",
+    gap: spacing.xs,
+    marginBottom: spacing.sm
+  }  
 
 });

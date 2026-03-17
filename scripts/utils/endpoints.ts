@@ -1,6 +1,6 @@
 const endpoints = {
-    login:'/api/',
-    logout:'/api/',
+    login:'/api/auth/login',
+    logout:'/api/auth/logout',
 
     //inventory
     addEquipment:'/api/inventory/add',

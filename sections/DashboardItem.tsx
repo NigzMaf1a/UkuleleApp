@@ -5,6 +5,9 @@ import { View, StyleSheet } from 'react-native';
 import Button from '../components/Button';
 import DispText from '../components/DispText';
 
+import { spacing } from '../styles/spacing';
+import { scale } from '../styles/responsive';
+
 export interface LabelledTextProps{
     label:string;
     text:string;
@@ -38,7 +41,25 @@ export default function DashboardItem({btnLabel, labelledTextOne, labelledTextTw
 }
 
 const styles = StyleSheet.create({
-    container:{},
-    view:{},
-    labelledText:{}
-});
+  container: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: spacing.sm,
+    borderRadius: scale(12)
+  },
+
+  view: {
+    width: "75%",
+    flexDirection: "column",
+    justifyContent: "center",
+    gap: spacing.xs
+  },
+
+  labelledText: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
+  }
+});;

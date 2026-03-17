@@ -27,9 +27,22 @@ export const cardStyles = StyleSheet.create({
     shadowRadius: scale(6),
     elevation: 3
   },
-  tray:{},
+  tray: {
+    width: "75%",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    gap: spacing.xs
+  },
   row:{
     flexDirection:"row"
   },
-  dashTray:{}
+  dashTray: {
+    width: "100%",
+    flexDirection: "column",
+    padding: spacing.md,
+    marginBottom: spacing.lg,
+    borderRadius: scale(14),
+    gap: spacing.sm
+  }
 });

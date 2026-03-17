@@ -1,11 +1,11 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 //components
 import DispText from './DispText';
 
 //styles
-import componentStyles from '../styles/components';
+import { spacing } from '../styles/spacing';
 
 interface LabelledTextProps{
     label:string;
@@ -14,9 +14,19 @@ interface LabelledTextProps{
 
 export default function LabelledText({label, text}:LabelledTextProps) {
   return (
-    <View style={componentStyles.labelledTextContainer}>
+    <View style={styles.labelledText}>
         <DispText text={label}/>
         <DispText text={text}/>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  labelledText: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: spacing.xs
+  }
+});

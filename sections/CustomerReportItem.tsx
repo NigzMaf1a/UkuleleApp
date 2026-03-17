@@ -40,7 +40,7 @@ export default function CustomerReportItem({service}:CustomerReportProps) {
                     <LabelledText label='Hours' text={String(service.Hours)}/>
                     <LabelledText label='Type' text={service.ServiceType}/>
                     <LabelledText label='Status' text={service.ServiceStatus}/>
-                    <LabelledText label='Payment' text={service.PaymentStatus}/>
+                    <LabelledText label='Payment' text={String(service.PaymentStatus)}/>
                     <Strip>
                         <Button label='Close' fun={() => toggleModal()}/>
                     </Strip>

@@ -8,7 +8,57 @@ import Button from '../components/Button';
 import Strip from '../components/Strip';
 
 //styles
-import { cardStyles } from '../styles/cardStyles';
+import { StyleSheet } from "react-native";
+import { colors } from "../styles/colors";
+import { spacing } from "../styles/spacing";
+import { scale } from "../styles/responsive";
+import { typography } from "../styles/typography";
+
+const cardStyles = StyleSheet.create({
+  // Main horizontal container: tray + button
+  strip: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: spacing.sm,
+    borderRadius: scale(12),
+    backgroundColor: colors.surface,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: scale(6),
+    elevation: 3,
+    marginBottom: spacing.md
+  },
+
+  // Left-side vertical stack
+  tray: {
+    width: "75%",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    gap: spacing.xs
+  },
+
+  // Horizontal row for label + value
+  row: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+
+  // Optional: style for text inside row (if you want to override DispText)
+  rowLabel: {
+    ...typography.body,
+    color: colors.text
+  },
+
+  rowValue: {
+    ...typography.body,
+    color: colors.textSecondary
+  }
+});
 
 //interfaces
 import Order from '../scripts/interfaces/orders';

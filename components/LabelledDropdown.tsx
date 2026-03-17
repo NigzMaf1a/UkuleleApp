@@ -8,6 +8,8 @@ import DispText from './DispText';
 //scripts
 import { DropDownItem } from './DropDown';
 
+import { containerStyles } from '../styles/containerStyles';
+
 interface LabelledDropdownProps{
     label:string;
     values:DropDownItem[];
@@ -17,7 +19,7 @@ interface LabelledDropdownProps{
 
 export default function LabelledDropdown({label, values, selectedValue, onValueChange}:LabelledDropdownProps){
     return (
-        <View>
+        <View style={containerStyles.val}>
             <DispText text={label}/>
             <DropDown values={values}
                       selectedValue={selectedValue}

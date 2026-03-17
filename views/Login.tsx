@@ -12,7 +12,7 @@ import FormStrip from "../components/FormStript";
 
 //auth
 import storage from "../scripts/auth/storage";
-import loginUser from "../scripts/auth/loginUser";
+import loginUser from "../scripts/utils/loginUser";
 
 //interfaces
 import LoginResponse from "../scripts/interfaces/login";
