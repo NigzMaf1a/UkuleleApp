@@ -2,28 +2,28 @@ import React, {useEffect, useState} from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
-import MyModal from '../components/MyModal';
-import DispText from '../components/DispText';
-import Button from '../components/Button';
-import BigForm from '../components/BigForm';
-import ListItemWithButton from '../sections/ListItemwithButton';
-import FormStrip from '../components/FormStript';
-import LabelledText from '../components/LabelledText';
+import MyModal from '../../../components/MyModal';
+import DispText from '../../../components/DispText';
+import Button from '../../../components/Button';
+import BigForm from '../../../components/BigForm';
+import ListItemWithButton from '../../../sections/ListItemwithButton';
+import FormStrip from '../../../components/FormStript';
+import LabelledText from '../../../components/LabelledText';
 
 //scripts
-import Storeman from '../scripts/classes/storeman';
-import date from '../scripts/utils/date';
-import toaster from '../scripts/utils/toaster';
+import Storeman from '../../../scripts/classes/storeman';
+import date from '../../../scripts/utils/date';
+import toaster from '../../../scripts/utils/toaster';
 
 //enums
-import { EquipmentDescription } from "../scripts/enums/equipment";
-import { OrderStatus } from "../scripts/enums/order";
+import { EquipmentDescription } from "../../../scripts/enums/equipment";
+import { OrderStatus } from "../../../scripts/enums/order";
 
 //auth
-import storage from '../scripts/auth/storage';
+import storage from '../../../scripts/auth/storage';
 
 //interfaces
-import Supply from '../scripts/interfaces/supply';
+import Supply from '../../../scripts/interfaces/supply';
 
 interface ItemPayload{
     SupplyType:EquipmentDescription;
@@ -101,13 +101,13 @@ export default function InventorySupplies(){
 
     function currentPayload():SupplyOrder{
         return {
-            SupplyID:selectedSupply?.supplyid as number,
+            SupplyID:selectedSupply?.SupplyID as number,
             OrderDate:date(),
-            OrderAmount: orderQty > 0 ? getOrderPrice(selectedSupply?.price as number, orderQty) : 0,
+            OrderAmount: orderQty > 0 ? getOrderPrice(selectedSupply?.Price as number, orderQty) : 0,
             OrderStatus:OrderStatus.Processing,
             items:[
                 {
-                    SupplyType:selectedSupply?.supplytype as EquipmentDescription,
+                    SupplyType:selectedSupply?.SupplyType as EquipmentDescription,
                     Quantity:orderQty
                 }
             ]
@@ -124,8 +124,8 @@ export default function InventorySupplies(){
     <ScrollScreen>
         {
             supplies.length > 0 ? supplies.map((s) => <ListItemWithButton
-                rowOneData={{label:'Supplier Name', text:s.suppliername}}
-                rowTwoData={{label:'Supply Type', text:s.supplytype}}
+                rowOneData={{label:'Supplier Name', text:s.SupplierName}}
+                rowTwoData={{label:'Supply Type', text:s.SupplyType}}
                 buttonLabel = 'View'
                 fun={() => addToCart()}
             />) : <DispText text='No supplies available'/>
