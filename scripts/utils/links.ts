@@ -1,5 +1,5 @@
-const backendUrl = "http://localhost:5000";
-const liveBackendUrl = "https://api.site.com";
+const backendUrl = "https://ukulelebackend.onrender.com";
+const liveBackendUrl = "https://ukulelebackend.onrender.com";
 
 const links: Record<string, string> = {
   dev: backendUrl,
