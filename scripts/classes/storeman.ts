@@ -5,6 +5,7 @@ import link from "../utils/links";
 import Inventory from "../interfaces/inventory";
 import Supply from "../interfaces/supply";
 import Order from "../interfaces/orders";
+import SupplyOrder from "../interfaces/supplyOrder";
 
 //utils
 import errorLogger from "../utils/errorLogger";
@@ -57,10 +58,14 @@ export default class Storeman extends User{
             return [];
         }
     }
-    async orderSupplies():Promise<void>{
-        //revisit this
+    async orderSupplies(order:SupplyOrder):Promise<void>{
         try{
-            await this.apiFetch(this.endpoints.addOrder, {method: 'POST'});
+            await this.apiFetch(this.endpoints.addOrder, 
+                {
+                    method: 'POST',
+                    body:JSON.stringify(order)
+                }
+            );
         }catch(error){
             throw error;
         }

@@ -44,7 +44,7 @@ export default function PendingPayments() {
                                                                                                 buttonLabel='Approve'
                                                                                                 rowOneData={{label:'Code', text:p.TransactionName}}
                                                                                                 rowTwoData={{label:'Amount', text:String(p.Amount)}}
-                                                                                                fun={() => approvePayment(p.TransactionID)}
+                                                                                                fun={() => approvePayment(p.TransactionID as number)}
             />) : <DispText text='No Pending Payments'/>
         }
     </ScrollScreen>

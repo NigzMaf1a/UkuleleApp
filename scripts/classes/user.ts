@@ -43,6 +43,10 @@ export default class User {
     return this.regID;
   }  
 
+  async getRegType(){
+    return await this.getUser().then(u => u?.regType);
+  }
+
   public apiFetch = async <T = unknown>(
     endpoint: string,
     options: RequestInit = {}
