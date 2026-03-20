@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
 //components
-import ScrollScreen from '../../../components/ScrollScreen';
+import ScrollScreen from '../components/ScrollScreen';
 import MyModal from '../components/MyModal';
 import DispText from '../components/DispText';
 import Button from '../components/Button';
