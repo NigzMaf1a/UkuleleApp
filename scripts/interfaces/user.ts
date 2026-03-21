@@ -2,7 +2,7 @@
 import RegType from "../enums/regType";
 
 export default interface Users {
-    regID: number;
+    regID?: number;
     name: string;
     phoneNo: string;
     email:string;
@@ -11,4 +11,5 @@ export default interface Users {
     regType: RegType;
     dLocation: string;
     accStatus: string;
+    image?:ImageData;
 }

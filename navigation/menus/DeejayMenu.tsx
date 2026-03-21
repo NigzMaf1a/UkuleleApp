@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import DeejayDashboard from "../../views/users/dj/DeejayDashboard";
 import DeejayPerformance from "../../views/users/dj/DeejayPerformance";
 import DeejayReports from "../../views/users/dj/DeejayReports";
+import DjRequestDispatch from "../../views/users/dj/RequestDispatch";
 
 // styles
 import { colors } from "../../styles/colors";
@@ -45,6 +46,9 @@ export default function DeejayMenu() {
             case "Performances":
               iconName = "analytics-outline";
               break;
+            case "Dispatch":
+              iconName = "rocket-outline";
+              break;              
             case "Reports":
               iconName = "bar-chart-outline";
               break;
@@ -66,6 +70,11 @@ export default function DeejayMenu() {
         component={DeejayPerformance}
         options={{ title: "Performances" }}
       />
+      <Drawer.Screen
+        name="Dispatch"
+        component={DeejayPerformance}
+        options={{ title: "Request Dispatch" }}
+      />      
       <Drawer.Screen
         name="Reports"
         component={DeejayReports}

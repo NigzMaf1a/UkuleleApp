@@ -21,6 +21,6 @@ export const imageStyles = StyleSheet.create({
     height: scale(48),
 
     borderRadius: scale(24)
-  }
-
+  },
+  imgCont:{}
 });

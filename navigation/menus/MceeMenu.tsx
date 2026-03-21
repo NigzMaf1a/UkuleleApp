@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import MceeDashboard from "../../views/users/mcee/MceeDashboard";
 import MceeApprovePerformance from "../../views/users/mcee/MceeApprovePerformance";
 import MceeReport from "../../views/users/mcee/MceeReport";
+import MceeRequestDispatch from "../../views/users/mcee/RequestDispatch";
 
 // styles
 import { colors } from "../../styles/colors";
@@ -45,6 +46,9 @@ export default function MceeMenu() {
             case "Performances":
               iconName = "mic-outline";
               break;
+            case "Dispatch":
+              iconName = "rocket-outline";
+              break;              
             case "Reports":
               iconName = "bar-chart-outline";
               break;
@@ -66,6 +70,11 @@ export default function MceeMenu() {
         component={MceeApprovePerformance}
         options={{ title: "Approve Performances" }}
       />
+      <Drawer.Screen
+        name="Dispatch"
+        component={MceeRequestDispatch}
+        options={{ title: "Dispatch" }}
+      />      
       <Drawer.Screen
         name="Reports"
         component={MceeReport}

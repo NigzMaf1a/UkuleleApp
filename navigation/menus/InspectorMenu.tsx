@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import InspectorDashboard from "../../views/users/inspector/InspectorDashboard";
 import InspectorInspection from "../../views/users/inspector/InspectorInspection";
 import InspectorReport from "../../views/users/inspector/InspectorReport";
+import InspectorPenalties from "../../views/users/inspector/InspectorPenalties";
 
 // styles
 import { colors } from "../../styles/colors";
@@ -66,6 +67,11 @@ export default function InspectorMenu() {
         component={InspectorInspection}
         options={{ title: "Inspections" }}
       />
+      <Drawer.Screen
+        name="Penalties"
+        component={InspectorPenalties}
+        options={{ title: "Penalties" }}
+      />      
       <Drawer.Screen
         name="Reports"
         component={InspectorReport}

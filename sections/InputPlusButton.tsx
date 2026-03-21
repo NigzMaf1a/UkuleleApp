@@ -37,7 +37,7 @@ export default function InputPlusButton({
 
         <Button
             label={btnLabel}
-            onPress={() => btnFun(inputValue)}
+            fun={() => btnFun(inputValue)}
         />
     </View>
   );

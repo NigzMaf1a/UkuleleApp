@@ -130,7 +130,7 @@ export default function InventorySupplies(){
         })();
     }, []);
 
-    return 
+    return (
     <ScrollScreen>
         {
             supplies.length > 0 ? supplies.map((s) => <ListItemWithButton
@@ -213,4 +213,5 @@ export default function InventorySupplies(){
             </BigForm>
         </MyModal>
     </ScrollScreen>
+    );
 }

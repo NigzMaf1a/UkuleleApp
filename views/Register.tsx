@@ -9,6 +9,14 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
+//interfaces
+import Users from "../scripts/interfaces/user";
+import RegType from "../scripts/enums/regType";
+
+//endpoints
+import endpoints from "../scripts/utils/endpoints";
+import apiFetch from "../scripts/utils/apiFetch";
+
 export default function Registration() {
   const [name, setName] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
@@ -19,19 +27,27 @@ export default function Registration() {
   const [regType, setRegType] = useState<string>("");
   const [dLocation, setDLocation] = useState<string>("");
 
-  const handleRegistration = () => {
-    console.log({
-      name,
-      phoneNo,
-      email,
-      password,
-      gender,
-      regType,
-      dLocation,
-    });
+  async function registerUser(){
+    await apiFetch(endpoints.addUser, 
+      {
+        method:'POST',
+        body:JSON.stringify(registrationPayload())
+      }
+    );
+  }
 
-    // Add your API call here
-  };
+  function registrationPayload():Users{
+    return {
+      name:name,
+      phoneNo:phoneNo,
+      email:email,
+      password:password,
+      gender:gender,
+      regType:regType as RegType,
+      dLocation:dLocation,
+      accStatus:'Pending'
+    }
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -134,7 +150,7 @@ export default function Registration() {
         </Picker>
       </View>
 
-      <TouchableOpacity style={styles.registerBtn} onPress={handleRegistration}>
+      <TouchableOpacity style={styles.registerBtn} onPress={() => registerUser()}>
         <Text style={styles.registerBtnText}>Register</Text>
       </TouchableOpacity>
     </ScrollView>

@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import BandDashboard from "../../views/users/band/BandDashboard";
 import ApproveBookings from "../../views/users/band/ApproveBookings";
 import BookingReports from "../../views/users/band/BookingReports";
+import BandRequestDispatch from "../../views/users/band/RequestDispatch";
 
 // styles
 import { colors } from "../../styles/colors";
@@ -45,6 +46,9 @@ export default function BandMenu() {
             case "Bookings":
               iconName = "checkmark-done-outline";
               break;
+            case "Dispatch":
+              iconName = "rocket-outline";
+              break;              
             case "Reports":
               iconName = "bar-chart-outline";
               break;
@@ -66,6 +70,11 @@ export default function BandMenu() {
         component={ApproveBookings}
         options={{ title: "Approve Bookings" }}
       />
+      <Drawer.Screen
+        name="Dispatch"
+        component={BandRequestDispatch}
+        options={{ title: "Request Dispatch" }}
+      />      
       <Drawer.Screen
         name="Reports"
         component={BookingReports}

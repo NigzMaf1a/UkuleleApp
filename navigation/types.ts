@@ -7,12 +7,15 @@ export type RootDrawerParamList = {
 export type AccountantMenuParamList = {
   Dashboard:undefined
   Payments:undefined
+  Penalties:undefined
+  Orders:undefined
   Reports:undefined
 }
 
 export type BandMenuParamList = {
   Dashboard:undefined
   Bookings:undefined
+  Dispatch:undefined
   Reports:undefined
 }
 
@@ -35,18 +38,21 @@ export type DispatchMenuParamList = {
 export type DjMenuParamList = {
   Dashboard:undefined
   Performances:undefined
+  Dispatch:undefined
   Reports:undefined
 }
 
 export type InspectorMenuParamList = {
   Dashboard:undefined
   Inspections:undefined
+  Penalties:undefined
   Reports:undefined
 }
 
 export type MceeMenuParamList = {
   Dashboard:undefined
   Performances:undefined
+  Dispatch:undefined
   Reports:undefined
 }
 

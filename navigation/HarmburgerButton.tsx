@@ -12,7 +12,7 @@ export default function HamburgerButton() {
   return (
     <Button
       label="☰"
-      onPress={() => navigation.openDrawer()}
+      fun={() => navigation.openDrawer()}
     />
   )
 }

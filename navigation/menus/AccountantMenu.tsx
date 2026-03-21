@@ -7,6 +7,8 @@ import { Ionicons } from "@expo/vector-icons";
 import AccountantDashboard from "../../views/users/accountant/AccountantDashboard";
 import PendingPayments from "../../views/users/accountant/PendingPayments";
 import AccountantReport from "../../views/users/accountant/AccountantReport";
+import AccountantPayOrder from "../../views/users/accountant/AccountantPayOrder";
+import AccountantPenalties from "../../views/users/accountant/AccountantPenalties";
 
 // styles
 import { colors } from "../../styles/colors";
@@ -45,6 +47,12 @@ export default function AccountantMenu() {
             case "Payments":
               iconName = "card-outline";
               break;
+            case "Penalties":
+              iconName = "alert-circle-outline";
+              break; 
+            case "Orders":
+              iconName = "cart-outline";
+              break;                           
             case "Reports":
               iconName = "stats-chart-outline";
               break;
@@ -61,11 +69,25 @@ export default function AccountantMenu() {
         component={AccountantDashboard}
         options={{ title: "Dashboard" }}
       />
+
       <Drawer.Screen
         name="Payments"
         component={PendingPayments}
         options={{ title: "Pending Payments" }}
       />
+
+      <Drawer.Screen
+        name='Penalties'
+        component={AccountantPenalties}
+        options={{ title: "Verify Penalties" }}
+      />
+
+      <Drawer.Screen
+        name='Orders'
+        component={AccountantPayOrder}
+        options={{ title: "Order Payment" }}
+      />    
+
       <Drawer.Screen
         name="Reports"
         component={AccountantReport}
