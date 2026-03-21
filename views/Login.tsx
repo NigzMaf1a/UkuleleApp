@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View} from "react-native";
+import { View } from "react-native";
 
 //components
 import Screen from "../components/Screen";
@@ -20,36 +20,59 @@ import LoginResponse from "../scripts/interfaces/login";
 //styles
 import { typography } from "../styles/typography";
 
-export default function Login() {
+type RegType =
+  | "Customer"
+  | "Band"
+  | "Accountant"
+  | "Deejay"
+  | "Dispatch"
+  | "Inspector"
+  | "Mcee"
+  | "Service"
+  | "Store"
+  | "Supplier";
+
+interface LoginProps {
+  setRole: (role: RegType | null) => void;
+}
+
+export default function Login({ setRole }: LoginProps) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const handleLogin = async () => {
-    const {token, user}:LoginResponse = await loginUser({email, password});
-    if(user !== undefined) await storage.set(token, user.regType, user);
+    const { token, user }: LoginResponse = await loginUser({ email, password });
+
+    if (user !== undefined) {
+      await storage.set(token, user.regType, user);
+      setRole(user.regType as RegType);
+    }
   };
 
   return (
     <Screen>
       <SmallForm>
         <FormStrip>
-          <DispText text="Login"/>
+          <DispText text="Login" />
         </FormStrip>
 
-        <LabelledInput label="Email"
-                       inputPlaceholder="Enter email here"
-                       value={email}
-                       onChange={setEmail}
+        <LabelledInput
+          label="Email"
+          inputPlaceholder="Enter email here"
+          value={email}
+          onChange={setEmail}
         />
-        <LabelledInput label="Password"
-                       inputPlaceholder="Enter password here"
-                       value={password}
-                       onChange={setPassword}
-        /> 
+
+        <LabelledInput
+          label="Password"
+          inputPlaceholder="Enter password here"
+          value={password}
+          onChange={setPassword}
+        />
 
         <FormStrip>
-          <Button label="Login" fun={()=> handleLogin()}/>
-        </FormStrip>       
+          <Button label="Login" fun={() => handleLogin()} />
+        </FormStrip>
       </SmallForm>
     </Screen>
   );

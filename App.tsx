@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 
-//components
-import ScrollScreen from "./components/ScrollScreen";
-
 //views
 import Login from "./views/Login";
 import SplashScreen from "./views/SplashScreen";
@@ -28,62 +25,44 @@ type RegType =
   | "Supplier";
 
 export default function App() {
-
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<RegType | null>(null);
 
-  /**
-   * Check session when app starts
-   */
-  const checkSession = async () => {
-    const storedRole = await storage.get.role();
-
-    if (storedRole) {
-      setRole(storedRole as RegType);
-    } else {
-      setRole(null);
-    }
-
-    setLoading(false);
-  };
-
   useEffect(() => {
-    checkSession();
+    const initApp = async () => {
+      try {
+        const storedRole = await storage.get.role();
 
-    /**
-     * Poll storage every second
-     * (detect login without props)
-     */
-    const interval = setInterval(checkSession, 1000);
+        setTimeout(() => {
+          if (storedRole) {
+            setRole(storedRole as RegType);
+          } else {
+            setRole(null);
+          }
 
-    return () => clearInterval(interval);
+          setLoading(false); 
+        }, 3000);
+      } catch (error) {
+        console.log("Session check failed:", error);
+        setRole(null);
+        setLoading(false);
+      }
+    };
 
+    initApp();
   }, []);
 
   return (
-
     <NavigationContainer>
+      <StatusBar style="auto" />
 
-      <ScrollScreen>
-
-        <StatusBar style="auto" />
-
-        {loading ? (
-
-          <SplashScreen />
-
-        ) : role ? (
-
-          <Menu regType={role} />
-
-        ) : (
-
-          <Login />
-
-        )}
-
-      </ScrollScreen>
-
+      {loading ? (
+        <SplashScreen />
+      ) : role ? (
+        <Menu regType={role} />
+      ) : (
+        <Login setRole={setRole} /> 
+      )}
     </NavigationContainer>
   );
 }
