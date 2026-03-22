@@ -101,6 +101,7 @@ export default function InventorySupplies(){
                 }
                 
                 await storeman?.orderSupplies(payload);
+                toaster(`${supplies?.find(s => s.SupplyID === item.productId)?.SupplyType as EquipmentDescription} ordered successfully`, 'info');
             }
         }
     }
@@ -195,20 +196,22 @@ export default function InventorySupplies(){
                         label='Close'
                         fun={() => closeCart()}
                     />
-
-                    <Button
-                        label='Check Out'
-                        fun={async () => {
-                            try {
-                                await checkout();
-                                setTimeout(()=>{
-                                    toaster('Order made successfully', 'success');
-                                }, 3000)
-                            } catch (error) {
-                                toaster('Failed to make order', 'danger');
-                            }
-                        }}
-                    />
+                    {
+                        cartItems && 
+                        <Button
+                            label='Check Out'
+                            fun={async () => {
+                                try {
+                                    await checkout();
+                                    setTimeout(()=>{
+                                        toaster('Order made successfully', 'success');
+                                    }, 3000)
+                                } catch (error) {
+                                    toaster('Failed to make order', 'danger');
+                                }
+                            }}
+                        />
+                    }
                 </FormStrip>
             </BigForm>
         </MyModal>

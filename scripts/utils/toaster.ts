@@ -1,6 +1,6 @@
 import { ToastAndroid } from "react-native";
 
-type ToastType = "info" | "success" | "danger" | "warn";
+export type ToastType = "info" | "success" | "danger" | "warn";
 
 export default function toaster(message: string, toast_type: ToastType): void {
 

@@ -21,6 +21,7 @@ export default class Storeman extends User{
     
     async addEquipment(equip: Inventory):Promise<void>{
         try{
+            this.toaster('Equipment added successfully','success');
             await this.apiFetch(this.endpoints.addEquipment, {body: JSON.stringify(equip), method: 'POST'});
         }catch(error){
             throw error;
@@ -28,6 +29,7 @@ export default class Storeman extends User{
     }
     async getEquipment():Promise<Inventory[]>{
         try{
+            this.toaster('Equipment fetched successfully','info');
             return await this.apiFetch<Inventory[]>(this.endpoints.getAllEquipment);
         } catch(error){
             console.error("Error getting equipment:", error);
@@ -36,6 +38,7 @@ export default class Storeman extends User{
     }
     async updateEquipment(id:number, equip:Inventory):Promise<void>{
         try{
+            this.toaster('Equipment updated successfully','success');
             await this.apiFetch(`${this.endpoints.updateEquipment}/${id}`, {body: JSON.stringify(equip), method: 'PUT'});
         }catch(error){
             throw error;
@@ -44,6 +47,7 @@ export default class Storeman extends User{
 
     async deleteEquipment(id:number):Promise<void>{
         try{
+            this.toaster('Equipment deleted successfully','success');
             await this.apiFetch(`${this.endpoints.deleteEquipment}/${id}`, {method: 'DELETE'});
         }catch(error){
             throw error;
@@ -52,6 +56,7 @@ export default class Storeman extends User{
 
     async getSupplies():Promise<Supply[]>{
         try{
+            this.toaster('Supplies fetched successfully','info');
             return await this.apiFetch<Supply[]>(this.endpoints.getAllSupplies);
         } catch(error){
             console.error("Error getting supplies:", error);
@@ -73,6 +78,7 @@ export default class Storeman extends User{
 
     async getOrders():Promise<Order[]>{
         try {
+            this.toaster('Equipment updated successfully','info');
             return await this.apiFetch(this.endpoints.getAllOrders)
         }catch(err){
             errorLogger(err);
@@ -91,6 +97,7 @@ export default class Storeman extends User{
                     body:JSON.stringify(order_status)
                 }
             );
+            this.toaster('Order updated successfully','success');
         } catch(err){
             errorLogger(err);
         }

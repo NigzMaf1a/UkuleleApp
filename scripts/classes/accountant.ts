@@ -37,6 +37,7 @@ export default class Accountant extends User{
             );
 
             if(typeof service_id === 'number') await this.approveServicePaymentStatus(service_id);
+            this.toaster('Payment approved successfully', 'success');
 
         }catch(error){
             console.error("Error approving payment:", error);
@@ -54,6 +55,7 @@ export default class Accountant extends User{
                     body:JSON.stringify(status)
                 }
             );
+            this.toaster('Penalty payment approved successfully', 'success');
         } catch(err){
             errorLogger(err);
         }
@@ -72,6 +74,7 @@ export default class Accountant extends User{
                     }
                 }
             }
+            this.toaster('Penalties fetched successfully', 'info');
             return paidPenalties;
         } catch(err){
             errorLogger(err);
@@ -81,6 +84,7 @@ export default class Accountant extends User{
 
     async getPenaltyPayments():Promise<PenaltyPayment[]>{
         try {
+            this.toaster('Penalty payments fetched successfully', 'info');
             return await this.apiFetch(this.endpoints.getPenaltyPayment);
         } catch (err) {
             errorLogger(err);
@@ -90,6 +94,7 @@ export default class Accountant extends User{
 
     async getOrders():Promise<Order[]>{
         try {
+            this.toaster('Orders fetched successfully', 'info');
             return await this.apiFetch<Order[]>(this.endpoints.getAllOrders);
         } catch (err) {
             errorLogger(err);
@@ -105,6 +110,7 @@ export default class Accountant extends User{
                     body:JSON.stringify(payment)
                 }
             );
+            this.toaster('Order payment made successfully', 'success');
         } catch (err) {
             errorLogger(err);
         }
@@ -121,6 +127,7 @@ export default class Accountant extends User{
                     body:JSON.stringify(status)
                 }
             );
+            this.toaster('Payment approved successfully', 'success');
         } catch (err) {
            errorLogger(err); 
         }
@@ -128,6 +135,7 @@ export default class Accountant extends User{
 
     public async getAllFinanceRecords(): Promise<Finance[]>{
         try{
+            this.toaster('Finance records fetched successfully', 'info');
             return await this.apiFetch<Finance[]>(this.endpoints.getAllFinance);
         }catch(error){
             console.error("Error getting finance records:", error);
@@ -137,6 +145,7 @@ export default class Accountant extends User{
 
     public async getAllServices():Promise<Services[]>{
         try{
+            this.toaster('Services fetched successfully','info');
             return await this.apiFetch(this.endpoints.getAllServices);
         } catch(err){
             console.error('Error', err, 'occurred');
@@ -147,6 +156,7 @@ export default class Accountant extends User{
     public async getPaymentServiceID(pay_id:number){
         const allPayments = await this.getAllFinanceRecords();
         const service_id = allPayments.find(p => p.TransactionID === pay_id)?.ServiceID;
+        this.toaster('Payment service id fetched successfully','info');
         return service_id;
     }
 
@@ -161,7 +171,8 @@ export default class Accountant extends User{
                     method:"POST",
                     body:JSON.stringify(status)
                 }
-        );
+            );
+            this.toaster('Payment approved successfully','success');
         } catch(err){
             console.error('Error', err, 'occurred');
         }

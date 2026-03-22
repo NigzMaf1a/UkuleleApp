@@ -18,6 +18,7 @@ export default class ServiceManager extends User{
 
     public async getAllServiceRequests():Promise<Services[]>{
         try {
+            this.toaster('Requests fetched successfully','info');
             return await this.apiFetch<Services[]>(this.endpoints.getAllServices);
         } catch(err){
             console.error('Error', err, 'occurred');
@@ -27,6 +28,7 @@ export default class ServiceManager extends User{
 
     async getAllLendingRequests():Promise<Lending[]>{
         try{ 
+            this.toaster('Requests fetched successfully','info');
             return await this.apiFetch<Lending[]>(this.endpoints.getAllLendingRequests);
         } catch(err){
             console.error('Error', err, 'occurred')
@@ -36,6 +38,7 @@ export default class ServiceManager extends User{
 
     async getAllBookingRequest():Promise<Booking[]>{
         try{
+            this.toaster('Requests fetched successfully','info');
             return await this.apiFetch<Booking[]>(this.endpoints.getAllBookings)
         } catch(err){
             console.log('Error', err, 'Occurred');
@@ -67,6 +70,7 @@ export default class ServiceManager extends User{
                 const thisLendingId = lendings.find(l => l.ServiceID === id)?.LendID;
                 if(thisLendingId) await this.approveLendingRequest(thisLendingId);
             }
+            this.toaster('Service updated successfully','success');
 
         } catch(err){
             console.error('Error', err, 'occurred');

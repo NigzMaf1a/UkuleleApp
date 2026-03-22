@@ -32,6 +32,7 @@ export default class DJ extends User {
                     body:JSON.stringify(performed)
                 }
             );
+            this.toaster('Performance update successful','success');
         } catch(err){
             errorLogger(err);
         }

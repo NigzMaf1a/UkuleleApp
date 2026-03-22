@@ -18,6 +18,7 @@ export default class Band extends User{
 
     async getAllBookings():Promise<Booking[]>{
         try{
+            this.toaster('Bookings fetched successfully','info');
             return await this.apiFetch<Booking[]>(this.endpoints.getAllBookings)
         } catch(err){
             errorLogger(err);
@@ -27,6 +28,7 @@ export default class Band extends User{
 
     async getAllServices():Promise<Services[]>{
         try{
+            this.toaster('Services fetched successfully','info');
             return await this.apiFetch<Services[]>(this.endpoints.getAllServices) ;
         } catch(err){
             errorLogger(err);
@@ -43,6 +45,7 @@ export default class Band extends User{
                     body:JSON.stringify(status)
                 }
             );
+            this.toaster('Performance updated successfully','success');
         } catch(err){
             errorLogger(err);
         }

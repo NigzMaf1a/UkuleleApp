@@ -28,6 +28,7 @@ export default class Inspector extends User {
                     body:JSON.stringify(insp)
                 }
             );
+            this.toaster('Inspection added successfully','success');
         } catch(err){
             errorLogger(err);
         }
@@ -35,6 +36,7 @@ export default class Inspector extends User {
 
     async getAllInspections():Promise<Inspection[]>{
         try {
+            this.toaster('Inspections fetched successfully','info');
             return await this.apiFetch<Inspection[]>(this.endpoints.getInspections);
         } catch(err){
             errorLogger(err);
@@ -44,6 +46,7 @@ export default class Inspector extends User {
 
     async getAllLendings():Promise<Lending[]>{
         try {
+            this.toaster('Lendings fetched successfully','info');
             return await this.apiFetch<Lending[]>(this.endpoints.getAllLendingRequests);
         } catch(err){
             errorLogger(err);
@@ -53,6 +56,7 @@ export default class Inspector extends User {
 
     async getAllAllocatedEquipment():Promise<AllocatedEquipment[]>{
         try {
+            this.toaster('Equipment fetched successfully','info');
             return await this.apiFetch<AllocatedEquipment[]>(this.endpoints.getAllAllocatedEquipment);
         } catch(err){
             errorLogger(err);
@@ -62,6 +66,7 @@ export default class Inspector extends User {
 
     async getAllEquipment():Promise<Inventory[]>{
         try {
+            this.toaster('Equipment fetched successfully','info');
             return await this.apiFetch<Inventory[]>(this.endpoints.getAllEquipment);
         } catch(err){
             errorLogger(err);
@@ -71,6 +76,7 @@ export default class Inspector extends User {
 
     async getAllServices():Promise<Services[]>{
         try {
+            this.toaster('Services fetched successfully','info');
             return await this.apiFetch<Services[]>(this.endpoints.getAllServices);
         } catch(err){
             errorLogger(err);
@@ -89,6 +95,7 @@ export default class Inspector extends User {
                     body:JSON.stringify(inspected)
                 }
             );
+            this.toaster('Equipment updated successfully','success');
         } catch(err){
             errorLogger(err);
         }
@@ -102,6 +109,7 @@ export default class Inspector extends User {
                     body:JSON.stringify(pen)
                 }
             );
+            this.toaster('Penalty added successfully','success');
         } catch(err){
             errorLogger(err);
         }

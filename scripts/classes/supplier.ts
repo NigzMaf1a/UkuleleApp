@@ -16,6 +16,7 @@ export default class Supplier extends User{
 
     async addSupply(supply: Supply):Promise<void>{
         try{
+            this.toaster('Supply added successfully','success');
             await this.apiFetch(this.endpoints.addSupply,  {method: 'POST', body: JSON.stringify(supply), headers: {'Content-Type': 'application/json'}});
         } catch(error){
             throw error;
@@ -24,6 +25,7 @@ export default class Supplier extends User{
 
     async getSupplies():Promise<Supply[]>{
         try{
+            this.toaster('Supplies fetched successfully','info');
             return await this.apiFetch<Supply[]>(this.endpoints.getAllSupplies);
         } catch(error){
             console.error("Error getting supplies:", error);
@@ -34,6 +36,7 @@ export default class Supplier extends User{
     async updateSupply(supplyId:number, supply: Supply):Promise<void>{
         try{
             await this.apiFetch(`${this.endpoints.updateSupply}/${supplyId}`,  {method: 'PUT', body: JSON.stringify(supply), headers: {'Content-Type': 'application/json'}});
+            this.toaster('Supply updated successfully','success');
         } catch(error){
             throw error;
         }
@@ -42,6 +45,7 @@ export default class Supplier extends User{
     async deleteSupply(supplyId:number):Promise<void>{
         try{
             await this.apiFetch(`${this.endpoints.deleteSupply}/${supplyId}`,  {method: 'DELETE'});
+            this.toaster('Supply deleted successfully','success');
         } catch(error){
             throw error;
         }
@@ -49,6 +53,7 @@ export default class Supplier extends User{
 
     async getOrders():Promise<Order[]>{
         try {
+            this.toaster('Orders fetched successfully','info');
             return await this.apiFetch<Order[]>(this.endpoints.getAllOrders);
         } catch(err) {
             errorLogger(err);
@@ -66,6 +71,7 @@ export default class Supplier extends User{
                     body:JSON.stringify(order_status)
                 }
             );
+            this.toaster('Order updated successfully','success');
         } catch(err){
             errorLogger(err);
         }

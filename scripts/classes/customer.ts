@@ -24,11 +24,12 @@ export default class Customer extends User{
     async requestService(service:Services){
         try {
            await this.apiFetch(this.endpoints.addService,
-            {
-                method:"POST",
-                body:JSON.stringify(service)
-            }
+                {
+                    method:"POST",
+                    body:JSON.stringify(service)
+                }
            );
+           this.toaster('Service request successful','success');
         } catch (error) {
             errorLogger(error);
         }
@@ -42,6 +43,7 @@ export default class Customer extends User{
                     body:JSON.stringify(booking)
                 }
             );
+            this.toaster('Service request successful','success');
         }catch(error){
             console.error("Error booking band:", error);
         }
@@ -54,6 +56,7 @@ export default class Customer extends User{
                     body:JSON.stringify(lending)
                 }
             );
+            this.toaster('Service request successful','success');
         }catch(error){
             console.error("Error hiring sound:", error);
         }
@@ -66,6 +69,7 @@ export default class Customer extends User{
                     body:JSON.stringify(fin)
                 }
             );
+            this.toaster('Payment successful','success');
         }catch(error){
             console.error("Error making payment:", error);
         }
@@ -78,12 +82,14 @@ export default class Customer extends User{
                     body:JSON.stringify(feed)
                 }
             );
+            this.toaster('Feedback added successfully','success');
         }catch(error){
             console.error("Error adding feedback:", error);
         }
     }
     async getFeedback(): Promise<Feedback[]>{
         try{
+            this.toaster('Feedback fetched successfully','info');
             return await this.apiFetch<Feedback[]>(this.endpoints.getAllFeedback);
         }catch(error){
             console.error("Error getting feedback:", error);
@@ -92,6 +98,7 @@ export default class Customer extends User{
     }
     async getBookingHistory(): Promise<Booking[]>{
         try{
+            this.toaster('Booking history fetch successful','info');
             return await this.apiFetch<Booking[]>(this.endpoints.getAllBookings);
         }catch(error){
             console.error("Error getting booking history:", error);
@@ -100,6 +107,7 @@ export default class Customer extends User{
     }
     async getHireHistory(): Promise<Lending[]>{
         try{
+            this.toaster('Lending history fetch successful','info');
             return await this.apiFetch<Lending[]>(this.endpoints.getAllLendingRequests);
         }catch(error){
             console.error("Error getting hire history:", error);
@@ -108,6 +116,7 @@ export default class Customer extends User{
     }
     async getPaymentHistory(): Promise<Finance[]>{
         try{
+            this.toaster('Payment history fetch successful','info');
             return (await this.apiFetch<Finance[]>(this.endpoints.getAllFinance)).filter(f => f.CustomerID === this.getRegID());
         }catch(error){
             console.error("Error getting payment history:", error);
@@ -117,6 +126,7 @@ export default class Customer extends User{
 
     async getPenaltyHistory(): Promise<Penalty[]>{
         try{
+            this.toaster('Penalty history fetch successful','info');
             return (await this.apiFetch<Penalty[]>(this.endpoints.getAllPenalties)).filter(p => p.CustomerID === this.getRegID());
         }catch(error){
             console.error("Error getting penalty history:", error);
@@ -126,6 +136,7 @@ export default class Customer extends User{
 
     async getCustomerServices():Promise<Services[]>{
         try {
+            this.toaster('Service history fetch successful','info');
             return (await this.apiFetch<Services[]>(this.endpoints.getAllServices)).filter(s => s.CustomerID === this.getRegID());
         }catch(err){
             errorLogger(err);
@@ -159,6 +170,8 @@ export default class Customer extends User{
                 method:"POST",
                 body:JSON.stringify(penaltyPayment)
             });
+
+            this.toaster('Penalty payment successful','success');
         } catch(err){
             errorLogger(err);
         }

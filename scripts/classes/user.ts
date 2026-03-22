@@ -8,6 +8,7 @@ import About from "../interfaces/about";
 import Users from "../interfaces/user";
 import Dispatch from "../interfaces/dispatch";
 import Lending from "../interfaces/lending";
+import { ToastType } from "../utils/toaster";
 
 //enums
 import RegType from "../enums/regType";
@@ -16,12 +17,14 @@ import DispatchStatus from "../enums/dispatch";
 
 //utils
 import errorLogger from "../utils/errorLogger";
+import toaster from "../utils/toaster";
 
 export default class User {
   private readonly regID: number;
   private readonly token: string;
   public url: string;
   public endpoints: typeof endpoints;
+  public toaster:(message:string, toast_type:ToastType) => void;
 
   constructor(regID: number, token: string, backendUrl: string = link) {
     if (!token || !regID) {
@@ -33,6 +36,7 @@ export default class User {
     this.token = token;
     this.url = backendUrl;
     this.endpoints = endpoints;
+    this.toaster = toaster;
   }
 
   getToken(): string {
@@ -56,6 +60,7 @@ export default class User {
 
   public async getAbout():Promise<About[]>{
     try{
+      this.toaster('About fetched successfully', 'info')
       return await this.apiFetch<About[]>(this.endpoints.getAbout)
     } catch(err){
       errorLogger(err);
@@ -65,6 +70,7 @@ export default class User {
 
   public async getContact():Promise<Contact[]>{
     try{
+      this.toaster('Contact fetch successful', 'info');
       return await this.apiFetch<Contact[]>(this.endpoints.getContacts);
     } catch(err){
       errorLogger(err);
@@ -75,6 +81,7 @@ export default class User {
   public async getUser():Promise<Users | undefined>{
     try {
       const allUsers = await this.apiFetch<Users[]>(this.endpoints.getAllUsers);
+      this.toaster('User fetch successful', 'info');
       if(allUsers !== undefined && allUsers.length > 0) {
         return allUsers.find(u => u.regID === this.getRegID());
       }
@@ -91,6 +98,7 @@ export default class User {
         case RegType.DJ || RegType.Mcee || RegType.Band:
           {
             try {
+              this.toaster('Dispatch record fetch successful', 'info')
               return this.apiFetch<Dispatch[]>(this.endpoints.getAllDispatches);
             } catch (error) {
               errorLogger(error);
@@ -121,6 +129,7 @@ export default class User {
                   body:JSON.stringify(status)
                 }
               );
+              this.toaster('Ready for dispatch', 'success');
             } catch (error) {
               errorLogger(error);
             }
@@ -135,6 +144,7 @@ export default class User {
 
   public async soundSystemGetLending():Promise<Lending[]>{
     try {
+      this.toaster('Lendings fetched successfully', 'info');
       return await this.apiFetch<Lending[]>(this.endpoints.getAllLendingRequests);
     } catch (error) {
       errorLogger(error);
@@ -154,6 +164,7 @@ export default class User {
           body:JSON.stringify(status)
         }
       );
+      this.toaster('Lending approved successfully', 'success');
     } catch (error) {
       errorLogger(error);
     }

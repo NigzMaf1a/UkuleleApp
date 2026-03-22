@@ -17,6 +17,7 @@ export default class DispatchMan extends User{
 
     async getDispatchRequests():Promise<Dispatch[]>{
         try {
+            this.toaster('Dispatch requests fetch successful','info');
             return await this.apiFetch<Dispatch[]>(this.endpoints.getAllDispatches);
         }catch(err){
             errorLogger(err);
@@ -34,6 +35,7 @@ export default class DispatchMan extends User{
                     body:JSON.stringify(dispatched)
                 }
             );
+            this.toaster('Dispatch update successful','success');
         } catch(err){
             errorLogger(err);
         }
@@ -49,6 +51,7 @@ export default class DispatchMan extends User{
                     body:JSON.stringify(returned)
                 }
             );
+            this.toaster('Dispatch update successful','success');
         } catch(err){
             errorLogger(err);
         }

@@ -15,6 +15,7 @@ export default class Mcee extends User{
 
     async getAllSoundBookings():Promise<Lending[]>{
         try{
+            this.toaster('Requests fetched successfully','info');
             return await this.apiFetch<Lending[]>(this.endpoints.getAllBookings);
         } catch(error){
             console.error("Error getting sound bookings:", error);
@@ -32,6 +33,7 @@ export default class Mcee extends User{
                     body:JSON.stringify(performed)
                 }
             );
+            this.toaster('Service updated successfully','success');
         } catch(err){
             errorLogger(err);
         }
