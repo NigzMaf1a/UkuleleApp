@@ -19,7 +19,10 @@ import LoginResponse from "../scripts/interfaces/login";
 
 //styles
 import { typography } from "../styles/typography";
-
+import { containerStyles } from "../styles/containerStyles";{}
+import { colors } from "../styles/colors";
+import { flexStyles } from "../styles/flexStyles";
+import { spacing } from "../styles/spacing";
 type RegType =
   | "Customer"
   | "Band"
