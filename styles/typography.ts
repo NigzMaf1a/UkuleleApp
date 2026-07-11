@@ -12,7 +12,7 @@ export const typography = {
   },
 
   h3: {
-    fontSize: normalize(22),
+    fontSize: normalize(16),
     fontWeight: "600" as const
   },
 

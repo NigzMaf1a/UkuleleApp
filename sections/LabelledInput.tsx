@@ -6,7 +6,7 @@ import Input from '../components/Input';
 import DispText from '../components/DispText';
 
 //styles
-import { cardStyles } from '../styles/cardStyles';
+import { containerStyles } from '../styles/finesse/components';
 
 interface LabelledInputProps{
     label:string;
@@ -24,7 +24,12 @@ export default function LabelledInput({
     onChange
 }:LabelledInputProps) {
   return (
-    <View style={cardStyles.strip}>
+    <View
+      style={[
+        containerStyles.LabelledInputContainer,
+        { backgroundColor: "white" },
+      ]}
+    >
         <DispText text={label}/>
         <Input placeholder={inputPlaceholder}
                placeholderTextColor={placeholderTextColor}

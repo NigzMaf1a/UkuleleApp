@@ -1,29 +1,41 @@
 import link from "./links";
+import storage from "../auth/storage";
 
 const BASE_URL = link;
 
 export default async function apiFetch<T>(
-  endpoint: string,
-  options: RequestInit = {}
+    endpoint: string,
+    options: RequestInit = {}
 ): Promise<T> {
-  const fullUrl = `${BASE_URL.replace(/\/$/, '')}/${endpoint.replace(/^\//, '')}`;
 
-  // Get token from localStorage (or cookie, etc.)
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  console.log(`Token from fetch: ${token}`)
+    const fullUrl =
+        `${BASE_URL.replace(/\/$/, "")}/${endpoint.replace(/^\//, "")}`;
 
-  const res = await fetch(fullUrl, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options.headers || {}),
-    },
-  });
+    // Get token from AsyncStorage
+    const token = await storage.get.key();
 
-  if (!res.ok) {
-    throw new Error(`Fetch failed: ${res.status} ${res.statusText}`);
-  }
+    console.log("Token from storage:", token);
 
-  return res.json();
+    const res = await fetch(fullUrl, {
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+
+            ...(token
+                ? {
+                    Authorization: `Bearer ${token}`,
+                }
+                : {}),
+
+            ...(options.headers ?? {}),
+        },
+    });
+
+    if (!res.ok) {
+        throw new Error(
+            `Fetch failed: ${res.status} ${res.statusText}`
+        );
+    }
+
+    return (await res.json()) as T;
 }

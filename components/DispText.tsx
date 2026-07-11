@@ -10,10 +10,11 @@ interface DispTextProps {
 export default function DispText({ text, textColor }: DispTextProps) {
   return (
     <Text
-      style={[
-        typography.h1,
-        textColor && { color: textColor }
-      ]}
+        style={[
+          typography.h3,
+          { textAlignVertical: "center" },
+          textColor && { color: textColor },
+        ]}
     >
       {text}
     </Text>

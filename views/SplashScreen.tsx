@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { View, Animated, StyleSheet } from "react-native";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import { colors } from "../styles/colors";
 
 /**
  * SplashScreen
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: "#111827",
+    backgroundColor: colors.background,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
