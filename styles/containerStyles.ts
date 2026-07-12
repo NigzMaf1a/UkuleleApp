@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 import { spacing } from "./spacing";
 import { colors } from "./colors";
+import { hp } from "./responsive";
 
 export const containerStyles = StyleSheet.create({
 
@@ -18,7 +19,7 @@ export const containerStyles = StyleSheet.create({
 
   smallForm: {
     width: "100%",
-    height: "40%",
+    height: hp(40),
     justifyContent: "center",
     alignItems: "stretch",
     gap: spacing.md,

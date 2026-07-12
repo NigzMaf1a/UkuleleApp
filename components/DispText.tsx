@@ -1,20 +1,32 @@
 import React from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text, TextStyle } from "react-native";
 import { typography } from "../styles/typography";
+import { colors } from "../styles/colors";
 
 interface DispTextProps {
   text: string;
+  variant?: keyof typeof typography;
   textColor?: string;
+  textAlign?: TextStyle["textAlign"];
+  numberOfLines?: number;
 }
 
-export default function DispText({ text, textColor }: DispTextProps) {
+export default function DispText({
+  text,
+  variant = "body",
+  textColor,
+  textAlign,
+  numberOfLines,
+}: DispTextProps) {
   return (
     <Text
-        style={[
-          typography.h3,
-          { textAlignVertical: "center" },
-          textColor && { color: textColor },
-        ]}
+      style={[
+        typography[variant],
+        { color: textColor ?? colors.text },
+        textAlign && { textAlign },
+      ]}
+      numberOfLines={numberOfLines}
+      maxFontSizeMultiplier={1.5}
     >
       {text}
     </Text>
