@@ -42,6 +42,8 @@ export const cardStyles = StyleSheet.create({
     padding: spacing.md,
     marginBottom: spacing.lg,
     borderRadius: scale(14),
-    gap: spacing.sm
+    gap: spacing.sm,
+    backgroundColor: colors.surface,
+    elevation: 3
   }
 });

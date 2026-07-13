@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 import storage from "../../../scripts/auth/storage";
 
@@ -20,39 +20,39 @@ import Accountant from "../../../scripts/classes/accountant";
 import { Status } from "../../../scripts/interfaces/finance";
 import { PaymentStatus } from "../../../scripts/enums/services";
 
-export default function AccountantDashboard(){
+export default function AccountantDashboard() {
     let [views, setViews] = useState<number>(1);
     const [accountant, setAccountant] = useState<Accountant>();
     const [payments, setPayments] = useState<Finance[]>([]);
     const [services, setServices] = useState<Services[]>([]);
 
-    function reset(){
+    function reset() {
         setViews(1);
     }
 
-    function toggleViews(){
-        do{
-            if(views === 0) reset();
+    function toggleViews() {
+        do {
+            if (views === 0) reset();
             setInterval(() => {
-             setViews(views--);    
+                setViews(views--);
             }, 5000);
-        } while(views !== 0);
+        } while (views !== 0);
     }
-    
-    useEffect(() =>{
-        ( async ()=> {
-                const id = await storage.get.profile().then(prof => prof?.regID);
-                const key = await storage.get.key().then(key => key);
-                if(typeof id === 'number' && typeof key === 'string' ){
-                    const acc = new Accountant(id, key);
-                    setAccountant(acc);
-                }        
+
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.regID);
+            const key = await storage.get.key().then(key => key);
+            if (typeof id === 'number' && typeof key === 'string') {
+                const acc = new Accountant(id, key);
+                setAccountant(acc);
+            }
         })();
     }, []);
 
-    useEffect(()=>{
-        ( async ()=>{
-            if(accountant){
+    useEffect(() => {
+        (async () => {
+            if (accountant) {
                 const pay = await accountant.getAllFinanceRecords();
                 const serv = await accountant.getAllServices();
 
@@ -62,23 +62,22 @@ export default function AccountantDashboard(){
         })();
     }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         toggleViews();
     }, []);
 
     return (
         <ScrollScreen>
-              
-                <DashTray>
-                    {
-                        payments.length > 0 && payments.map((p) => <ListItem key={p.TransactionID} 
-                                                                             rowOneData={{label:'Code', text:p.TransactionName}}
-                                                                             rowTwoData={{label:'Date', text:String(p.TransactionDate)}}
-                                                                             rightSideText={String(p.Amount)}
-                        />)
-                    }
-                    <DispText text="Implement this"/>
-                </DashTray>                   
+
+            <DashTray>
+                {
+                    payments.length > 0 && payments.map((p) => <ListItem key={p.TransactionID}
+                        rowOneData={{ label: 'Code', text: p.TransactionName }}
+                        rowTwoData={{ label: 'Date', text: String(p.TransactionDate) }}
+                        rightSideText={String(p.Amount)}
+                    />)
+                }
+            </DashTray>
         </ScrollScreen>
     );
 }
