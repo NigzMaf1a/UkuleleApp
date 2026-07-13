@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { View } from "react-native";
 
 //components
-import Screen from "../components/Screen";
-import Strip from "../components/Strip";
+import ScrollScreen from "../components/ScrollScreen";
+import SmallForm from "../components/SmallForm";
+import FormStrip from "../components/FormStript";
 import LabelledInput from "../sections/LabelledInput";
 import Button from "../components/Button";
 import DispText from "../components/DispText";
-import SmallForm from "../components/SmallForm";
-import FormStrip from "../components/FormStript";
+import RegLogRedirector from "../sections/RegLogRedirector";
 
 //auth
 import storage from "../scripts/auth/storage";
@@ -18,11 +17,8 @@ import loginUser from "../scripts/utils/loginUser";
 import LoginResponse from "../scripts/interfaces/login";
 
 //styles
-import { typography } from "../styles/typography";
-import { containerStyles } from "../styles/containerStyles";{}
 import { colors } from "../styles/colors";
-import { flexStyles } from "../styles/flexStyles";
-import { spacing } from "../styles/spacing";
+
 type RegType =
   | "Customer"
   | "Band"
@@ -42,21 +38,30 @@ interface LoginProps {
 export default function Login({ setRole }: LoginProps) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogin = async () => {
-    const { token, user }: LoginResponse = await loginUser({ email, password });
+    setError(null);
 
-    if (user !== undefined) {
-      await storage.set(token, user.regType, user);
-      setRole(user.regType as RegType);
+    try {
+      const { token, user }: LoginResponse = await loginUser({ email, password });
+
+      if (user !== undefined) {
+        await storage.set(token, user.regType, user);
+        setRole(user.regType as RegType);
+      } else {
+        setError("Invalid email or password.");
+      }
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
     }
   };
 
   return (
-    <Screen>
+    <ScrollScreen>
       <SmallForm>
         <FormStrip>
-          <DispText text="Login" />
+          <DispText text="Login" variant="h2" />
         </FormStrip>
 
         <LabelledInput
@@ -64,6 +69,10 @@ export default function Login({ setRole }: LoginProps) {
           inputPlaceholder="Enter email here"
           value={email}
           onChange={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          returnKeyType="next"
         />
 
         <LabelledInput
@@ -71,12 +80,24 @@ export default function Login({ setRole }: LoginProps) {
           inputPlaceholder="Enter password here"
           value={password}
           onChange={setPassword}
+          secureTextEntry
+          autoComplete="password"
+          returnKeyType="done"
+          onSubmitEditing={handleLogin}
         />
 
+        {error && (
+          <FormStrip>
+            <DispText text={error} variant="caption" textColor={colors.danger} />
+          </FormStrip>
+        )}
+
+        <RegLogRedirector view="login" />
+
         <FormStrip>
-          <Button label="Login" fun={() => handleLogin()} />
+          <Button label="Login" fun={handleLogin} />
         </FormStrip>
       </SmallForm>
-    </Screen>
+    </ScrollScreen>
   );
 }

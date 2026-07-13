@@ -1,41 +1,54 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, TextInputProps } from 'react-native';
 
-//components
 import Input from '../components/Input';
 import DispText from '../components/DispText';
 
-//styles
-import { containerStyles } from '../styles/finesse/components';
+import { containerStyles } from '../styles/labelledInputStyles';
+import { colors } from '../styles/colors';
 
-interface LabelledInputProps{
-    label:string;
-    inputPlaceholder:string;
-    placeholderTextColor?:string;
-    value:string;
-    onChange:(newValue: string) => void;
+interface LabelledInputProps {
+  label: string;
+  inputPlaceholder: string;
+  value: string;
+  onChange: (newValue: string) => void;
+  secureTextEntry?: boolean;
+  keyboardType?: TextInputProps['keyboardType'];
+  autoCapitalize?: TextInputProps['autoCapitalize'];
+  autoComplete?: TextInputProps['autoComplete'];
+  returnKeyType?: TextInputProps['returnKeyType'];
+  onSubmitEditing?: () => void;
+  maxLength?: number;
 }
 
 export default function LabelledInput({
-    label,
-    inputPlaceholder,
-    placeholderTextColor,
-    value,
-    onChange
-}:LabelledInputProps) {
+  label,
+  inputPlaceholder,
+  value,
+  onChange,
+  secureTextEntry,
+  keyboardType,
+  autoCapitalize,
+  autoComplete,
+  returnKeyType,
+  onSubmitEditing,
+  maxLength
+}: LabelledInputProps) {
   return (
-    <View
-      style={[
-        containerStyles.LabelledInputContainer,
-        { backgroundColor: "white" },
-      ]}
-    >
-        <DispText text={label}/>
-        <Input placeholder={inputPlaceholder}
-               placeholderTextColor={placeholderTextColor}
-               value={value}
-               onChange={() => onChange}
-        />
+    <View style={[containerStyles.labelledInputContainer, { backgroundColor: colors.background }]}>
+      <DispText text={label} variant="caption" textColor={colors.textSecondary} />
+      <Input
+        placeholder={inputPlaceholder}
+        value={value}
+        onChange={onChange}
+        secureTextEntry={secureTextEntry}
+        keyboardType={keyboardType}
+        autoCapitalize={autoCapitalize}
+        autoComplete={autoComplete}
+        returnKeyType={returnKeyType}
+        onSubmitEditing={onSubmitEditing}
+        maxLength={maxLength}
+      />
     </View>
-  )
+  );
 }

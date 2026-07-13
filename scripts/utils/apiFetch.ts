@@ -32,9 +32,20 @@ export default async function apiFetch<T>(
     });
 
     if (!res.ok) {
-        throw new Error(
-            `Fetch failed: ${res.status} ${res.statusText}`
-        );
+        let message = `Fetch failed: ${res.status} ${res.statusText}`;
+
+        try {
+            const body = await res.json();
+            if (body?.error) {
+                message = body.error;
+            } else if (body?.message) {
+                message = body.message;
+            }
+        } catch {
+            // Response body wasn't JSON — fall back to the generic message
+        }
+
+        throw new Error(message);
     }
 
     return (await res.json()) as T;

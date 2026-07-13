@@ -71,7 +71,7 @@ export default function InspectorMenu() {
         name="Penalties"
         component={InspectorPenalties}
         options={{ title: "Penalties" }}
-      />      
+      />
       <Drawer.Screen
         name="Reports"
         component={InspectorReport}

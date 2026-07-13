@@ -15,5 +15,5 @@ export const colors = {
 };
 
 export const gradients = {
-  primary: ["#3B82F6", "#6366F1"],
+  primary: ["#3B82F6", "#6366F1"]
 };

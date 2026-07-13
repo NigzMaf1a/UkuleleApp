@@ -1,5 +1,4 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
 
 // Menus
 import AccountantMenu from "./menus/AccountantMenu";
@@ -31,7 +30,6 @@ interface MenuProps {
 }
 
 export default function Menu({ regType }: MenuProps) {
-
   // Map role → menu component
   const menuMap: Record<RegType, React.ComponentType> = {
     Customer: CustomerMenu,
@@ -48,24 +46,5 @@ export default function Menu({ regType }: MenuProps) {
 
   const DrawerMenu = menuMap[regType];
 
-  return (
-    <View style={styles.container}>
-      {/* Drawer Navigation */}
-      <View style={styles.drawer}>
-        <DrawerMenu />
-      </View>
-
-      {/* Bottom Navigation */}
-      <BottomNav />
-    </View>
-  );
+  return <BottomNav DrawerMenu={DrawerMenu} />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  drawer: {
-    flex: 1
-  }
-});

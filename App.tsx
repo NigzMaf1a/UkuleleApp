@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import NetInfo, { NetInfoState } from "@react-native-community/netinfo";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 //views
-import Login from "./views/Login";
 import SplashScreen from "./views/SplashScreen";
 
 //navigation
 import Menu from "./navigation/Menu";
+import AuthStack from "./navigation/AuthStack";
 
 //storage
 import storage from "./scripts/auth/storage";
@@ -93,16 +94,18 @@ export default function App() {
   }, []);
 
   return (
-    <NavigationContainer>
-      <StatusBar style="auto" />
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <StatusBar style="auto" />
 
-      {loading ? (
-        <SplashScreen />
-      ) : role ? (
-        <Menu regType={role} />
-      ) : (
-        <Login setRole={setRole} />
-      )}
-    </NavigationContainer>
+        {loading ? (
+          <SplashScreen />
+        ) : role ? (
+          <Menu regType={role} />
+        ) : (
+          <AuthStack setRole={setRole} />
+        )}
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }

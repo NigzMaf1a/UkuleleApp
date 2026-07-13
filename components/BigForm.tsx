@@ -4,11 +4,11 @@ import { View } from 'react-native';
 //styles
 import { containerStyles } from '../styles/containerStyles';
 
-interface SmallFormProps{
-  children:React.ReactNode; 
+interface BigFormProps {
+  children: React.ReactNode;
 }
 
-export default function BigForm({children}:SmallFormProps) {
+export default function BigForm({ children }: BigFormProps) {
   return (
     <View style={containerStyles.bigForm}>
       {children}

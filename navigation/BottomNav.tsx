@@ -1,11 +1,11 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { BottomTabParamList } from "./types";
 import { Ionicons } from "@expo/vector-icons";
+import { BottomTabParamList } from "./types";
 
 // views
 import AboutUs from "../views/AboutUs";
-import ContacUs from "../views/ContacUs";
+import ContactUs from "../views/ContacUs";
 import Help from "../views/Help";
 import Profile from "../views/Profile";
 
@@ -15,30 +15,35 @@ import menuStyles from "../styles/menuStyles";
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
-export default function BottomNav() {
+interface BottomNavProps {
+  DrawerMenu: React.ComponentType;
+}
+
+export default function BottomNav({ DrawerMenu }: BottomNavProps) {
   return (
     <Tab.Navigator
-      initialRouteName="Profile"
+      initialRouteName="Menu"
       screenOptions={({ route }) => ({
-        headerShown: true,
+        // "Menu" is the Drawer — it manages its own header, so suppress the Tab's here
+        headerShown: route.name !== "Menu",
         lazy: true,
 
-        // tab styles
         tabBarStyle: menuStyles.bottomTab,
         tabBarLabelStyle: menuStyles.label,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textSecondary,
 
-        // header styles
         headerStyle: menuStyles.header,
         headerTitleStyle: menuStyles.headerTitle,
         headerTintColor: colors.text,
 
-        // icons per tab
         tabBarIcon: ({ color, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap;
 
           switch (route.name) {
+            case "Menu":
+              iconName = "menu-outline";
+              break;
             case "Profile":
               iconName = "person-outline";
               break;
@@ -56,32 +61,14 @@ export default function BottomNav() {
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
-        },
+        }
       })}
     >
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{ title: "Profile" }}
-      />
-
-      <Tab.Screen
-        name="About"
-        component={AboutUs}
-        options={{ title: "About Us" }}
-      />
-
-      <Tab.Screen
-        name="Contact"
-        component={ContacUs}
-        options={{ title: "Contact Us" }}
-      />
-
-      <Tab.Screen
-        name="Help"
-        component={Help}
-        options={{ title: "Help" }}
-      />
+      <Tab.Screen name="Menu" component={DrawerMenu} options={{ title: "Menu" }} />
+      <Tab.Screen name="Profile" component={Profile} options={{ title: "Profile" }} />
+      <Tab.Screen name="About" component={AboutUs} options={{ title: "About Us" }} />
+      <Tab.Screen name="Contact" component={ContactUs} options={{ title: "Contact Us" }} />
+      <Tab.Screen name="Help" component={Help} options={{ title: "Help" }} />
     </Tab.Navigator>
   );
 }

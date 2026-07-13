@@ -1,13 +1,19 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+//components
+import ScrollScreen from "../components/ScrollScreen";
+import BigForm from "../components/BigForm";
+import FormStrip from "../components/FormStript";
+import LabelledInput from "../sections/LabelledInput";
+import LabelledDropdown from "../components/LabelledDropdown";
+import Button from "../components/Button";
+import DispText from "../components/DispText";
+import RegLogRedirector from "../sections/RegLogRedirector";
+
+//navigation
+import { AuthStackParamList } from "../navigation/AuthStack";
 
 //interfaces
 import Users from "../scripts/interfaces/user";
@@ -17,7 +23,55 @@ import RegType from "../scripts/enums/regType";
 import endpoints from "../scripts/utils/endpoints";
 import apiFetch from "../scripts/utils/apiFetch";
 
+//styles
+import { colors } from "../styles/colors";
+
+interface RegisterResponse {
+  error?: string;
+}
+
+type AuthNavProp = NativeStackNavigationProp<AuthStackParamList>;
+
+const genderItems = [
+  { label: "Male", value: "Male" },
+  { label: "Female", value: "Female" }
+];
+
+// Display labels are user-friendly; values match the canonical RegType
+// used in App.tsx / Menu.tsx's menuMap — these MUST stay in sync.
+const regTypeItems = [
+  { label: "Customer", value: "Customer" },
+  { label: "DJ", value: "Deejay" },
+  { label: "Mcee", value: "Mcee" },
+  { label: "Storeman", value: "Store" },
+  { label: "Accountant", value: "Accountant" },
+  { label: "Dispatchman", value: "Dispatch" },
+  { label: "Inspector", value: "Inspector" },
+  { label: "Band", value: "Band" },
+  { label: "Supplier", value: "Supplier" },
+  { label: "Service Provider", value: "Service" }
+];
+
+const locationItems = [
+  { label: "Nairobi CBD", value: "Nairobi CBD" },
+  { label: "Westlands", value: "Westlands" },
+  { label: "Karen", value: "Karen" },
+  { label: "Langata", value: "Langata" },
+  { label: "Kilimani", value: "Kilimani" },
+  { label: "Eastleigh", value: "Eastleigh" },
+  { label: "Umoja", value: "Umoja" },
+  { label: "Parklands", value: "Parklands" },
+  { label: "Ruiru", value: "Ruiru" },
+  { label: "Ruai", value: "Ruai" },
+  { label: "Gikambura", value: "Gikambura" },
+  { label: "Kitengela", value: "Kitengela" },
+  { label: "Nairobi West", value: "Nairobi West" },
+  { label: "Nairobi East", value: "Nairobi East" }
+];
+
 export default function Registration() {
+  const navigation = useNavigation<AuthNavProp>();
+
   const [name, setName] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [email, setEmail] = useState("");
@@ -27,187 +81,130 @@ export default function Registration() {
   const [regType, setRegType] = useState<string>("");
   const [dLocation, setDLocation] = useState<string>("");
 
-  async function registerUser(){
-    await apiFetch(endpoints.addUser, 
-      {
-        method:'POST',
-        body:JSON.stringify(registrationPayload())
-      }
-    );
+  const [error, setError] = useState<string | null>(null);
+
+  function registrationPayload(): Users {
+    return {
+      name,
+      phoneNo,
+      email,
+      password,
+      gender,
+      regType: regType as RegType,
+      dLocation,
+      accStatus: "Pending"
+    };
   }
 
-  function registrationPayload():Users{
-    return {
-      name:name,
-      phoneNo:phoneNo,
-      email:email,
-      password:password,
-      gender:gender,
-      regType:regType as RegType,
-      dLocation:dLocation,
-      accStatus:'Pending'
+  async function registerUser() {
+    setError(null);
+
+    if (!name || !email || !password || !regType) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+
+    try {
+      const response = await apiFetch<RegisterResponse>(endpoints.addUser, {
+        method: "POST",
+        body: JSON.stringify(registrationPayload())
+      });
+
+      if (!response || response.error) {
+        setError(response?.error ?? "Registration failed. Please try again.");
+        return;
+      }
+
+      navigation.navigate("Login");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     }
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Create Account</Text>
+    <ScrollScreen>
+      <BigForm>
+        <FormStrip>
+          <DispText text="Create Account" variant="h2" />
+        </FormStrip>
 
-      <TextInput
-        placeholder="Full Name"
-        placeholderTextColor="#777"
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-      />
+        <LabelledInput
+          label="Full Name"
+          inputPlaceholder="Enter your full name"
+          value={name}
+          onChange={setName}
+          autoCapitalize="words"
+          autoComplete="name"
+          returnKeyType="next"
+        />
 
-      <TextInput
-        placeholder="Phone Number"
-        placeholderTextColor="#777"
-        keyboardType="phone-pad"
-        style={styles.input}
-        value={phoneNo}
-        onChangeText={setPhoneNo}
-      />
+        <LabelledInput
+          label="Phone Number"
+          inputPlaceholder="Enter your phone number"
+          value={phoneNo}
+          onChange={setPhoneNo}
+          keyboardType="phone-pad"
+          autoComplete="tel"
+          returnKeyType="next"
+        />
 
-      <TextInput
-        placeholder="Email"
-        placeholderTextColor="#777"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-      />
+        <LabelledInput
+          label="Email"
+          inputPlaceholder="Enter your email"
+          value={email}
+          onChange={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          returnKeyType="next"
+        />
 
-      <TextInput
-        placeholder="Password"
-        placeholderTextColor="#777"
-        secureTextEntry
-        style={styles.input}
-        value={password}
-        onChangeText={setPassword}
-      />
+        <LabelledInput
+          label="Password"
+          inputPlaceholder="Enter a password"
+          value={password}
+          onChange={setPassword}
+          secureTextEntry
+          autoComplete="password"
+          returnKeyType="next"
+        />
 
-      {/* Gender */}
-      <View style={styles.pickerContainer}>
-        <Text style={styles.label}>Gender</Text>
-        <Picker
+        <LabelledDropdown
+          label="Gender"
+          values={genderItems}
           selectedValue={gender}
-          onValueChange={(val : string) => setGender(String(val))}
-          style={styles.picker}
-        >
-          <Picker.Item label="Select Gender" value="" />
-          <Picker.Item label="Male" value="Male" />
-          <Picker.Item label="Female" value="Female" />
-        </Picker>
-      </View>
+          onValueChange={setGender}
+          placeholder="Select Gender"
+        />
 
-      {/* RegType */}
-      <View style={styles.pickerContainer}>
-        <Text style={styles.label}>Account Type</Text>
-        <Picker
+        <LabelledDropdown
+          label="Account Type"
+          values={regTypeItems}
           selectedValue={regType}
-          onValueChange={(val : string) => setRegType(String(val))}
-          style={styles.picker}
-        >
-          <Picker.Item label="Select Account Type" value="" />
-          <Picker.Item label="Customer" value="Customer" />
-          <Picker.Item label="DJ" value="DJ" />
-          <Picker.Item label="Mcee" value="Mcee" />
-          <Picker.Item label="Storeman" value="Storeman" />
-          <Picker.Item label="Accountant" value="Accountant" />
-          <Picker.Item label="Dispatchman" value="Dispatchman" />
-          <Picker.Item label="Inspector" value="Inspector" />
-          <Picker.Item label="Band" value="Band" />
-          <Picker.Item label="Supplier" value="Supplier" />
-        </Picker>
-      </View>
+          onValueChange={setRegType}
+          placeholder="Select Account Type"
+        />
 
-      {/* Location */}
-      <View style={styles.pickerContainer}>
-        <Text style={styles.label}>Delivery Location</Text>
-        <Picker
+        <LabelledDropdown
+          label="Delivery Location"
+          values={locationItems}
           selectedValue={dLocation}
-          onValueChange={(val : string) => setDLocation(String(val))}
-          style={styles.picker}
-        >
-          <Picker.Item label="Select Location" value="" />
-          <Picker.Item label="Nairobi CBD" value="Nairobi CBD" />
-          <Picker.Item label="Westlands" value="Westlands" />
-          <Picker.Item label="Karen" value="Karen" />
-          <Picker.Item label="Langata" value="Langata" />
-          <Picker.Item label="Kilimani" value="Kilimani" />
-          <Picker.Item label="Eastleigh" value="Eastleigh" />
-          <Picker.Item label="Umoja" value="Umoja" />
-          <Picker.Item label="Parklands" value="Parklands" />
-          <Picker.Item label="Ruiru" value="Ruiru" />
-          <Picker.Item label="Ruai" value="Ruai" />
-          <Picker.Item label="Gikambura" value="Gikambura" />
-          <Picker.Item label="Kitengela" value="Kitengela" />
-          <Picker.Item label="Nairobi West" value="Nairobi West" />
-          <Picker.Item label="Nairobi East" value="Nairobi East" />
-        </Picker>
-      </View>
+          onValueChange={setDLocation}
+          placeholder="Select Location"
+        />
 
-      <TouchableOpacity style={styles.registerBtn} onPress={() => registerUser()}>
-        <Text style={styles.registerBtnText}>Register</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        {error && (
+          <FormStrip>
+            <DispText text={error} variant="caption" textColor={colors.danger} />
+          </FormStrip>
+        )}
+
+        <RegLogRedirector view="register" />
+
+        <FormStrip>
+          <Button label="Register" fun={registerUser} />
+        </FormStrip>
+      </BigForm>
+    </ScrollScreen>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 25,
-    paddingVertical: 40,
-    backgroundColor: "#f7f7f7",
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "700",
-    marginBottom: 30,
-    textAlign: "center",
-    color: "#222",
-  },
-  input: {
-    width: "100%",
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: "#ddd",
-  },
-  pickerContainer: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    marginBottom: 15,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    paddingHorizontal: 10,
-  },
-  label: {
-    fontSize: 14,
-    marginBottom: 5,
-    marginTop: 10,
-    color: "#444",
-    fontWeight: "600",
-  },
-  picker: {
-    width: "100%",
-  },
-  registerBtn: {
-    backgroundColor: "#4CAF50",
-    paddingVertical: 15,
-    borderRadius: 10,
-    marginTop: 10,
-  },
-  registerBtnText: {
-    color: "#fff",
-    textAlign: "center",
-    fontSize: 18,
-    fontWeight: "600",
-  },
-});

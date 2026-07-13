@@ -9,6 +9,7 @@ interface DispTextProps {
   textColor?: string;
   textAlign?: TextStyle["textAlign"];
   numberOfLines?: number;
+  onClick?: () => void;
 }
 
 export default function DispText({
@@ -17,6 +18,7 @@ export default function DispText({
   textColor,
   textAlign,
   numberOfLines,
+  onClick
 }: DispTextProps) {
   return (
     <Text
@@ -27,6 +29,7 @@ export default function DispText({
       ]}
       numberOfLines={numberOfLines}
       maxFontSizeMultiplier={1.5}
+      onPress={onClick}
     >
       {text}
     </Text>

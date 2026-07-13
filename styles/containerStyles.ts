@@ -5,12 +5,14 @@ import { hp } from "./responsive";
 
 export const containerStyles = StyleSheet.create({
 
+  // Outer ScrollView wrapper — use with `style` prop
   screen: {
     flex: 1,
     width: "100%",
     backgroundColor: colors.background
   },
 
+  // Inner scrollable content — use with `contentContainerStyle` prop
   screenContent: {
     flexGrow: 1,
     paddingHorizontal: spacing.md,
@@ -28,7 +30,7 @@ export const containerStyles = StyleSheet.create({
 
   bigForm: {
     width: "100%",
-    height: "70%",
+    height: hp(70),
     justifyContent: "center",
     alignItems: "stretch",
     gap: spacing.md
@@ -38,7 +40,8 @@ export const containerStyles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center", // default when only one button
+    justifyContent: "center", // overridden dynamically by FormStrip.tsx based on child count
+    gap: spacing.sm,
     paddingVertical: spacing.xs, // minimal extra vertical space
     paddingHorizontal: spacing.md
   },
@@ -59,6 +62,7 @@ export const containerStyles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center"
   },
+
   val: {
     width: "100%",
     flexDirection: "column",

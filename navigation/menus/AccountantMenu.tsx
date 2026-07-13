@@ -49,10 +49,10 @@ export default function AccountantMenu() {
               break;
             case "Penalties":
               iconName = "alert-circle-outline";
-              break; 
+              break;
             case "Orders":
               iconName = "cart-outline";
-              break;                           
+              break;
             case "Reports":
               iconName = "stats-chart-outline";
               break;
@@ -86,7 +86,7 @@ export default function AccountantMenu() {
         name='Orders'
         component={AccountantPayOrder}
         options={{ title: "Order Payment" }}
-      />    
+      />
 
       <Drawer.Screen
         name="Reports"
