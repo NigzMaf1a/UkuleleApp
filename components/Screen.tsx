@@ -1,26 +1,25 @@
 import React, { ReactNode } from 'react';
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 //styles
 import { containerStyles } from '../styles/containerStyles';
 
-interface ScreenProps{
-    children:ReactNode;
+interface ScreenProps {
+  children: ReactNode;
 }
 
+export default function Screen({ children }: ScreenProps) {
+  const insets = useSafeAreaInsets();
 
-export default function Screen({children}:ScreenProps) {
   return (
-    <View style={containerStyles.screen}>
-        {children}
+    <View
+      style={[
+        containerStyles.screen,
+        { paddingTop: insets.top, paddingBottom: insets.bottom }
+      ]}
+    >
+      {children}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 25,
-    paddingVertical: 40,
-    backgroundColor: "#f7f7f7",
-  }
-});

@@ -16,15 +16,14 @@ export const cardStyles = StyleSheet.create({
     shadowRadius: scale(6),
     elevation: 3
   },
-  strip:{
-    width:"100%",
-    padding:spacing.sm,
-    flexDirection:flexStyles.row.flexDirection,
-    justifyContent:"space-between",
+  strip: {
+    width: "100%",
+    padding: spacing.sm,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     borderRadius: scale(12),
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: scale(6),
+    backgroundColor: colors.background,
     elevation: 3
   },
   tray: {
@@ -34,8 +33,8 @@ export const cardStyles = StyleSheet.create({
     alignItems: "flex-start",
     gap: spacing.xs
   },
-  row:{
-    flexDirection:"row"
+  row: {
+    flexDirection: "row"
   },
   dashTray: {
     width: "100%",

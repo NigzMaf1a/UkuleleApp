@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Modal } from 'react-native';
 
 //components
@@ -11,38 +11,41 @@ import LabelledText from '../components/LabelledText';
 //interfaces
 import Feedback from '../scripts/interfaces/feedback';
 
-export interface FeedbackProps{
-    feedback:Feedback;
+export interface FeedbackProps {
+    feedback: Feedback;
 }
 
-export default function CustomerFeedbackItem({feedback}:FeedbackProps) {
-    const[showModal, setShowModal] = useState<boolean>(false);
+export default function CustomerFeedbackItem({ feedback }: FeedbackProps) {
+    const [showModal, setShowModal] = useState<boolean>(false);
 
-    function toggleModal(){
+    function toggleModal() {
         setShowModal(prev => !prev);
     }
 
-  return (
-    <>
-        <Strip>
-            <Tray>
-                <LabelledText label='Comment' text={feedback.Comments}/>
-                <LabelledText label='Response' text={String(feedback.Response)}/>
-            </Tray>
-            <Button label='View' fun={() => toggleModal()}/>
-        </Strip>
-        {
-            showModal && <Modal>
+    return (
+        <>
+            <Strip>
+                <Tray>
+                    <LabelledText label='Comment' text={feedback.Comments} />
+                    <LabelledText label='Response' text={String(feedback.Response)} />
+                </Tray>
+                <Button label='View' fun={() => toggleModal()} />
+            </Strip>
+
+            <Modal
+                visible={showModal}
+                animationType="slide"
+                onRequestClose={toggleModal}
+            >
                 <Screen>
-                    <LabelledText label='Name' text={feedback.Name}/>
-                    <LabelledText label='Comment' text={feedback.Comments}/>
-                    <LabelledText label='Response' text={String(feedback.Response)}/>
+                    <LabelledText label='Name' text={feedback.Name} />
+                    <LabelledText label='Comment' text={feedback.Comments} />
+                    <LabelledText label='Response' text={String(feedback.Response)} />
                     <Strip>
-                        <Button label='Close' fun={()=> toggleModal()}/>
+                        <Button label='Close' fun={() => toggleModal()} />
                     </Strip>
                 </Screen>
             </Modal>
-        }
-    </>
-  );
-} 
+        </>
+    );
+}

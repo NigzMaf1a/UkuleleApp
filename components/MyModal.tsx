@@ -1,15 +1,23 @@
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode } from 'react';
 import {
   Modal,
   View,
-  Text,
   Pressable,
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
+  KeyboardAvoidingView,
+  ScrollView,
   Platform,
-  BackHandler,
 } from 'react-native';
+
+//components
+import DispText from './DispText';
+
+//styles
+import { colors } from '../styles/colors';
+import { spacing } from '../styles/spacing';
+import { scale } from '../styles/responsive';
 
 interface MyModalProps {
   visible: boolean;
@@ -34,24 +42,6 @@ export default function MyModal({
   closeOnBackdropPress = true,
 }: MyModalProps) {
 
-  /**
-   * Android hardware back button support
-   */
-  useEffect(() => {
-    if (!visible) return;
-
-    const backAction = () => {
-      onClose();
-      return true;
-    };
-
-    const subscription = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction
-    );
-
-    return () => subscription.remove();
-  }, [visible, onClose]);
 
   return (
     <Modal
@@ -60,102 +50,104 @@ export default function MyModal({
       animationType={animationType}
       onRequestClose={onClose} // required for Android
     >
-      {/* Backdrop */}
-      <TouchableWithoutFeedback
-        onPress={() => {
-          if (closeOnBackdropPress) {
-            Keyboard.dismiss();
-            onClose();
-          }
-        }}
+      <KeyboardAvoidingView
+        style={styles.flexFill}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View style={styles.backdrop}>
-          
-          {/* Prevent closing when pressing inside modal */}
-          <TouchableWithoutFeedback onPress={() => {}}>
-            <View style={styles.modalContainer}>
-              
-              {/* Header */}
-              {title && (
-                <View style={styles.header}>
-                  <Text style={styles.title}>{title}</Text>
+        {/* Backdrop */}
+        <TouchableWithoutFeedback
+          onPress={() => {
+            if (closeOnBackdropPress) {
+              Keyboard.dismiss();
+              onClose();
+            }
+          }}
+        >
+          <View style={styles.backdrop}>
 
-                  <Pressable onPress={onClose}>
-                    <Text style={styles.closeText}>✕</Text>
-                  </Pressable>
-                </View>
-              )}
+            {/* Prevent closing when pressing inside modal */}
+            <TouchableWithoutFeedback onPress={() => { }}>
+              <View style={styles.modalContainer}>
 
-              {/* Body */}
-              <View style={styles.body}>
-                {children}
+                {/* Header */}
+                {title && (
+                  <View style={styles.header}>
+                    <DispText text={title} variant="h3" />
+
+                    <Pressable
+                      onPress={onClose}
+                      hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                    >
+                      <DispText text="✕" variant="h3" textColor={colors.textSecondary} />
+                    </Pressable>
+                  </View>
+                )}
+
+                {/* Body — scrollable so long content doesn't overflow/clip */}
+                <ScrollView
+                  contentContainerStyle={styles.body}
+                  keyboardShouldPersistTaps="handled"
+                  showsVerticalScrollIndicator={false}
+                >
+                  {children}
+                </ScrollView>
+
+                {/* Footer */}
+                {footer && (
+                  <View style={styles.footer}>
+                    {footer}
+                  </View>
+                )}
+
               </View>
+            </TouchableWithoutFeedback>
 
-              {/* Footer */}
-              {footer && (
-                <View style={styles.footer}>
-                  {footer}
-                </View>
-              )}
-
-            </View>
-          </TouchableWithoutFeedback>
-
-        </View>
-      </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
+  flexFill: {
+    flex: 1,
+  },
+
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: spacing.md,
   },
 
   modalContainer: {
     width: '100%',
-    maxWidth: 500,
-    backgroundColor: '#fff',
-    borderRadius: 16,
+    maxHeight: '85%',
+    backgroundColor: colors.background,
+    borderRadius: scale(16),
     overflow: 'hidden',
-    elevation: 10, // Android shadow
-    shadowColor: '#000', // iOS shadow
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
+    elevation: 10
   },
 
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#ddd',
-  },
-
-  title: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-
-  closeText: {
-    fontSize: 20,
-    fontWeight: '600',
+    borderBottomColor: colors.border,
   },
 
   body: {
-    padding: 16,
+    padding: spacing.md,
   },
 
   footer: {
-    padding: 16,
+    padding: spacing.md,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: '#ddd',
+    borderTopColor: colors.border,
   },
 });
