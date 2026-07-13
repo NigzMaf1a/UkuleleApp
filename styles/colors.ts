@@ -13,7 +13,11 @@ export const colors = {
   border: "#E5E7EB",
 
   danger: "#EF4444",
-  success: "#10B981"
+  success: "#10B981",
+
+  anim_one: "",
+  anim_two: "",
+  anim_three: ""
 };
 
 export const gradients = {

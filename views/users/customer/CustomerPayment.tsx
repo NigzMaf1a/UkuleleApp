@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -32,21 +32,21 @@ import storage from '../../../scripts/auth/storage';
 export default function CustomerPayment() {
     const [customer, setCustomer] = useState<Customer>();
     const [user, setUser] = useState<Users>();
-    const[serviceId, setServiceId] = useState<number>(0);
-    const[payments, setPayments] = useState<Finance[]>([]);
-    const[pendingServices, setPendingServices] = useState<Services[]>([]);
+    const [serviceId, setServiceId] = useState<number>(0);
+    const [payments, setPayments] = useState<Finance[]>([]);
+    const [pendingServices, setPendingServices] = useState<Services[]>([]);
     const [selectedService, setSelectedService] = useState<Services | undefined>();
     const [paymentRequest, setPaymentRequest] = useState<Finance>();
     const [showModal, setShowModal] = useState<boolean>(false);
     const [amount, setAmount] = useState<string>('');
     const [code, setCode] = useState<string>('');
 
-    function toggleModal(){
+    function toggleModal() {
         setShowModal(prev => !prev);
     }
 
-    function validateServiceId(id:number):number{
-        if(id !== null && id !== undefined && id > 0){
+    function validateServiceId(id: number): number {
+        if (id !== null && id !== undefined && id > 0) {
             return id;
         } else {
             toaster('Invalid service ID. Please try again.', 'danger');
@@ -54,115 +54,134 @@ export default function CustomerPayment() {
         }
     }
 
-    function validateTransactionCode(cd:string):string{
-        if(cd.length > 10){
+    function validateTransactionCode(cd: string): string {
+        if (cd.length > 10) {
             toaster('A valid transaction code must be at least ten characters', 'info');
         }
         return cd.toUpperCase();
     }
 
-    async function filterServices(){
-        if(customer){
+    async function filterServices() {
+        if (customer) {
             const services = await customer.getCustomerServices();
             setPendingServices(services.filter(s => s.PaymentStatus === PaymentStatus.NotPaid));
         }
     }
 
-    async function getUser(){
-        if(customer){
+    async function getUser() {
+        if (customer) {
             const thisUser = await customer.getUser();
-            if(thisUser !== undefined){
+            if (thisUser !== undefined) {
                 setUser(thisUser);
             }
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         setShowModal(false);
-        ( async ()=>{
+        (async () => {
             const id = await storage.get.profile().then(prof => prof?.regID);
             const key = await storage.get.key().then(key => key);
-            if(typeof id === 'number' && typeof key === 'string' ){
+            if (typeof id === 'number' && typeof key === 'string') {
                 const cust = new Customer(id, key);
                 const finances = await cust?.getPaymentHistory();
 
                 setCustomer(cust);
-                setPayments(finances);  
+                setPayments(finances);
                 await filterServices();
                 await getUser();
-            }                    
+            }
         })();
     }, [pendingServices]);
 
-    function payload():Finance{
+    function payload(): Finance {
         return {
-            CustomerID:user?.regID as number,
-            Name:user?.name as string,
-            PhoneNo:user?.phoneNo as string,
-            TransactionName:validateTransactionCode(code),
-            TransactionDate:date(),
-            Amount:stringToNumber(amount),
-            TransactType:'Payment',
-            TransactionStatus:Status.Pending,
-            ServiceID:validateServiceId(serviceId)
-        }
+            CustomerID: user?.regID as number,
+            Name: user?.name as string,
+            PhoneNo: user?.phoneNo as string,
+            TransactionName: validateTransactionCode(code),
+            TransactionDate: date(),
+            Amount: stringToNumber(amount),
+            TransactType: 'Payment',
+            TransactionStatus: Status.Pending,
+            ServiceID: validateServiceId(serviceId)
+        };
     }
 
-    function mountModal(id:number){
+    function mountModal(id: number) {
         setServiceId(id);
         toggleModal();
     }
 
-    function unmountModal(){
+    function unmountModal() {
         setServiceId(0);
-        setSelectedService(undefined);        
+        setSelectedService(undefined);
         toggleModal();
     }
 
-    function findSelectedService():Services | undefined{
-        if(pendingServices !== undefined && serviceId > 0){
+    function findSelectedService(): Services | undefined {
+        if (pendingServices !== undefined && serviceId > 0) {
             return pendingServices.find(p => p.ServiceID === serviceId);
         }
     }
 
-    async function initiatePaymentRequest(){
-        if(customer && paymentRequest !== undefined){
+    async function initiatePaymentRequest() {
+        if (customer && paymentRequest !== undefined) {
             await customer.makePayment(paymentRequest);
             pendingServices.pop();
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         setPaymentRequest(payload());
-        if(findSelectedService() !== undefined){
+        if (findSelectedService() !== undefined) {
             setSelectedService(findSelectedService());
         }
     }, [serviceId, pendingServices]);
 
-  return (
-    <ScrollScreen>
-        <DashTray>
-            {
-                pendingServices.length > 0 ? pendingServices.map((s) => <ListItemWithButton
-                    key={s.ServiceID}
-                    rowOneData={{label:'Service Type', text:s.ServiceType}}
-                    rowTwoData={{label:'Amount', text:String(s.Cost)}}
-                    buttonLabel='Pay'
-                    fun={() => mountModal(s.ServiceID as number)}
-                />) : <DispText text='No unpaid services found'/>
-            }
-        </DashTray>
-        <DashTray>
-            {
-                payments.length > 0 ? payments.map((p) => <CustomerPaymentItem key={p.TransactionID} payment={p}/>) : <DispText text='No payment records found'/>
-            }
-        </DashTray>
-        {
-            showModal && 
+    return (
+        <ScrollScreen>
+            <DashTray>
+                {pendingServices.length > 0 ? (
+                    pendingServices.map((s) => (
+                        <ListItemWithButton
+                            key={s.ServiceID}
+                            rowOneData={{ label: 'Service Type', text: s.ServiceType }}
+                            rowTwoData={{ label: 'Amount', text: String(s.Cost) }}
+                            buttonLabel='Pay'
+                            fun={() => mountModal(s.ServiceID as number)}
+                        />
+                    ))
+                ) : (
+                    <DispText text='No unpaid services found' />
+                )}
+            </DashTray>
+            <DashTray>
+                {payments.length > 0 ? (
+                    payments.map((p) => (
+                        <CustomerPaymentItem key={p.TransactionID} payment={p} />
+                    ))
+                ) : (
+                    <DispText text='No payment records found' />
+                )}
+            </DashTray>
+
             <MyModal
-                visible = {showModal}
-                onClose={()=> unmountModal()}
+                visible={showModal}
+                onClose={() => unmountModal()}
                 title='Make Payment'
+                footer={
+                    <FormStrip>
+                        <Button
+                            label='Pay'
+                            fun={async () => await initiatePaymentRequest()}
+                        />
+                        <Button
+                            label='Close'
+                            fun={() => unmountModal()}
+                        />
+                    </FormStrip>
+                }
             >
                 <SmallForm>
                     <LabelledInput
@@ -178,21 +197,8 @@ export default function CustomerPayment() {
                         value={amount}
                         onChange={setAmount}
                     />
-
-                    <FormStrip>
-                        <Button
-                            label='Pay'
-                            fun={async () => await initiatePaymentRequest()}
-                        /> 
-
-                        <Button
-                            label='Close'
-                            fun={() => unmountModal()}
-                        />                         
-                    </FormStrip>
                 </SmallForm>
             </MyModal>
-        }
-    </ScrollScreen>
-  )
+        </ScrollScreen>
+    );
 }

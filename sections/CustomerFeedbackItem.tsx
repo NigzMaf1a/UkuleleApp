@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Modal } from 'react-native';
 
 //components
 import Screen from '../components/Screen';
@@ -7,6 +6,7 @@ import Strip from '../components/Strip';
 import Tray from '../components/Tray';
 import Button from '../components/Button';
 import LabelledText from '../components/LabelledText';
+import MyModal from '../components/MyModal';
 
 //interfaces
 import Feedback from '../scripts/interfaces/feedback';
@@ -32,20 +32,21 @@ export default function CustomerFeedbackItem({ feedback }: FeedbackProps) {
                 <Button label='View' fun={() => toggleModal()} />
             </Strip>
 
-            <Modal
+            <MyModal
                 visible={showModal}
+                onClose={toggleModal}
                 animationType="slide"
-                onRequestClose={toggleModal}
-            >
-                <Screen>
-                    <LabelledText label='Name' text={feedback.Name} />
-                    <LabelledText label='Comment' text={feedback.Comments} />
-                    <LabelledText label='Response' text={String(feedback.Response)} />
+                title='Feedback Details'
+                footer={
                     <Strip>
                         <Button label='Close' fun={() => toggleModal()} />
                     </Strip>
-                </Screen>
-            </Modal>
+                }
+            >
+                <LabelledText label='Name' text={feedback.Name} />
+                <LabelledText label='Comment' text={feedback.Comments} />
+                <LabelledText label='Response' text={String(feedback.Response)} />
+            </MyModal>
         </>
     );
 }

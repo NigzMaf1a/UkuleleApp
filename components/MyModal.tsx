@@ -42,31 +42,28 @@ export default function MyModal({
   closeOnBackdropPress = true,
 }: MyModalProps) {
 
-
-  return (
-    <Modal
-      transparent
-      visible={visible}
-      animationType={animationType}
-      onRequestClose={onClose} // required for Android
-    >
-      <KeyboardAvoidingView
-        style={styles.flexFill}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+  // On Android, KeyboardAvoidingView's 'height' behavior can cause visible
+  // resize/flicker. Prefer android:windowSoftInputMode="adjustResize" in the
+  // manifest and skip KeyboardAvoidingView on Android entirely. Swap the
+  // condition below if you'd rather keep 'height' behavior after testing.
+  const content = (
+    <>
+      {/* Backdrop */}
+      <TouchableWithoutFeedback
+        onPress={() => {
+          if (closeOnBackdropPress) {
+            Keyboard.dismiss();
+            onClose();
+          }
+        }}
       >
-        {/* Backdrop */}
-        <TouchableWithoutFeedback
-          onPress={() => {
-            if (closeOnBackdropPress) {
-              Keyboard.dismiss();
-              onClose();
-            }
-          }}
-        >
-          <View style={styles.backdrop}>
+        <View style={styles.backdrop}>
 
-            {/* Prevent closing when pressing inside modal */}
-            <TouchableWithoutFeedback onPress={() => { }}>
+          {/* Prevent closing when pressing inside modal */}
+          <TouchableWithoutFeedback onPress={() => { }}>
+            {/* Outer wrapper owns elevation + radius so the Android shadow
+                isn't clipped by overflow:hidden on the inner container */}
+            <View style={styles.modalShadowWrapper}>
               <View style={styles.modalContainer}>
 
                 {/* Header */}
@@ -77,6 +74,8 @@ export default function MyModal({
                     <Pressable
                       onPress={onClose}
                       hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                      accessibilityRole="button"
+                      accessibilityLabel="Close"
                     >
                       <DispText text="✕" variant="h3" textColor={colors.textSecondary} />
                     </Pressable>
@@ -100,11 +99,32 @@ export default function MyModal({
                 )}
 
               </View>
-            </TouchableWithoutFeedback>
+            </View>
+          </TouchableWithoutFeedback>
 
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+        </View>
+      </TouchableWithoutFeedback>
+    </>
+  );
+
+  return (
+    <Modal
+      transparent
+      visible={visible}
+      animationType={animationType}
+      onRequestClose={onClose}
+      accessibilityViewIsModal
+      statusBarTranslucent
+    >
+      {Platform.OS === 'ios' ? (
+        <KeyboardAvoidingView style={styles.flexFill} behavior="padding">
+          {content}
+        </KeyboardAvoidingView>
+      ) : (
+        <View style={styles.flexFill}>
+          {content}
+        </View>
+      )}
     </Modal>
   );
 }
@@ -122,13 +142,19 @@ const styles = StyleSheet.create({
     padding: spacing.md,
   },
 
-  modalContainer: {
+  modalShadowWrapper: {
     width: '100%',
+    maxWidth: scale(480),
     maxHeight: '85%',
+    borderRadius: scale(16),
+    elevation: 10,
+  },
+
+  modalContainer: {
+    flex: 1,
     backgroundColor: colors.background,
     borderRadius: scale(16),
     overflow: 'hidden',
-    elevation: 10
   },
 
   header: {

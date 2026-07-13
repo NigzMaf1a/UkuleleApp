@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 import storage from "../../../scripts/auth/storage";
 
@@ -16,24 +16,24 @@ import DispText from "../../../components/DispText";
 //interfaces
 import Inventory from "../../../scripts/interfaces/inventory";
 
-export default function InventoryDashboard(){
+export default function InventoryDashboard() {
     let [views, setViews] = useState<number>(1);
     const [equipment, setEquipment] = useState<Inventory[]>([]);
 
-    function reset(){
+    function reset() {
         setViews(1);
     }
-    
-    useEffect(() =>{
-        ( async ()=> {
-                const id = await storage.get.profile().then(prof => prof?.regID);
-                const key = await storage.get.key().then(key => key);
-                if(typeof id === 'number' && typeof key === 'string' ){
-                    const manager = new Storeman(id, key);
 
-                    const inventory = (await manager.getEquipment()).filter(i => i.Availability === 'Available');
-                    setEquipment(inventory);
-                }        
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.regID);
+            const key = await storage.get.key().then(key => key);
+            if (typeof id === 'number' && typeof key === 'string') {
+                const manager = new Storeman(id, key);
+
+                const inventory = (await manager.getEquipment()).filter(i => i.Availability === 'Available');
+                setEquipment(inventory);
+            }
         })();
     }, []);
 
@@ -43,13 +43,13 @@ export default function InventoryDashboard(){
                 <DashTray>
                     {
                         equipment.length > 0 ? equipment.map((e) => <ListItem key={e.EquipmentID}
-                                                                              rowOneData={{label:'ID', text:String(e.EquipmentID)}}
-                                                                              rowTwoData={{label:'Description', text:e.Description}}
-                                                                              rightSideText={e.dCondition}
-                        />) : <DispText text="No available equipment"/>
+                            rowOneData={{ label: 'ID', text: String(e.EquipmentID) }}
+                            rowTwoData={{ label: 'Description', text: e.Description }}
+                            rightSideText={e.dCondition}
+                        />) : <DispText text="No available equipment" />
                     }
                 </DashTray>
-            }                    
+            }
         </ScrollScreen>
     );
 }

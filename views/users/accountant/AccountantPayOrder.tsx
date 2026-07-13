@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -30,11 +30,11 @@ export default function AccountantPayOrder() {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [paymentId, setPaymentId] = useState<number>(0);
 
-    useEffect(()=>{
-        (async ()=>{
+    useEffect(() => {
+        (async () => {
             const id = await storage.get.profile().then(prof => prof?.regID);
             const key = await storage.get.key().then(key => key);
-            if(typeof id === 'number' && typeof key === 'string' ){
+            if (typeof id === 'number' && typeof key === 'string') {
                 const acc = new Accountant(id, key);
                 const ord = await acc.getOrders();
 
@@ -44,63 +44,82 @@ export default function AccountantPayOrder() {
         })();
     }, []);
 
-   async function makePayment(id:number){
-    const money = Number(amount);
-    if(typeof money !== 'number' || money === 0) {
-        toaster('Please enter a valid amount', 'warn');
-        return;
+    async function makePayment(id: number) {
+        const money = Number(amount);
+        if (typeof money !== 'number' || money === 0) {
+            toaster('Please enter a valid amount', 'warn');
+            return;
+        }
+        if (paymentCode.length !== 10) {
+            toaster('Please enter a valid payment code', 'warn');
+            return;
+        }
+        const payment: OrderPayment = {
+            OrderID: id,
+            PaymentCode: paymentCode,
+            PaymentDate: date(),
+            Amount: money
+        };
+        if (accountant) {
+            await accountant.makeOrderPayment(payment);
+            await accountant.changeOrderStatus(id);
+        }
     }
-    if(paymentCode.length > 10 || paymentCode.length < 10) toaster('Please enter a valid payment code', 'warn');
-    const payment:OrderPayment = {
-        OrderID:id,
-        PaymentCode:paymentCode,
-        PaymentDate:date(),
-        Amount:money
-    }
-    if(accountant){
-        await accountant.makeOrderPayment(payment);
-        await accountant.changeOrderStatus(id);
-    }
-   }
 
-   function setId(id:number){
-        if(paymentId > 0){
+    function setId(id: number) {
+        if (paymentId > 0) {
             setPaymentId(0);
-        } else{
-            if(typeof id !== 'undefined'){
-                if(typeof id === 'number' && id > 0){
+        } else {
+            if (typeof id !== 'undefined') {
+                if (typeof id === 'number' && id > 0) {
                     setPaymentId(id);
                 }
             }
         }
-   }
+    }
 
-   function triggerModal(id:number){
-    setId(id);
-    setShowModal(true);
-   }
+    function triggerModal(id: number) {
+        setId(id);
+        setShowModal(true);
+    }
 
-   function closeModal(){
-    setPaymentId(0);
-    setShowModal(false);
-   }
+    function closeModal() {
+        setPaymentId(0);
+        setShowModal(false);
+    }
 
-  return (
-    <ScrollScreen>
-        {
-            orders.length > 0 ? orders.map((o) => <ListItemWithButton key={o.OrderID}
-                                                                      rowOneData={{label:'ID', text:String(o.OrderID)}}
-                                                                      rowTwoData={{label:'Amount', text:String(o.OrderAmount)}}
-                                                                      buttonLabel='Pay'
-                                                                      fun={() => triggerModal(o.OrderID)}
-            />) : <DispText text='No unpaid orders found'/>
-        }
-        {
-            showModal && 
+    return (
+        <ScrollScreen>
+            {orders.length > 0 ? (
+                orders.map((o) => (
+                    <ListItemWithButton
+                        key={o.OrderID}
+                        rowOneData={{ label: 'ID', text: String(o.OrderID) }}
+                        rowTwoData={{ label: 'Amount', text: String(o.OrderAmount) }}
+                        buttonLabel='Pay'
+                        fun={() => triggerModal(o.OrderID)}
+                    />
+                ))
+            ) : (
+                <DispText text='No unpaid orders found' />
+            )}
+
             <MyModal
                 visible={showModal}
-                onClose={() => closeModal()}
-                title="Make Order Payment"              
+                onClose={closeModal}
+                title="Make Order Payment"
+                footer={
+                    <FormStrip>
+                        <Button
+                            label='Close'
+                            fun={closeModal}
+                        />
+                        <Button
+                            label='Pay'
+                            fun={() => makePayment(paymentId)}
+                        />
+                    </FormStrip>
+                }
             >
                 <SmallForm>
                     <LabelledInput
@@ -116,21 +135,8 @@ export default function AccountantPayOrder() {
                         value={amount}
                         onChange={setAmount}
                     />
-                    <FormStrip>
-                        <Button
-                            label='Close'
-                            fun={() => closeModal()}
-                        />
-
-                        <Button
-                            label='Pay'
-                            fun={() => makePayment(paymentId)}
-                        />                        
-                    </FormStrip>
-
                 </SmallForm>
             </MyModal>
-        }
-    </ScrollScreen>
-  )
+        </ScrollScreen>
+    );
 }
