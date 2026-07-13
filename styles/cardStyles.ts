@@ -19,12 +19,11 @@ export const cardStyles = StyleSheet.create({
   strip: {
     width: "100%",
     padding: spacing.sm,
-    flexDirection: flexStyles.row.flexDirection,
+    flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-between",
     borderRadius: scale(12),
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: scale(6),
+    backgroundColor: colors.background,
     elevation: 3
   },
   tray: {
