@@ -9,6 +9,9 @@ export const containerStyles = StyleSheet.create({
   screen: {
     flex: 1,
     width: "100%",
+    minHeight: "100%",
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
     backgroundColor: colors.background
   },
 

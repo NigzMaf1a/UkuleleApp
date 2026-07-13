@@ -14,20 +14,8 @@ interface LabelledTextProps {
 export default function LabelledText({ label, text }: LabelledTextProps) {
   return (
     <View style={styles.labelledText}>
-      <DispText
-        text={label}
-        variant="caption"
-        textColor={colors.textSecondary}
-        numberOfLines={1}
-      />
-      <View style={styles.valueContainer}>
-        <DispText
-          text={text}
-          variant="body"
-          textAlign="right"
-          numberOfLines={2}
-        />
-      </View>
+      <DispText text={label} variant='caption' textColor={colors.textCaption} />
+      <DispText text={text} />
     </View>
   );
 }

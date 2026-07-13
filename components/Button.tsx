@@ -1,48 +1,50 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, Text, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+
+//styles
 import { buttonStyles } from '../styles/buttonStyles';
-import { colors } from '../styles/colors';
+import { Theme } from '@react-navigation/native';
+
+type Variant = 'primary' | 'secondary';
+
+interface ThemeStyles {
+  button: ViewStyle;
+  text: TextStyle;
+}
 
 interface ButtonProps {
   label: string;
   fun: () => Promise<void> | void;
-  variant?: 'primary' | 'secondary';
-  disabled?: boolean;
+  variant?: Variant;
 }
 
-export default function Button({ label, fun, variant = 'primary', disabled = false }: ButtonProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  const isDisabled = disabled || isLoading;
+export default function Button({ label, fun, variant = 'primary' }: ButtonProps) {
 
-  const handlePress = async () => {
-    if (isDisabled) return;
-    try {
-      setIsLoading(true);
-      await fun();
-    } finally {
-      setIsLoading(false);
+  function getStyles(): StyleSheet.NamedStyles<ThemeStyles> {
+    switch (variant) {
+      case 'secondary':
+        return StyleSheet.create({
+          button: buttonStyles.secondaryButton,
+          text: buttonStyles.secondaryButtonText
+        });
+      case 'primary':
+      default:
+        return StyleSheet.create({
+          button: buttonStyles.primaryButton,
+          text: buttonStyles.buttonText
+        });
     }
-  };
+  }
 
-  const buttonStyle = variant === 'primary' ? buttonStyles.primaryButton : buttonStyles.secondaryButton;
-  const textStyle = variant === 'primary' ? buttonStyles.buttonText : buttonStyles.buttonTextSecondary;
+
+  const styles = getStyles();
 
   return (
     <TouchableOpacity
-      style={[buttonStyle, isDisabled && buttonStyles.disabledButton]}
-      onPress={handlePress}
-      disabled={isDisabled}
-      activeOpacity={0.7}
-      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      accessibilityState={{ disabled: isDisabled, busy: isLoading }}
+      style={styles.button}
+      onPress={fun}
     >
-      {isLoading ? (
-        <ActivityIndicator color={variant === 'primary' ? '#FFFFFF' : colors.primary} />
-      ) : (
-        <Text style={textStyle}>{label}</Text>
-      )}
+      <Text style={styles.text}>{label}</Text>
     </TouchableOpacity>
   );
 }
