@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, TextStyle } from "react-native";
 import { typography } from "../styles/typography";
 import { colors } from "../styles/colors";
@@ -20,6 +20,7 @@ export default function DispText({
   numberOfLines,
   onClick
 }: DispTextProps) {
+  const [label_color] = useState<string>(colors.textSecondary)
   return (
     <Text
       style={[

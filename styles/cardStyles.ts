@@ -18,13 +18,21 @@ export const cardStyles = StyleSheet.create({
   },
   strip: {
     width: "100%",
-    padding: spacing.sm,
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
+    alignItems: "center",
+    padding: spacing.sm,
     borderRadius: scale(12),
-    backgroundColor: colors.background,
-    elevation: 3
+    backgroundColor: colors.surface,
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: scale(2) },
+    shadowOpacity: 0.1,
+    shadowRadius: scale(6),
+
+    elevation: 3,
+
+    marginBottom: spacing.md
   },
   tray: {
     width: "75%",

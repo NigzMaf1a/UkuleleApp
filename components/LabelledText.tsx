@@ -6,17 +6,18 @@ import DispText from './DispText';
 
 //styles
 import { spacing } from '../styles/spacing';
+import { colors } from '../styles/colors';
 
-interface LabelledTextProps{
-    label:string;
-    text:string;
+interface LabelledTextProps {
+  label: string;
+  text: string;
 }
 
-export default function LabelledText({label, text}:LabelledTextProps) {
+export default function LabelledText({ label, text }: LabelledTextProps) {
   return (
     <View style={styles.labelledText}>
-        <DispText text={label}/>
-        <DispText text={text}/>
+      <DispText text={label} variant='caption' textColor={colors.textCaption} />
+      <DispText text={text} />
     </View>
   );
 }

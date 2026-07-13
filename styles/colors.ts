@@ -7,6 +7,8 @@ export const colors = {
 
   text: "#111827",
   textSecondary: "#6B7280",
+  textCaption: "#0000FF",
+  rightSideText: "#1E90FF",
 
   border: "#E5E7EB",
 
