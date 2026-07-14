@@ -1,25 +1,18 @@
 import React, { useEffect, useRef } from "react";
 import { View, Animated, StyleSheet } from "react-native";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+
+//styles
 import { colors } from "../styles/colors";
 
-/**
- * SplashScreen
- * Musical splash with animated speakers + music note
- */
 export default function SplashScreen() {
 
-  // animated scale for speaker pulse
   const scale = useRef(new Animated.Value(1)).current;
 
-  // animated bounce for music note
   const bounce = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
 
-    /**
-     * Speaker pulse animation
-     */
     Animated.loop(
       Animated.sequence([
         Animated.timing(scale, {
@@ -35,9 +28,6 @@ export default function SplashScreen() {
       ])
     ).start();
 
-    /**
-     * Music note bounce animation
-     */
     Animated.loop(
       Animated.sequence([
         Animated.timing(bounce, {
@@ -59,23 +49,20 @@ export default function SplashScreen() {
 
     <View style={styles.container}>
 
-      {/* Speaker left */}
       <Animated.View style={{ transform: [{ scale }] }}>
-        <MaterialIcons name="speaker" size={60} color="#6366F1" />
+        <MaterialIcons name="speaker" size={60} color={colors.anim_one} />
       </Animated.View>
 
-      {/* Music note */}
       <Animated.View
         style={{
           transform: [{ translateY: bounce }]
         }}
       >
-        <FontAwesome5 name="music" size={40} color="#3B82F6" />
+        <FontAwesome5 name="music" size={40} color={colors.anim_two} />
       </Animated.View>
 
-      {/* Speaker right */}
       <Animated.View style={{ transform: [{ scale }] }}>
-        <MaterialIcons name="speaker" size={60} color="#6366F1" />
+        <MaterialIcons name="speaker" size={60} color={colors.anim_one} />
       </Animated.View>
 
     </View>

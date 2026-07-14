@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -18,72 +18,72 @@ import Customer from '../../../scripts/classes/customer';
 import storage from '../../../scripts/auth/storage';
 
 export default function CustomerFeedback() {
-    const[customer, setCustomer] = useState<Customer>();
-    const[feedback, setFeedback] = useState<Feedback[]>([]);
-    const[newFeedback, setNewFeedback] = useState<string>('');
+    const [customer, setCustomer] = useState<Customer>();
+    const [feedback, setFeedback] = useState<Feedback[]>([]);
+    const [newFeedback, setNewFeedback] = useState<string>('');
     const [user, setUser] = useState<Users>();
     const [rating] = useState<number>(4);
 
-    async function addFeedback(feed:Feedback){
+    async function addFeedback(feed: Feedback) {
         await customer?.addFeedback(feed);
     }
 
-    async function getCurrentUser(){
-        if(customer){
+    async function getCurrentUser() {
+        if (customer) {
             const thisUser = await customer.getUser();
-            if(thisUser !== undefined){
+            if (thisUser !== undefined) {
                 setUser(thisUser);
             }
         }
     }
 
-    useEffect(()=>{
-        ( async ()=>{
+    useEffect(() => {
+        (async () => {
             const id = await storage.get.profile().then(prof => prof?.regID);
             const key = await storage.get.key().then(key => key);
-            if(typeof id === 'number' && typeof key === 'string' ){
+            if (typeof id === 'number' && typeof key === 'string') {
                 const cust = new Customer(id, key);
                 const feed = await cust?.getFeedback();
 
                 setCustomer(cust);
-                setFeedback(feed);  
+                setFeedback(feed);
                 await getCurrentUser();
             }
         })();
     }, []);
 
-  return (
-    <Screen>
-        <InputPlusButton
-            inputPlaceholder='Enter feedback here'
-            inputValue={newFeedback}
-            onInputChange={setNewFeedback}
-            btnLabel='Submit'
-            btnFun={async () => {
+    return (
+        <Screen>
+            <InputPlusButton
+                inputPlaceholder='Enter feedback here'
+                inputValue={newFeedback}
+                onInputChange={setNewFeedback}
+                btnLabel='Submit'
+                btnFun={async () => {
 
-                if (!customer) return;
+                    if (!customer) return;
 
-                const feed: Feedback = {
-                    CustomerID: customer.getRegID(),
-                    Comments: newFeedback,
-                    Name:user?.name as string,
-                    Rating:rating as 1 | 2 | 3 | 4 | 5
-                };
+                    const feed: Feedback = {
+                        CustomerID: customer.getRegID(),
+                        Comments: newFeedback,
+                        Name: user?.name as string,
+                        Rating: rating as 1 | 2 | 3 | 4 | 5
+                    };
 
-                await addFeedback(feed);
+                    await addFeedback(feed);
 
-                // optional UI update
-                setFeedback(prev => [...prev, feed]);
+                    // optional UI update
+                    setFeedback(prev => [...prev, feed]);
 
-                // clear input
-                setNewFeedback('');
-            }}
-        />
-        <ScrollScreen>
-            {
-                feedback.length > 0 ?  feedback.map((f)=> <CustomerFeedbackItem key={f.FeedbackID} feedback={f}/>) : <DispText text='No feedback found'/>
-            }
-        </ScrollScreen>
-    </Screen>
-  );
+                    // clear input
+                    setNewFeedback('');
+                }}
+            />
+            <ScrollScreen>
+                {
+                    feedback.length > 0 ? feedback.map((f) => <CustomerFeedbackItem key={f.FeedbackID} feedback={f} />) : <DispText text='No feedback found' />
+                }
+            </ScrollScreen>
+        </Screen>
+    );
 }
