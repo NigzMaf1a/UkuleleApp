@@ -27,25 +27,25 @@ export default function Registration() {
   const [regType, setRegType] = useState<string>("");
   const [dLocation, setDLocation] = useState<string>("");
 
-  async function registerUser(){
-    await apiFetch(endpoints.addUser, 
+  async function registerUser() {
+    await apiFetch(endpoints.addUser,
       {
-        method:'POST',
-        body:JSON.stringify(registrationPayload())
+        method: 'POST',
+        body: JSON.stringify(registrationPayload())
       }
     );
   }
 
-  function registrationPayload():Users{
+  function registrationPayload(): Users {
     return {
-      name:name,
-      phoneNo:phoneNo,
-      email:email,
-      password:password,
-      gender:gender,
-      regType:regType as RegType,
-      dLocation:dLocation,
-      accStatus:'Pending'
+      name: name,
+      phoneNo: phoneNo,
+      email: email,
+      password: password,
+      gender: gender,
+      regType: regType as RegType,
+      dLocation: dLocation,
+      accStatus: 'Pending'
     }
   }
 
@@ -94,7 +94,7 @@ export default function Registration() {
         <Text style={styles.label}>Gender</Text>
         <Picker
           selectedValue={gender}
-          onValueChange={(val : string) => setGender(String(val))}
+          onValueChange={(val: string) => setGender(String(val))}
           style={styles.picker}
         >
           <Picker.Item label="Select Gender" value="" />
@@ -108,7 +108,7 @@ export default function Registration() {
         <Text style={styles.label}>Account Type</Text>
         <Picker
           selectedValue={regType}
-          onValueChange={(val : string) => setRegType(String(val))}
+          onValueChange={(val: string) => setRegType(String(val))}
           style={styles.picker}
         >
           <Picker.Item label="Select Account Type" value="" />
@@ -129,7 +129,7 @@ export default function Registration() {
         <Text style={styles.label}>Delivery Location</Text>
         <Picker
           selectedValue={dLocation}
-          onValueChange={(val : string) => setDLocation(String(val))}
+          onValueChange={(val: string) => setDLocation(String(val))}
           style={styles.picker}
         >
           <Picker.Item label="Select Location" value="" />

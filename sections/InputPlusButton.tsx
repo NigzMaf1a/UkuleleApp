@@ -8,13 +8,13 @@ import Input from '../components/Input';
 //styles
 import { cardStyles } from '../styles/cardStyles';
 
-interface InputPlusButtonProps{
-    inputPlaceholder:string;
-    inputPlaceholderTextColor?:string;
-    inputValue:string;
-    onInputChange:(par:string) => void;
-    btnLabel:string;
-    btnFun:(par:string) => Promise<void> | void;
+interface InputPlusButtonProps {
+    inputPlaceholder: string;
+    inputPlaceholderTextColor?: string;
+    inputValue: string;
+    onInputChange: (par: string) => void;
+    btnLabel: string;
+    btnFun: (par: string) => Promise<void> | void;
 }
 
 export default function InputPlusButton({
@@ -24,21 +24,22 @@ export default function InputPlusButton({
     onInputChange,
     btnLabel,
     btnFun
-}:InputPlusButtonProps) {
+}: InputPlusButtonProps) {
 
-  return (
-    <View style={cardStyles.strip}>
-        <Input
-            placeholder={inputPlaceholder}
-            placeholderTextColor={inputPlaceholderTextColor}
-            value={inputValue}
-            onChange={onInputChange}
-        />
+    return (
+        <View style={cardStyles.strip}>
+            <Input
+                placeholder={inputPlaceholder}
+                placeholderTextColor={inputPlaceholderTextColor}
+                value={inputValue}
+                onChange={onInputChange}
+            />
 
-        <Button
-            label={btnLabel}
-            fun={() => btnFun(inputValue)}
-        />
-    </View>
-  );
+            <Button
+                label={btnLabel}
+                fun={() => btnFun(inputValue)}
+                variant='secondary'
+            />
+        </View>
+    );
 }
