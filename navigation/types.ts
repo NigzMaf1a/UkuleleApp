@@ -5,82 +5,82 @@ export type RootDrawerParamList = {
 }
 
 export type AccountantMenuParamList = {
-  Dashboard:undefined
-  Payments:undefined
-  Penalties:undefined
-  Orders:undefined
-  Reports:undefined
+  Dashboard: undefined
+  Payments: undefined
+  Penalties: undefined
+  Orders: undefined
+  Reports: undefined
 }
 
 export type BandMenuParamList = {
-  Dashboard:undefined
-  Bookings:undefined
-  Dispatch:undefined
-  Reports:undefined
+  Dashboard: undefined
+  Bookings: undefined
+  Dispatch: undefined
+  Reports: undefined
 }
 
 export type CustomerMenuParamList = {
-  Dashboard:undefined
-  Services:undefined
-  Payments:undefined
-  Penalty:undefined
-  Feedback:undefined
-  Report:undefined
+  Dashboard: undefined
+  Services: undefined
+  Payments: undefined
+  Penalty: undefined
+  Feedback: undefined
+  Report: undefined
 }
 
 export type DispatchMenuParamList = {
-  Dashboard:undefined
-  Dispatch:undefined
-  Return:undefined
-  Reports:undefined
+  Dashboard: undefined
+  Dispatch: undefined
+  Return: undefined
+  Reports: undefined
 }
 
 export type DjMenuParamList = {
-  Dashboard:undefined
-  Performances:undefined
-  Dispatch:undefined
-  Reports:undefined
+  Dashboard: undefined
+  Performances: undefined
+  Dispatch: undefined
+  Reports: undefined
 }
 
 export type InspectorMenuParamList = {
-  Dashboard:undefined
-  Inspections:undefined
-  Penalties:undefined
-  Reports:undefined
+  Dashboard: undefined
+  Inspections: undefined
+  Penalties: undefined
+  Reports: undefined
 }
 
 export type MceeMenuParamList = {
-  Dashboard:undefined
-  Performances:undefined
-  Dispatch:undefined
-  Reports:undefined
+  Dashboard: undefined
+  Performances: undefined
+  Dispatch: undefined
+  Reports: undefined
 }
 
 export type ServiceMenuParamList = {
-  Dashboard:undefined
-  Services:undefined
-  Reports:undefined
+  Dashboard: undefined
+  Services: undefined
+  Reports: undefined
 }
 
 export type StoreMenuParamList = {
-  Dashboard:undefined
-  Add:undefined
-  Inventory:undefined
-  Supplies:undefined
-  Orders:undefined
-  Reports:undefined
+  Dashboard: undefined
+  Add: undefined
+  Inventory: undefined
+  Supplies: undefined
+  Orders: undefined
+  Reports: undefined
 }
 
 export type SupplierMenuParamList = {
-  Dashboard:undefined
-  Supplies:undefined
-  Orders:undefined
-  Reports:undefined
+  Dashboard: undefined
+  Supplies: undefined
+  Orders: undefined
+  Reports: undefined
 }
 
 export type BottomTabParamList = {
   Profile: undefined
   About: undefined
   Contact: undefined
-  Help:undefined
+  Help: undefined
 }

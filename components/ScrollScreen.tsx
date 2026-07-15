@@ -1,19 +1,28 @@
-import React, {ReactNode} from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import React, { ReactNode } from "react";
+import { ScrollView, StyleProp, ViewStyle } from "react-native";
 
-import { containerStyles } from '../styles/containerStyles';
+import { containerStyles } from "../styles/containerStyles";
 
-interface ScreenProps{
-    children:ReactNode;
+interface ScreenProps {
+  children: ReactNode;
+  contentContainerStyle?: StyleProp<ViewStyle>;
 }
 
-export default function ScrollScreen({children}:ScreenProps) {
+export default function ScrollScreen({
+  children,
+  contentContainerStyle,
+}: ScreenProps) {
   return (
-    <ScrollView style={containerStyles.screen}
-                showsVerticalScrollIndicator = {false}
-                showsHorizontalScrollIndicator = {false}
+    <ScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={[
+        containerStyles.screen,
+        contentContainerStyle,
+      ]}
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
     >
-        {children}
+      {children}
     </ScrollView>
   );
 }

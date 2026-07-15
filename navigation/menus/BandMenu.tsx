@@ -48,7 +48,7 @@ export default function BandMenu() {
               break;
             case "Dispatch":
               iconName = "rocket-outline";
-              break;              
+              break;
             case "Reports":
               iconName = "bar-chart-outline";
               break;
@@ -74,7 +74,7 @@ export default function BandMenu() {
         name="Dispatch"
         component={BandRequestDispatch}
         options={{ title: "Request Dispatch" }}
-      />      
+      />
       <Drawer.Screen
         name="Reports"
         component={BookingReports}

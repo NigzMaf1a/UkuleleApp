@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { View, TouchableOpacity, TextInput, Text } from 'react-native';
-import Voice from '@react-native-voice/voice';
+// import Voice from '@react-native-voice/voice';
 
 //styles
 import { colors } from '../styles/colors';
@@ -62,43 +62,43 @@ export default function Help() {
     setMicPressed(prev => !prev);
   }
 
-  const startListening = async () => {
-    try {
-      await Voice.start('en-US');
-      setMicPressed(true);
-    }
-    catch (err) {
-      console.log(err);
-    }
-  };
+  // const startListening = async () => {
+  //   try {
+  //     await Voice.start('en-US');
+  //     setMicPressed(true);
+  //   }
+  //   catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
-  const stopListening = async () => {
-    try {
-      await Voice.stop();
-      setMicPressed(false);
-    }
-    catch (err) {
-      console.log(err);
-    }
-  };
+  // const stopListening = async () => {
+  //   try {
+  //     await Voice.stop();
+  //     setMicPressed(false);
+  //   }
+  //   catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    Voice.onSpeechResults = (event) => {
+  //   Voice.onSpeechResults = (event) => {
 
-      if (event.value?.length) {
-        setQuery(event.value[0]);
-      }
+  //     if (event.value?.length) {
+  //       setQuery(event.value[0]);
+  //     }
 
-    };
+  //   };
 
-    return () => {
+  //   return () => {
 
-      Voice.destroy();
+  //     Voice.destroy();
 
-    };
+  //   };
 
-  }, []);
+  // }, []);
 
   return (
     <ScrollScreen>

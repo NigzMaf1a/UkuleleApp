@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 import { spacing } from "./spacing";
 import { colors } from "./colors";
+import { scale } from "./responsive";
 
 export const containerStyles = StyleSheet.create({
 
@@ -62,6 +63,14 @@ export const containerStyles = StyleSheet.create({
     justifyContent: "center",
     gap: spacing.xs,
     marginBottom: spacing.sm
+  },
+  labelledInputContainer: {
+    width: "100%",
+    padding: spacing.sm,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    borderRadius: scale(12),
+    elevation: 3
   }
 
 });
