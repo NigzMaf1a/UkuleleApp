@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { View, TouchableOpacity, TextInput, Text } from 'react-native';
+import Voice from '@react-native-voice/voice';
 
 //styles
 import { colors } from '../styles/colors';
@@ -18,6 +19,7 @@ import storage from '../scripts/auth/storage';
 
 //scripts
 import User from '../scripts/classes/user';
+import { askAssistant } from '../scripts/ai/assistant';
 
 //enums
 import RegType from '../scripts/enums/regType';
@@ -46,12 +48,57 @@ export default function Help() {
     })();
   }, []);
 
-  function handleBtnPress() {
-    setBtnPressed(prev => !prev);
+  async function handleBtnPress() {
+
+    if (!query.trim()) return;
+
+    const response = await askAssistant(query);
+
+    console.log(response);
+
   }
+
   function handleMicPress() {
     setMicPressed(prev => !prev);
   }
+
+  const startListening = async () => {
+    try {
+      await Voice.start('en-US');
+      setMicPressed(true);
+    }
+    catch (err) {
+      console.log(err);
+    }
+  };
+
+  const stopListening = async () => {
+    try {
+      await Voice.stop();
+      setMicPressed(false);
+    }
+    catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+
+    Voice.onSpeechResults = (event) => {
+
+      if (event.value?.length) {
+        setQuery(event.value[0]);
+      }
+
+    };
+
+    return () => {
+
+      Voice.destroy();
+
+    };
+
+  }, []);
 
   return (
     <ScrollScreen>
@@ -64,28 +111,21 @@ export default function Help() {
           placeholderTextColor={colors.textCaption}
           value={query}
           onChangeText={setQuery}
+          multiline
         />
 
         <TouchableOpacity
-          style={[
-            { ...helpStyles.button },
-            { ...helpStyles.search_btn }
-          ]}
-          onPressIn={() => handleBtnPress()}
-          onPressOut={() => handleBtnPress()}
+          style={helpStyles.micButton}
+          onPress={handleMicPress}
         >
-          <Text style={helpStyles.text_mic}>{''}</Text>
+          <Text style={helpStyles.micIcon}>🎤</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[
-            { ...helpStyles.button },
-            { ...helpStyles.search_btn }
-          ]}
-          onPressIn={() => handleMicPress()}
-          onPressOut={() => handleMicPress()}
+          style={helpStyles.sendButton}
+          onPress={handleBtnPress}
         >
-          <Text style={helpStyles.text_btn}>{''}</Text>
+          <Text style={helpStyles.sendIcon}>➜</Text>
         </TouchableOpacity>
       </View>
     </ScrollScreen>
@@ -102,23 +142,75 @@ const helpStyles = StyleSheet.create({
   },
   search: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    height: "15%",
-    backgroundColor: colors.surface,
-    shadowRadius: scale(6),
-    elevation: 3
+    alignItems: "center",
+
+    marginHorizontal: spacing.md,
+    marginVertical: spacing.sm,
+
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+
+    borderRadius: scale(30),
+
+    backgroundColor: "#F4F4F4",
+
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
   },
+
   input: {
-    height: "100%",
-    width: "80%"
+    flex: 1,
+
+    minHeight: scale(48),
+    maxHeight: scale(120),
+
+    fontSize: scale(15),
+    color: colors.primary,
+
+    paddingHorizontal: spacing.sm,
   },
-  button: {
-    height: "100%",
-    width: "10%"
+
+  micButton: {
+    width: scale(42),
+    height: scale(42),
+
+    borderRadius: scale(21),
+
+    backgroundColor: "#FFF",
+
+    borderWidth: 2,
+    borderColor: "#0A84FF",
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    marginLeft: spacing.sm,
   },
-  search_btn: {},
-  mic_btn: {},
-  text_btn: {},
-  text_mic: {}
+
+  sendButton: {
+    width: scale(42),
+    height: scale(42),
+
+    borderRadius: scale(21),
+
+    backgroundColor: "#0A84FF",
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    marginLeft: spacing.sm,
+  },
+
+  micIcon: {
+    color: "#0A84FF",
+    fontSize: scale(18),
+  },
+
+  sendIcon: {
+    color: "#FFF",
+    fontSize: scale(18),
+    fontWeight: "bold",
+  },
 });
