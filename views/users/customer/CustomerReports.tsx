@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -15,26 +15,26 @@ import Customer from '../../../scripts/classes/customer';
 import storage from '../../../scripts/auth/storage';
 
 export default function CustomerReports() {
-    const[services, setServices] = useState<Services[]>([]);
+    const [services, setServices] = useState<Services[]>([]);
 
-    useEffect(()=>{
-         ( async ()=> {
-            const id = await storage.get.profile().then(prof => prof?.regID);
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.RegID);
             const key = await storage.get.key().then(key => key);
-            if(typeof id === 'number' && typeof key === 'string' ){
+            if (typeof id === 'number' && typeof key === 'string') {
                 const customer = new Customer(id, key);
                 const s = await customer.getCustomerServices();
 
-                setServices(s);                
+                setServices(s);
             }
         })();
     }, []);
 
-  return (
-    <ScrollScreen>
-        {
-            services.length > 0 ? services.map((s) => <CustomerReportItem key={s.ServiceID} service={s}/>) : <DispText text='No service records found'/>
-        }
-    </ScrollScreen>
-  );
+    return (
+        <ScrollScreen>
+            {
+                services.length > 0 ? services.map((s) => <CustomerReportItem key={s.ServiceID} service={s} />) : <DispText text='No service records found' />
+            }
+        </ScrollScreen>
+    );
 }

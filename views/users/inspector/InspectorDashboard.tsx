@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 import storage from "../../../scripts/auth/storage";
 
@@ -15,24 +15,24 @@ import describer from "../../../scripts/utils/describer";
 //interfaces
 import Inspection from "../../../scripts/interfaces/inspection";
 
-export default function InspectorDashboard(){
+export default function InspectorDashboard() {
     let [views, setViews] = useState<number>(1);
     const [inspections, setInspections] = useState<Inspection[]>([]);
 
-    function reset(){
+    function reset() {
         setViews(1);
     }
-    
-    useEffect(() =>{
-        ( async ()=> {
-                const id = await storage.get.profile().then(prof => prof?.regID);
-                const key = await storage.get.key().then(key => key);
-                if(typeof id === 'number' && typeof key === 'string' ){
-                    const inspector = new Inspector(id, key);
 
-                    const insp = await inspector.getAllInspections();
-                    setInspections(insp);
-                }        
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.RegID);
+            const key = await storage.get.key().then(key => key);
+            if (typeof id === 'number' && typeof key === 'string') {
+                const inspector = new Inspector(id, key);
+
+                const insp = await inspector.getAllInspections();
+                setInspections(insp);
+            }
         })();
     }, []);
 
@@ -41,12 +41,12 @@ export default function InspectorDashboard(){
             <DashTray>
                 {
                     inspections.length > 0 ? inspections.map((i) => <ListItem key={i.InspectionID}
-                                                                              rowOneData={{label:'Inspection Id:', text:String(i.InspectionID)}}
-                                                                              rowTwoData={{label:'Date', text:String(i.InspectionDate)}}
-                                                                              rightSideText={describer(i.dCondition)}                                                      
-                    />) : <DispText text="No current inspections"/>           
+                        rowOneData={{ label: 'Inspection Id:', text: String(i.InspectionID) }}
+                        rowTwoData={{ label: 'Date', text: String(i.InspectionDate) }}
+                        rightSideText={describer(i.dCondition)}
+                    />) : <DispText text="No current inspections" />
                 }
-            </DashTray>                     
+            </DashTray>
         </ScrollScreen>
     );
 }

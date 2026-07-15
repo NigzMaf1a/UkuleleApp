@@ -18,7 +18,7 @@ type RegType =
   | "Customer"
   | "Band"
   | "Accountant"
-  | "Deejay"
+  | "DJ"
   | "Dispatch"
   | "Inspector"
   | "Mcee"
@@ -37,7 +37,7 @@ export default function Menu({ regType }: MenuProps) {
     Customer: CustomerMenu,
     Band: BandMenu,
     Accountant: AccountantMenu,
-    Deejay: DeejayMenu,
+    DJ: DeejayMenu,
     Dispatch: DispatchMenu,
     Inspector: InspectorMenu,
     Mcee: MceeMenu,

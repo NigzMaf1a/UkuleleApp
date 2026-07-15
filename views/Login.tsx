@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 //components
 import ScrollScreen from "../components/ScrollScreen";
@@ -23,7 +23,7 @@ type RegType =
   | "Customer"
   | "Band"
   | "Accountant"
-  | "Deejay"
+  | "DJ"
   | "Dispatch"
   | "Inspector"
   | "Mcee"
@@ -40,6 +40,10 @@ export default function Login({ setRole }: LoginProps) {
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    console.log(password);
+  }, [password]);
+
   const handleLogin = async () => {
     setError(null);
 
@@ -47,12 +51,13 @@ export default function Login({ setRole }: LoginProps) {
       const { token, user }: LoginResponse = await loginUser({ email, password });
 
       if (user !== undefined) {
-        await storage.set(token, user.regType, user);
-        setRole(user.regType as RegType);
+        await storage.set(token, user.RegType, user);
+        setRole(user.RegType as RegType);
       } else {
         setError("Invalid email or password.");
       }
     } catch (err) {
+      console.error("Login screen:", err);
       setError("Something went wrong. Please try again.");
     }
   };
@@ -84,7 +89,6 @@ export default function Login({ setRole }: LoginProps) {
           inputPlaceholder="Enter password here"
           value={password}
           onChange={setPassword}
-          secureTextEntry
           autoComplete="password"
           returnKeyType="done"
           onSubmitEditing={handleLogin}

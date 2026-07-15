@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -23,15 +23,15 @@ export default function AccountantPenalties() {
     const [payments, setPayments] = useState<PenaltyPayment[]>([]);
     const [accountant, setAccountant] = useState<Accountant>();
 
-    useEffect(()=>{
-        (async ()=>{
-            const id = await storage.get.profile().then(prof => prof?.regID);
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.RegID);
             const key = await storage.get.key().then(key => key);
-            if(typeof id === 'number' && typeof key === 'string' ){
+            if (typeof id === 'number' && typeof key === 'string') {
                 const acc = new Accountant(id, key);
-                const pen = (await acc.getPenalties()).filter(p => p.PenaltyStatus === PenaltyStatus.Processing);   
-                const pay = await acc.getPenaltyPayments();  
-                
+                const pen = (await acc.getPenalties()).filter(p => p.PenaltyStatus === PenaltyStatus.Processing);
+                const pay = await acc.getPenaltyPayments();
+
                 setAccountant(acc);
                 setPenalties(pen);
                 setPayments(pay);
@@ -39,23 +39,23 @@ export default function AccountantPenalties() {
         })();
     }, []);
 
-    function returnCode(id:number):string{
-        if(payments.length > 0) {
+    function returnCode(id: number): string {
+        if (payments.length > 0) {
             const match = payments.find(p => p.PenaltyID === id)?.PaymentCode;
-            if(typeof match === 'string') return match;
+            if (typeof match === 'string') return match;
         }
         return '';
     }
-  return (
-    <ScrollScreen>
-        {
-            penalties.length > 0 ? penalties.map((p) => <ListItemWithButton key={p.PenaltyID}
-                                                                            rowOneData={{label:'Pay Code', text:returnCode(Number(p.PenaltyID))}}
-                                                                            rowTwoData={{label:'Amount', text:String(p.Penalty)}}
-                                                                            buttonLabel='Approve'
-                                                                            fun={() => accountant?.approvePenaltyPayment(Number(p.PenaltyID))}
-            />) : <DispText text='No pending penalty payments found'/>
-        }
-    </ScrollScreen>
-  );
+    return (
+        <ScrollScreen>
+            {
+                penalties.length > 0 ? penalties.map((p) => <ListItemWithButton key={p.PenaltyID}
+                    rowOneData={{ label: 'Pay Code', text: returnCode(Number(p.PenaltyID)) }}
+                    rowTwoData={{ label: 'Amount', text: String(p.Penalty) }}
+                    buttonLabel='Approve'
+                    fun={() => accountant?.approvePenaltyPayment(Number(p.PenaltyID))}
+                />) : <DispText text='No pending penalty payments found' />
+            }
+        </ScrollScreen>
+    );
 }

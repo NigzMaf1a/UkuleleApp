@@ -47,11 +47,11 @@ export default function InspectorInspection() {
 
   useEffect(() => {
     (async () => {
-      const id = await storage.get.profile().then(prof => prof?.regID);
+      const id = await storage.get.profile().then(prof => prof?.RegID);
       const key = await storage.get.key().then(key => key);
       if (typeof id === 'number' && typeof key === 'string') {
         const insp = new Inspector(id, key);
-        const n = await insp.getUser().then(i => i?.name);
+        const n = await insp.getUser().then(i => i?.Name);
         const lendEquipment = await insp.getAllAllocatedEquipment();
         const equip = await insp.getAllEquipment();
         const served = await insp.getAllServices();

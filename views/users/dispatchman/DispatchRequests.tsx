@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -21,15 +21,15 @@ export default function DispatchRequests() {
     const [dispatches, setDispatches] = useState<Dispatch[]>([]);
     const [manager, setManager] = useState<DispatchMan>();
 
-    async function markRequestDispatched(id:number){
+    async function markRequestDispatched(id: number) {
         await manager?.markDispatchRequestAsDispatched(id);
     }
 
-    useEffect(()=>{
-        ( async ()=>{
-            const id = await storage.get.profile().then(prof => prof?.regID);
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.RegID);
             const key = await storage.get.key().then(key => key);
-            if(typeof id === 'number' && typeof key === 'string' ){            
+            if (typeof id === 'number' && typeof key === 'string') {
                 const man = new DispatchMan(id, key);
                 const disp = await man?.getDispatchRequests();
 
@@ -39,11 +39,11 @@ export default function DispatchRequests() {
         })();
     }, []);
 
-  return (
-    <ScrollScreen>
-        {
-            dispatches.length > 0 ? dispatches.map((d) => <DispatchRequestItem item={d} fun={() => markRequestDispatched(d.DispatchID)}/>) : <DispText text='No dispatch requests found'/>
-        }
-    </ScrollScreen>
-  );
+    return (
+        <ScrollScreen>
+            {
+                dispatches.length > 0 ? dispatches.map((d) => <DispatchRequestItem item={d} fun={() => markRequestDispatched(d.DispatchID)} />) : <DispText text='No dispatch requests found' />
+            }
+        </ScrollScreen>
+    );
 }

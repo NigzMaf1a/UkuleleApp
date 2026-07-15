@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -23,31 +23,31 @@ export default function InventoryOrders() {
     const [supplies, setSupplies] = useState<Supply[]>([]);
     const [storeman, setStoreman] = useState<Storeman>();
 
-    useEffect(()=>{
-        (async ()=> {
-            const id = await storage.get.profile().then(prof => prof?.regID);
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.RegID);
             const key = await storage.get.key().then(key => key);
-            if(typeof id === 'number' && typeof key === 'string' ){
+            if (typeof id === 'number' && typeof key === 'string') {
                 const manager = new Storeman(id, key);
                 const thisOrders = await manager?.getOrders();
                 const thisSupplies = await manager?.getSupplies();
 
                 setStoreman(manager);
                 setOrders(thisOrders.filter(o => o.OrderStatus === OrderStatus.Hauled));
-                setSupplies(thisSupplies);                
-            }                    
+                setSupplies(thisSupplies);
+            }
         })();
     }, []);
 
-    async function markSupplyDelivered(id:number){
+    async function markSupplyDelivered(id: number) {
         await storeman?.updateOrder(id);
     }
 
-  return (
-    <ScrollScreen>
-        {
-            orders.length > 0 ? orders.map((o) => <OrderListItem key={o.OrderID} order={o} supplies={supplies} fun={() => markSupplyDelivered(o.OrderID)}/>) : <DispText text='No hauled supplies found'/>
-        }
-    </ScrollScreen>
-  );
+    return (
+        <ScrollScreen>
+            {
+                orders.length > 0 ? orders.map((o) => <OrderListItem key={o.OrderID} order={o} supplies={supplies} fun={() => markSupplyDelivered(o.OrderID)} />) : <DispText text='No hauled supplies found' />
+            }
+        </ScrollScreen>
+    );
 }

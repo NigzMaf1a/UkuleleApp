@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text } from 'react-native';
 
 //components
@@ -17,23 +17,23 @@ import { typography } from '../styles/typography';
 import storage from '../scripts/auth/storage';
 
 export default function AboutUs() {
-    const[about, setAbout] = useState<About>();
+    const [about, setAbout] = useState<About>();
 
-    useEffect(()=>{
-        (async ()=>{
-            const id = await storage.get.profile().then(prof => prof?.regID);
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.RegID);
             const key = await storage.get.key().then(key => key);
-            if(typeof id === 'number' && typeof key === 'string' ){
+            if (typeof id === 'number' && typeof key === 'string') {
                 const user = new User(id, key);
                 const thisAbout = await user?.getAbout();
 
-                setAbout(thisAbout[thisAbout.length - 1]);                
+                setAbout(thisAbout[thisAbout.length - 1]);
             }
         })();
     }, []);
-  return (
-    <ScrollScreen>
-        <Text style={typography.body}>{about?.detail}</Text>
-    </ScrollScreen>
-  );
+    return (
+        <ScrollScreen>
+            <Text style={typography.body}>{about?.detail}</Text>
+        </ScrollScreen>
+    );
 }

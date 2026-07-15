@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 import storage from "../../../scripts/auth/storage";
 
@@ -18,26 +18,26 @@ import Dispatch from "../../../scripts/interfaces/dispatch";
 //enums
 import DispatchStatus from "../../../scripts/enums/dispatch";
 
-export default function DispatchDashboard(){
+export default function DispatchDashboard() {
     let [views, setViews] = useState<number>(1);
     const [pending, setPending] = useState<Dispatch[]>([]);
     const [packed, setPacked] = useState<Dispatch[]>([]);
 
-    function reset(){
+    function reset() {
         setViews(1);
     }
-    
-    useEffect(() =>{
-        ( async ()=> {
-                const id = await storage.get.profile().then(prof => prof?.regID);
-                const key = await storage.get.key().then(key => key);
-                if(typeof id === 'number' && typeof key === 'string' ){
-                    const man = new DispatchMan(id, key);
 
-                    const requests = await man.getDispatchRequests();
-                    setPending(requests.filter(r => r.Dispatched === DispatchStatus.Pending));
-                    setPacked(requests.filter(r => r.Dispatched === DispatchStatus.Packed));
-                }        
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.RegID);
+            const key = await storage.get.key().then(key => key);
+            if (typeof id === 'number' && typeof key === 'string') {
+                const man = new DispatchMan(id, key);
+
+                const requests = await man.getDispatchRequests();
+                setPending(requests.filter(r => r.Dispatched === DispatchStatus.Pending));
+                setPacked(requests.filter(r => r.Dispatched === DispatchStatus.Packed));
+            }
         })();
     }, []);
 
@@ -46,21 +46,21 @@ export default function DispatchDashboard(){
             <DashTray>
                 {
                     pending.length > 0 ? pending.map((p) => <ListItem key={p.DispatchID}
-                                                                      rowOneData={{label:'Location:', text:p.dLocation}}
-                                                                      rowTwoData={{label:'Phone:', text:p.PhoneNo}}
-                                                                      rightSideText={p.DispatchDate}
-                    />) : <DispText text="No pending dispatch requests found"/>
+                        rowOneData={{ label: 'Location:', text: p.dLocation }}
+                        rowTwoData={{ label: 'Phone:', text: p.PhoneNo }}
+                        rightSideText={p.DispatchDate}
+                    />) : <DispText text="No pending dispatch requests found" />
                 }
-            </DashTray>    
+            </DashTray>
             <DashTray>
                 {
                     packed.length > 0 ? packed.map((p) => <ListItem key={p.DispatchID}
-                                                                      rowOneData={{label:'Location:', text:p.dLocation}}
-                                                                      rowTwoData={{label:'Phone:', text:p.PhoneNo}}
-                                                                      rightSideText={p.DispatchDate}
-                    />) : <DispText text="No pending dispatch requests found"/>
+                        rowOneData={{ label: 'Location:', text: p.dLocation }}
+                        rowTwoData={{ label: 'Phone:', text: p.PhoneNo }}
+                        rightSideText={p.DispatchDate}
+                    />) : <DispText text="No pending dispatch requests found" />
                 }
-            </DashTray>                                   
+            </DashTray>
         </ScrollScreen>
     );
 }

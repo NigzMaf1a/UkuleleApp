@@ -35,7 +35,7 @@ const storage = {
     ): Promise<void> {
 
         // remove sensitive data
-        const { password, ...safeUser } = thisUser;
+        const { Password, ...safeUser } = thisUser;
 
         await AsyncStorage.multiSet([
             ['token', token],

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -16,27 +16,27 @@ import storage from '../../../scripts/auth/storage';
 export default function ServiceRecords() {
     const [records, setRecords] = useState<Services[]>([]);
 
-    useEffect(()=>{
-        ( async ()=>{
-            const id = await storage.get.profile().then(prof => prof?.regID);
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.RegID);
             const key = await storage.get.key().then(key => key);
-            if(typeof id === 'number' && typeof key === 'string' ){
+            if (typeof id === 'number' && typeof key === 'string') {
                 const man = new ServiceManager(id, key);
                 const services = await man?.getAllServiceRequests();
-                setRecords(services.filter(s => s.PaymentStatus === PaymentStatus.Paid && s.ServiceStatus === ServiceStatus.Approved));                
+                setRecords(services.filter(s => s.PaymentStatus === PaymentStatus.Paid && s.ServiceStatus === ServiceStatus.Approved));
             }
         })();
     }, []);
 
-  return (
-    <ScrollScreen>
-        {
-            records.length > 0 ? records.map((r) => <ListItem key={r.ServiceID}
-                                                              rowOneData={{label:'Type', text:r.ServiceType}}
-                                                              rowTwoData={{label:'Status', text:String(r.PaymentStatus)}}
-                                                              rightSideText={r.ServiceStatus}
-            />) : <DispText text = {'No service records found'}/>
-        }
-    </ScrollScreen>
-  );
+    return (
+        <ScrollScreen>
+            {
+                records.length > 0 ? records.map((r) => <ListItem key={r.ServiceID}
+                    rowOneData={{ label: 'Type', text: r.ServiceType }}
+                    rowTwoData={{ label: 'Status', text: String(r.PaymentStatus) }}
+                    rightSideText={r.ServiceStatus}
+                />) : <DispText text={'No service records found'} />
+            }
+        </ScrollScreen>
+    );
 }

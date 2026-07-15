@@ -51,7 +51,7 @@ export default function InspectorPenalties() {
 
   useEffect(() => {
     (async () => {
-      const id = await storage.get.profile().then(prof => prof?.regID);
+      const id = await storage.get.profile().then(prof => prof?.RegID);
       const key = await storage.get.key().then(key => key);
       if (typeof id === 'number' && typeof key === 'string') {
         const man = new Inspector(id, key);

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 
 //components
@@ -21,42 +21,42 @@ import Users from '../scripts/interfaces/user';
 
 
 export default function Profile() {
-  const [user, setUser] = useState<User>();
-  const [reg, setReg] = useState<Users>();
+    const [user, setUser] = useState<User>();
+    const [reg, setReg] = useState<Users>();
 
-    useEffect(()=>{
-        (async ()=>{
-            const id = await storage.get.profile().then(prof => prof?.regID);
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.RegID);
             const key = await storage.get.key().then(key => key);
-            if(typeof id === 'number' && typeof key === 'string' ){
+            if (typeof id === 'number' && typeof key === 'string') {
                 const us = new User(id, key);
-                const thisUser = await us.getUser();   
+                const thisUser = await us.getUser();
                 setUser(us);
                 setReg(thisUser);
             }
         })();
-    }, []);  
-  return (
-    <ScrollScreen>
-        <ImageCont/>
-        <DashTray>
-          <LabelledText
-              label='Name'
-              text={reg?.name as string}
-          />
-          <LabelledText
-              label='Phone'
-              text={reg?.phoneNo as string}
-          />
-          <LabelledText
-              label='Email'
-              text={reg?.email as string}
-          />
-          <LabelledText
-              label='Reg Type'
-              text={reg?.regType as string}
-          />                              
-        </DashTray>
-    </ScrollScreen>
-  );
+    }, []);
+    return (
+        <ScrollScreen>
+            <ImageCont />
+            <DashTray>
+                <LabelledText
+                    label='Name'
+                    text={reg?.Name as string}
+                />
+                <LabelledText
+                    label='Phone'
+                    text={reg?.PhoneNo as string}
+                />
+                <LabelledText
+                    label='Email'
+                    text={reg?.Email as string}
+                />
+                <LabelledText
+                    label='Reg Type'
+                    text={reg?.RegType as string}
+                />
+            </DashTray>
+        </ScrollScreen>
+    );
 }

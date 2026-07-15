@@ -6,13 +6,15 @@ interface LoginResponse {
   user?: Users;
 }
 
-interface LogginCreds{
-    email:string;
-    password:string;
+interface LogginCreds {
+  email: string;
+  password: string;
 }
 export default async function loginUser(creds: LogginCreds): Promise<LoginResponse> {
   try {
     console.log('We are really here man');
+    console.log(creds.email, creds.password);
+
     return await apiFetch<LoginResponse>('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify({ Email: creds.email, Password: creds.password }),

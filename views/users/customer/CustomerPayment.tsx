@@ -80,7 +80,7 @@ export default function CustomerPayment() {
     useEffect(() => {
         setShowModal(false);
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.regID);
+            const id = await storage.get.profile().then(prof => prof?.RegID);
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const cust = new Customer(id, key);
@@ -96,9 +96,9 @@ export default function CustomerPayment() {
 
     function payload(): Finance {
         return {
-            CustomerID: user?.regID as number,
-            Name: user?.name as string,
-            PhoneNo: user?.phoneNo as string,
+            CustomerID: user?.RegID as number,
+            Name: user?.Name as string,
+            PhoneNo: user?.PhoneNo as string,
             TransactionName: validateTransactionCode(code),
             TransactionDate: date(),
             Amount: stringToNumber(amount),

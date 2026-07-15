@@ -8,7 +8,7 @@ type RegType =
     | "Customer"
     | "Band"
     | "Accountant"
-    | "Deejay"
+    | "DJ"
     | "Dispatch"
     | "Inspector"
     | "Mcee"

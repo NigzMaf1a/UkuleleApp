@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -19,27 +19,27 @@ import storage from '../../../scripts/auth/storage';
 export default function SupplierAvailable() {
     const [supplies, setSupplies] = useState<Supply[]>([]);
 
-    useEffect(()=>{
-        (async ()=>{
-            const id = await storage.get.profile().then(prof => prof?.regID);
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.RegID);
             const key = await storage.get.key().then(key => key);
-            if(typeof id === 'number' && typeof key === 'string' ){
+            if (typeof id === 'number' && typeof key === 'string') {
                 const supplier = new Supplier(id, key);
                 const sup = await supplier.getSupplies();
-                setSupplies(sup.filter(s => s.Available === SupplyAvailable.Yes));                
-            }                    
+                setSupplies(sup.filter(s => s.Available === SupplyAvailable.Yes));
+            }
         })();
     }, []);
 
-  return (
-    <ScrollScreen>
-        {
-            supplies.length > 0 ? supplies.map((sup) => <ListItem key={sup.SupplyID}
-                                                                  rowOneData={{label:'Type', text:sup.SupplyType}}  
-                                                                  rowTwoData={{label:'Price', text:String(sup.Price)}}
-                                                                  rightSideText={String(sup.AvailableUnits)}
-            />) : <DispText text='No available supplies'/> 
-        }
-    </ScrollScreen>
-  )
+    return (
+        <ScrollScreen>
+            {
+                supplies.length > 0 ? supplies.map((sup) => <ListItem key={sup.SupplyID}
+                    rowOneData={{ label: 'Type', text: sup.SupplyType }}
+                    rowTwoData={{ label: 'Price', text: String(sup.Price) }}
+                    rightSideText={String(sup.AvailableUnits)}
+                />) : <DispText text='No available supplies' />
+            }
+        </ScrollScreen>
+    )
 }
