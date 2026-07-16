@@ -2,171 +2,329 @@ import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
-import BigForm from '../../../components/BigForm';
+import MyModal from '../../../components/MyModal';
+import CustomerPaymentItem from '../../../sections/CustomerPaymentItem';
+import DispText from '../../../components/DispText';
+import DashTray from '../../../sections/DashTray';
+import ListItemWithButton from '../../../sections/ListItemwithButton';
+import SmallForm from '../../../components/SmallForm';
 import LabelledInput from '../../../sections/LabelledInput';
-import LabelledDropdown from '../../../components/LabelledDropdown';
-import LabelledText from '../../../components/LabelledText';
+import Button from '../../../components/Button';
+import FormStrip from '../../../components/FormStript';
 
 //interfaces
+import Finance, { Status } from '../../../scripts/interfaces/finance';
 import Services from '../../../scripts/interfaces/services';
-import { DropDownItem } from '../../../components/DropDown';
-import Finance from '../../../scripts/interfaces/finance';
-
-//enums
-import { Genre, ServiceType, ServiceStatus, PaymentStatus } from '../../../scripts/enums/services';
-import { Status } from '../../../scripts/interfaces/finance';
+import Users from '../../../scripts/interfaces/user';
 
 //scripts
 import Customer from '../../../scripts/classes/customer';
-import { genreDropDownValues, serviceTypeDropDownValues } from '../../../scripts/utils/services';
-import stringToNumber from '../../../scripts/utils/stringToNumber';
-import { Charges, ChargeRates } from '../../../scripts/utils/charges';
-import errorLogger from '../../../scripts/utils/errorLogger';
-import toaster from '../../../scripts/utils/toaster';
 import date from '../../../scripts/utils/date';
+import toaster from '../../../scripts/utils/toaster';
+import stringToNumber from '../../../scripts/utils/stringToNumber';
 
-//data
-import hoursDropDownValues from '../../../scripts/utils/hours';
+//enums
+import { PaymentStatus } from '../../../scripts/enums/services';
 
 //auth
 import storage from '../../../scripts/auth/storage';
-import Button from '../../../components/Button';
 
-export default function CustomerServices() {
+export default function CustomerPayment() {
+
   const [customer, setCustomer] = useState<Customer>();
-  const [customerId, setCustomerId] = useState<number>(0);
-  const [genre, setGenre] = useState<string>('');
-  const [hours, setHours] = useState<string>('');
-  const [serviceType, setServiceType] = useState<string>('');
-  const [serviceStatus] = useState<ServiceStatus>(ServiceStatus.Pending);
-  const [paymentStatus] = useState<PaymentStatus>(PaymentStatus.NotPaid);
-  const [bookingHours] = useState<DropDownItem[]>(hoursDropDownValues);
-  const [genres] = useState<DropDownItem[]>(genreDropDownValues());
-  const [services] = useState<DropDownItem[]>(serviceTypeDropDownValues());
-  const [total, setTotal] = useState<number>(0);
+  const [user, setUser] = useState<Users>();
+
+  const [serviceId, setServiceId] = useState(0);
+
+  const [payments, setPayments] = useState<Finance[]>([]);
+  const [pendingServices, setPendingServices] = useState<Services[]>([]);
+
+  const [selectedService, setSelectedService] = useState<Services>();
+
+  const [showModal, setShowModal] = useState(false);
+
+  const [amount, setAmount] = useState('');
+  const [code, setCode] = useState('');
+
+  function toggleModal() {
+    setShowModal(prev => !prev);
+  }
+
+  function validateServiceId(id: number): number {
+
+    if (id > 0) {
+      return id;
+    }
+
+    toaster(
+      'Invalid service ID. Please try again.',
+      'danger'
+    );
+
+    throw new Error('Invalid Service ID');
+  }
+
+  function validateTransactionCode(cd: string): string {
+
+    if (cd.trim().length < 10) {
+
+      toaster(
+        'A valid transaction code must be at least 10 characters.',
+        'danger'
+      );
+
+      throw new Error('Invalid transaction code');
+    }
+
+    return cd.toUpperCase();
+  }
+
+  async function filterServices(cust: Customer) {
+
+    const services = await cust.getCustomerServices();
+
+    setPendingServices(
+      services.filter(
+        s => s.PaymentStatus === PaymentStatus.NotPaid
+      )
+    );
+  }
+
+  async function getUser(cust: Customer) {
+
+    const thisUser = await cust.getUser();
+
+    if (thisUser) {
+      setUser(thisUser);
+    }
+  }
 
   useEffect(() => {
+
     (async () => {
-      const id = await storage.get.profile().then(prof => prof?.RegID);
-      const key = await storage.get.key().then(key => key);
+
+      const id = await storage.get.profile()
+        .then(prof => prof?.RegID);
+
+      const key = await storage.get.key();
+
       if (typeof id === 'number' && typeof key === 'string') {
+
         const cust = new Customer(id, key);
 
+        const history =
+          await cust.getPaymentHistory();
+
         setCustomer(cust);
-        setCustomerId(id);
+
+        setPayments(history);
+
+        await filterServices(cust);
+
+        await getUser(cust);
       }
+
     })();
+
   }, []);
 
-  function genreChargesExtractor(genre: Genre): number {
-    if (genre === null) {
-      toaster('Please select a genre', 'warn');
-    }
-    switch (genre) {
-      case Genre.Benga:
-        return Charges.Benga;
-      case Genre.Reggae:
-        return Charges.Reggae;
-      case Genre.Rhumba:
-        return Charges.Rhumba;
-      case Genre.RnB:
-        return Charges.RnB;
-      case Genre.Soul:
-        return Charges.Soul;
-      case Genre.Zilizopendwa:
-        return Charges.Zilizopendwa;
-    }
+  function mountModal(id: number) {
+
+    setServiceId(id);
+
+    const service = pendingServices.find(
+      s => s.ServiceID === id
+    );
+
+    setSelectedService(service);
+
+    toggleModal();
   }
 
-  function costCalculator(val: ServiceType, gen: Genre): number {
-    let cost: number = 0;
-    if (val === ServiceType.Booking) {
-      cost = ChargeRates.Booking * genreChargesExtractor(gen) * stringToNumber(hours);
-      return cost;
-    } else {
-      cost = ChargeRates.Lending * genreChargesExtractor(gen) * stringToNumber(hours);
-      return cost;
-    }
+  function unmountModal() {
+
+    setServiceId(0);
+
+    setSelectedService(undefined);
+
+    setAmount('');
+
+    setCode('');
+
+    toggleModal();
   }
 
-  function calculateCost(gen: Genre) {
-    let subTotal: number = 0;
-    if (genre !== null && hours !== null && serviceType !== null) {
-      if (serviceType === ServiceType.Booking) {
-        if (stringToNumber(hours) > 3) {
-          toaster('A band live booking cannot exceed three hours', 'info');
-          setHours('3');
-        }
-        subTotal = costCalculator(serviceType, gen);
-        setTotal(subTotal);
-      } else {
-        subTotal = costCalculator(serviceType as ServiceType, gen);
-        setTotal(subTotal);
-      }
-    }
-  }
+  async function initiatePaymentRequest() {
 
-  useEffect(() => {
-    calculateCost(genre as Genre);
-  }, [genre, serviceType, hours]);
-
-  function request(): Services {
-    return {
-      CustomerID: customerId,
-      Genre: genre as Genre,
-      Cost: total,
-      Hours: stringToNumber(hours),
-      ServiceType: serviceType as ServiceType,
-      ServiceStatus: serviceStatus,
-      PaymentStatus: paymentStatus
+    if (!customer || !user) {
+      toaster(
+        'Unable to initialize payment.',
+        'danger'
+      );
+      return;
     }
-  }
 
-  async function sendRequest() {
-    if (customer) {
-      toaster('Requesting.......', 'info');
-      await customer.requestService(request());
-      setTimeout(() => {
-        toaster('Service request successful', 'success');
-      }, 3000);
+    const parsedAmount = stringToNumber(amount);
+
+    if (parsedAmount === null) {
+
+      toaster(
+        'Please enter a valid amount.',
+        'danger'
+      );
+
+      return;
     }
+
+    let transactionCode: string;
+
+    try {
+
+      transactionCode =
+        validateTransactionCode(code);
+
+    } catch {
+
+      return;
+    }
+
+    const request: Finance = {
+
+      CustomerID: user.RegID as number,
+
+      Name: user.Name,
+
+      PhoneNo: user.PhoneNo,
+
+      TransactionName: transactionCode,
+
+      TransactionDate: date(),
+
+      Amount: parsedAmount,
+
+      TransactType: 'Payment',
+
+      TransactionStatus: Status.Pending,
+
+      ServiceID: validateServiceId(serviceId)
+
+    };
+
+    await customer.makePayment(request);
+
+    await filterServices(customer);
+
+    const history =
+      await customer.getPaymentHistory();
+
+    setPayments(history);
+
+    unmountModal();
   }
 
   return (
+
     <ScrollScreen>
-      <BigForm>
-        <LabelledDropdown
-          label='Select Service Type'
-          values={services}
-          selectedValue={serviceType}
-          onValueChange={setServiceType}
-        />
 
-        <LabelledDropdown
-          label='Select Genre'
-          values={genres}
-          selectedValue={genre}
-          onValueChange={setGenre}
-        />
+      <DashTray>
 
-        <LabelledDropdown
-          label='Hours'
-          values={bookingHours}
-          selectedValue={hours}
-          onValueChange={setHours}
-        />
+        {
+          pendingServices.length > 0 ?
 
-        <LabelledText
-          label='Total'
-          text={String(total)}
-        />
+            pendingServices.map(s => (
 
-        <Button
-          label='Request'
-          fun={async () => await sendRequest()}
-        />
+              <ListItemWithButton
+                key={s.ServiceID}
+                rowOneData={{
+                  label: 'Service Type',
+                  text: s.ServiceType
+                }}
+                rowTwoData={{
+                  label: 'Amount',
+                  text: String(s.Cost)
+                }}
+                buttonLabel='Pay'
+                fun={() => mountModal(s.ServiceID as number)}
+              />
 
-      </BigForm>
+            ))
+
+            :
+
+            <DispText
+              text='No unpaid services found'
+            />
+
+        }
+
+      </DashTray>
+
+      <DashTray>
+
+        {
+          payments.length > 0 ?
+
+            payments.map(p => (
+
+              <CustomerPaymentItem
+                key={p.TransactionID}
+                payment={p}
+              />
+
+            ))
+
+            :
+
+            <DispText
+              text='No payment records found'
+            />
+
+        }
+
+      </DashTray>
+
+      <MyModal
+        visible={showModal}
+        onClose={unmountModal}
+        title='Make Payment'
+        footer={
+          <FormStrip>
+
+            <Button
+              label='Pay'
+              fun={initiatePaymentRequest}
+            />
+
+            <Button
+              label='Close'
+              fun={unmountModal}
+            />
+
+          </FormStrip>
+        }
+      >
+
+        <SmallForm>
+
+          <LabelledInput
+            label='Transaction Code'
+            inputPlaceholder='Enter your transaction code here'
+            value={code}
+            onChange={setCode}
+          />
+
+          <LabelledInput
+            label='Amount'
+            inputPlaceholder='Enter the payment amount here'
+            value={amount}
+            onChange={setAmount}
+          />
+
+        </SmallForm>
+
+      </MyModal>
+
     </ScrollScreen>
+
   );
 }

@@ -21,23 +21,9 @@ import { Status } from "../../../scripts/interfaces/finance";
 import { PaymentStatus } from "../../../scripts/enums/services";
 
 export default function AccountantDashboard() {
-    let [views, setViews] = useState<number>(1);
     const [accountant, setAccountant] = useState<Accountant>();
     const [payments, setPayments] = useState<Finance[]>([]);
     const [services, setServices] = useState<Services[]>([]);
-
-    function reset() {
-        setViews(1);
-    }
-
-    function toggleViews() {
-        do {
-            if (views === 0) reset();
-            setInterval(() => {
-                setViews(views--);
-            }, 5000);
-        } while (views !== 0);
-    }
 
     useEffect(() => {
         (async () => {
@@ -52,19 +38,20 @@ export default function AccountantDashboard() {
 
     useEffect(() => {
         (async () => {
-            if (accountant) {
-                const pay = await accountant.getAllFinanceRecords();
-                const serv = await accountant.getAllServices();
+            if (!accountant) return;
 
-                setPayments(pay.filter(p => p.TransactionStatus === Status.Pending));
-                setServices(serv.filter(s => s.PaymentStatus === PaymentStatus.NotPaid));
-            }
+            const pay = await accountant.getAllFinanceRecords();
+            const serv = await accountant.getAllServices();
+
+            setPayments(
+                pay.filter(p => p.TransactionStatus === Status.Pending)
+            );
+
+            setServices(
+                serv.filter(s => s.PaymentStatus === PaymentStatus.NotPaid)
+            );
         })();
-    }, []);
-
-    useEffect(() => {
-        toggleViews();
-    }, []);
+    }, [accountant]);
 
     return (
         <ScrollScreen>

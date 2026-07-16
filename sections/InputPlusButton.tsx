@@ -27,10 +27,10 @@ export default function InputPlusButton({
 }: InputPlusButtonProps) {
 
     return (
-        <View style={cardStyles.strip}>
+        <View style={cardStyles.input_plus_btn}>
+
             <Input
                 placeholder={inputPlaceholder}
-                placeholderTextColor={inputPlaceholderTextColor}
                 value={inputValue}
                 onChange={onInputChange}
             />
@@ -38,7 +38,7 @@ export default function InputPlusButton({
             <Button
                 label={btnLabel}
                 fun={() => btnFun(inputValue)}
-                variant='secondary'
+                variant='primary'
             />
         </View>
     );

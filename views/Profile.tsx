@@ -33,6 +33,10 @@ export default function Profile() {
                 const thisUser = await us.getUser();
                 setUser(us);
                 setReg(thisUser);
+                console.log(reg);
+                console.log(user);
+
+
             }
         })();
     }, []);

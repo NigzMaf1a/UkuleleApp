@@ -34,6 +34,24 @@ export const cardStyles = StyleSheet.create({
 
     marginBottom: spacing.md
   },
+  input_plus_btn: {
+    width: "100%",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: spacing.sm,
+    borderRadius: scale(12),
+    backgroundColor: colors.surface,
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: scale(2) },
+    shadowOpacity: 0.1,
+    shadowRadius: scale(6),
+
+    elevation: 3,
+
+    marginBottom: spacing.md
+  },
   tray: {
     width: "75%",
     flexDirection: "column",

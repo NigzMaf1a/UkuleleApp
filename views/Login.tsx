@@ -18,18 +18,7 @@ import LoginResponse from "../scripts/interfaces/login";
 
 //styles
 import { colors } from "../styles/colors";
-
-type RegType =
-  | "Customer"
-  | "Band"
-  | "Accountant"
-  | "DJ"
-  | "Dispatch"
-  | "Inspector"
-  | "Mcee"
-  | "Service"
-  | "Store"
-  | "Supplier";
+import RegType from "../scripts/enums/regTypeTwo";
 
 interface LoginProps {
   setRole: (role: RegType | null) => void;

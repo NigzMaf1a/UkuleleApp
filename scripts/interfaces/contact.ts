@@ -1,7 +1,7 @@
 export default interface Contact {
-    PhoneNo: string;
-    EmailAddress: string;
-    Instagram: string;
-    Facebook: string;
-    PoBox: string;
+    phoneno: string;
+    emailaddress: string;
+    instagram: string;
+    facebook: string;
+    pobox: string;
 }

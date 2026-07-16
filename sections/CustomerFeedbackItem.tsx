@@ -29,7 +29,7 @@ export default function CustomerFeedbackItem({ feedback }: FeedbackProps) {
                     <LabelledText label='Comment' text={feedback.Comments} />
                     <LabelledText label='Response' text={String(feedback.Response)} />
                 </Tray>
-                <Button label='View' fun={() => toggleModal()} />
+                <Button label='View' fun={() => toggleModal()} variant='secondary' />
             </Strip>
 
             <MyModal

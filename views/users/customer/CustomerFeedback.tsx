@@ -25,6 +25,7 @@ export default function CustomerFeedback() {
     const [rating] = useState<number>(4);
 
     async function addFeedback(feed: Feedback) {
+        console.log('Feedback is about to be added');
         await customer?.addFeedback(feed);
     }
 

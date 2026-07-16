@@ -1,0 +1,15 @@
+enum RegType {
+    Customer = "Customer",
+    DJ = "DJ",
+    Mcee = "Mcee",
+    Storeman = "Storeman",
+    Accountant = "Accountant",
+    Dispatchman = "Dispatchman",
+    Inspector = "Inspector",
+    Band = "Band",
+    Admin = "Admin",
+    Supplier = "Supplier",
+    ServiceManager = "ServiceManager"
+}
+
+export default RegType;

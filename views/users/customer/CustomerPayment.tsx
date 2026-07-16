@@ -30,160 +30,282 @@ import { PaymentStatus } from '../../../scripts/enums/services';
 import storage from '../../../scripts/auth/storage';
 
 export default function CustomerPayment() {
+
     const [customer, setCustomer] = useState<Customer>();
     const [user, setUser] = useState<Users>();
-    const [serviceId, setServiceId] = useState<number>(0);
+
+    const [serviceId, setServiceId] = useState(0);
+
     const [payments, setPayments] = useState<Finance[]>([]);
     const [pendingServices, setPendingServices] = useState<Services[]>([]);
-    const [selectedService, setSelectedService] = useState<Services | undefined>();
-    const [paymentRequest, setPaymentRequest] = useState<Finance>();
-    const [showModal, setShowModal] = useState<boolean>(false);
-    const [amount, setAmount] = useState<string>('');
-    const [code, setCode] = useState<string>('');
+
+    const [selectedService, setSelectedService] = useState<Services>();
+
+    const [showModal, setShowModal] = useState(false);
+
+    const [amount, setAmount] = useState('');
+    const [code, setCode] = useState('');
 
     function toggleModal() {
         setShowModal(prev => !prev);
     }
 
     function validateServiceId(id: number): number {
-        if (id !== null && id !== undefined && id > 0) {
+
+        if (id > 0) {
             return id;
-        } else {
-            toaster('Invalid service ID. Please try again.', 'danger');
-            throw new Error('Invalid Service ID');
         }
+
+        toaster(
+            'Invalid service ID. Please try again.',
+            'danger'
+        );
+
+        throw new Error('Invalid Service ID');
     }
 
     function validateTransactionCode(cd: string): string {
-        if (cd.length > 10) {
-            toaster('A valid transaction code must be at least ten characters', 'info');
+
+        if (cd.trim().length < 10) {
+
+            toaster(
+                'A valid transaction code must be at least 10 characters.',
+                'danger'
+            );
+
+            throw new Error('Invalid transaction code');
         }
+
         return cd.toUpperCase();
     }
 
-    async function filterServices() {
-        if (customer) {
-            const services = await customer.getCustomerServices();
-            setPendingServices(services.filter(s => s.PaymentStatus === PaymentStatus.NotPaid));
-        }
+    async function filterServices(cust: Customer) {
+
+        const services = await cust.getCustomerServices();
+
+        setPendingServices(
+            services.filter(
+                s => s.PaymentStatus === PaymentStatus.NotPaid
+            )
+        );
     }
 
-    async function getUser() {
-        if (customer) {
-            const thisUser = await customer.getUser();
-            if (thisUser !== undefined) {
-                setUser(thisUser);
-            }
+    async function getUser(cust: Customer) {
+
+        const thisUser = await cust.getUser();
+
+        if (thisUser) {
+            setUser(thisUser);
         }
     }
 
     useEffect(() => {
-        setShowModal(false);
+
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
-            const key = await storage.get.key().then(key => key);
+
+            const id = await storage.get.profile()
+                .then(prof => prof?.RegID);
+
+            const key = await storage.get.key();
+
             if (typeof id === 'number' && typeof key === 'string') {
+
                 const cust = new Customer(id, key);
-                const finances = await cust?.getPaymentHistory();
+
+                const history =
+                    await cust.getPaymentHistory();
 
                 setCustomer(cust);
-                setPayments(finances);
-                await filterServices();
-                await getUser();
-            }
-        })();
-    }, [pendingServices]);
 
-    function payload(): Finance {
-        return {
-            CustomerID: user?.RegID as number,
-            Name: user?.Name as string,
-            PhoneNo: user?.PhoneNo as string,
-            TransactionName: validateTransactionCode(code),
-            TransactionDate: date(),
-            Amount: stringToNumber(amount),
-            TransactType: 'Payment',
-            TransactionStatus: Status.Pending,
-            ServiceID: validateServiceId(serviceId)
-        };
-    }
+                setPayments(history);
+
+                await filterServices(cust);
+
+                await getUser(cust);
+            }
+
+        })();
+
+    }, []);
 
     function mountModal(id: number) {
+
         setServiceId(id);
+
+        const service = pendingServices.find(
+            s => s.ServiceID === id
+        );
+
+        setSelectedService(service);
+
         toggleModal();
     }
 
     function unmountModal() {
+
         setServiceId(0);
+
         setSelectedService(undefined);
+
+        setAmount('');
+
+        setCode('');
+
         toggleModal();
     }
 
-    function findSelectedService(): Services | undefined {
-        if (pendingServices !== undefined && serviceId > 0) {
-            return pendingServices.find(p => p.ServiceID === serviceId);
-        }
-    }
-
     async function initiatePaymentRequest() {
-        if (customer && paymentRequest !== undefined) {
-            await customer.makePayment(paymentRequest);
-            pendingServices.pop();
-        }
-    }
 
-    useEffect(() => {
-        setPaymentRequest(payload());
-        if (findSelectedService() !== undefined) {
-            setSelectedService(findSelectedService());
+        if (!customer || !user) {
+            toaster(
+                'Unable to initialize payment.',
+                'danger'
+            );
+            return;
         }
-    }, [serviceId, pendingServices]);
+
+        const parsedAmount = stringToNumber(amount);
+
+        if (parsedAmount === null) {
+
+            toaster(
+                'Please enter a valid amount.',
+                'danger'
+            );
+
+            return;
+        }
+
+        let transactionCode: string;
+
+        try {
+
+            transactionCode =
+                validateTransactionCode(code);
+
+        } catch {
+
+            return;
+        }
+
+        const request: Finance = {
+
+            CustomerID: user.RegID as number,
+
+            Name: user.Name,
+
+            PhoneNo: user.PhoneNo,
+
+            TransactionName: transactionCode,
+
+            TransactionDate: date(),
+
+            Amount: parsedAmount,
+
+            TransactType: 'Payment',
+
+            TransactionStatus: Status.Pending,
+
+            ServiceID: validateServiceId(serviceId)
+
+        };
+
+        await customer.makePayment(request);
+
+        await filterServices(customer);
+
+        const history =
+            await customer.getPaymentHistory();
+
+        setPayments(history);
+
+        unmountModal();
+    }
 
     return (
+
         <ScrollScreen>
+
             <DashTray>
-                {pendingServices.length > 0 ? (
-                    pendingServices.map((s) => (
-                        <ListItemWithButton
-                            key={s.ServiceID}
-                            rowOneData={{ label: 'Service Type', text: s.ServiceType }}
-                            rowTwoData={{ label: 'Amount', text: String(s.Cost) }}
-                            buttonLabel='Pay'
-                            fun={() => mountModal(s.ServiceID as number)}
+
+                {
+                    pendingServices.length > 0 ?
+
+                        pendingServices.map(s => (
+
+                            <ListItemWithButton
+                                key={s.ServiceID}
+                                rowOneData={{
+                                    label: 'Service Type',
+                                    text: s.ServiceType
+                                }}
+                                rowTwoData={{
+                                    label: 'Amount',
+                                    text: String(s.Cost)
+                                }}
+                                buttonLabel='Pay'
+                                fun={() => mountModal(s.ServiceID as number)}
+                            />
+
+                        ))
+
+                        :
+
+                        <DispText
+                            text='No unpaid services found'
                         />
-                    ))
-                ) : (
-                    <DispText text='No unpaid services found' />
-                )}
+
+                }
+
             </DashTray>
+
             <DashTray>
-                {payments.length > 0 ? (
-                    payments.map((p) => (
-                        <CustomerPaymentItem key={p.TransactionID} payment={p} />
-                    ))
-                ) : (
-                    <DispText text='No payment records found' />
-                )}
+
+                {
+                    payments.length > 0 ?
+
+                        payments.map(p => (
+
+                            <CustomerPaymentItem
+                                key={p.TransactionID}
+                                payment={p}
+                            />
+
+                        ))
+
+                        :
+
+                        <DispText
+                            text='No payment records found'
+                        />
+
+                }
+
             </DashTray>
 
             <MyModal
                 visible={showModal}
-                onClose={() => unmountModal()}
+                onClose={unmountModal}
                 title='Make Payment'
                 footer={
                     <FormStrip>
+
                         <Button
                             label='Pay'
-                            fun={async () => await initiatePaymentRequest()}
+                            fun={initiatePaymentRequest}
                         />
+
                         <Button
                             label='Close'
-                            fun={() => unmountModal()}
+                            fun={unmountModal}
                         />
+
                     </FormStrip>
                 }
             >
+
                 <SmallForm>
+
                     <LabelledInput
                         label='Transaction Code'
                         inputPlaceholder='Enter your transaction code here'
@@ -193,12 +315,16 @@ export default function CustomerPayment() {
 
                     <LabelledInput
                         label='Amount'
-                        inputPlaceholder='Enter your transaction code here'
+                        inputPlaceholder='Enter the payment amount here'
                         value={amount}
                         onChange={setAmount}
                     />
+
                 </SmallForm>
+
             </MyModal>
+
         </ScrollScreen>
+
     );
 }

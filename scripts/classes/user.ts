@@ -24,7 +24,7 @@ export default class User {
   private readonly token: string;
   public url: string;
   public endpoints: typeof endpoints;
-  public toaster:(message:string, toast_type:ToastType) => void;
+  public toaster: (message: string, toast_type: ToastType) => void;
 
   constructor(regID: number, token: string, backendUrl: string = link) {
     if (!token || !regID) {
@@ -45,10 +45,10 @@ export default class User {
 
   getRegID(): number {
     return this.regID;
-  }  
+  }
 
-  async getRegType(){
-    return await this.getUser().then(u => u?.regType);
+  async getRegType() {
+    return await this.getUser().then(u => u?.RegType);
   }
 
   public apiFetch = async <T = unknown>(
@@ -58,43 +58,50 @@ export default class User {
     return classApiFetch<T>(this.url, this.token, endpoint, options);
   };
 
-  public async getAbout():Promise<About[]>{
-    try{
+  public async getAbout(): Promise<About[]> {
+    try {
       this.toaster('About fetched successfully', 'info')
       return await this.apiFetch<About[]>(this.endpoints.getAbout)
-    } catch(err){
+    } catch (err) {
       errorLogger(err);
       return [];
     }
   }
 
-  public async getContact():Promise<Contact[]>{
-    try{
+  public async getContact(): Promise<Contact> {
+    try {
       this.toaster('Contact fetch successful', 'info');
-      return await this.apiFetch<Contact[]>(this.endpoints.getContacts);
-    } catch(err){
+      return await this.apiFetch<Contact>(this.endpoints.getContacts);
+    } catch (err) {
       errorLogger(err);
-      return [];
+
+      return {
+        emailaddress: '',
+        facebook: '',
+        instagram: '',
+        phoneno: '',
+        pobox: '',
+      };
     }
   }
 
-  public async getUser():Promise<Users | undefined>{
+  public async getUser(): Promise<Users | undefined> {
     try {
       const allUsers = await this.apiFetch<Users[]>(this.endpoints.getAllUsers);
       this.toaster('User fetch successful', 'info');
-      if(allUsers !== undefined && allUsers.length > 0) {
-        return allUsers.find(u => u.regID === this.getRegID());
+      if (allUsers !== undefined && allUsers.length > 0) {
+        return allUsers.find(u => u.RegID === this.getRegID());
       }
-    }catch(err){
+    } catch (err) {
       errorLogger(err);
       return undefined;
     }
   }
 
-  public async soundSystemDispatches():Promise<Dispatch[] | undefined>{
+  public async soundSystemDispatches(): Promise<Dispatch[] | undefined> {
     const user = await this.getUser();
-    if(user){
-      switch(user.regType){
+    if (user) {
+      switch (user.RegType) {
         case RegType.DJ || RegType.Mcee || RegType.Band:
           {
             try {
@@ -103,30 +110,30 @@ export default class User {
             } catch (error) {
               errorLogger(error);
               return [];
-            }            
+            }
           }
         default:
-          if(!RegType.DJ || !RegType.Mcee || !RegType.Band){
+          if (!RegType.DJ || !RegType.Mcee || !RegType.Band) {
             return [];
           }
       }
-    } 
+    }
   }
 
-  public async packForDispatch(dispatch_id:number){
-    let status:Partial<Dispatch> = {
-      Dispatched:DispatchStatus.Packed
+  public async packForDispatch(dispatch_id: number) {
+    let status: Partial<Dispatch> = {
+      Dispatched: DispatchStatus.Packed
     }
 
-    if(await this.getUser() !== undefined){
-      switch(await this.getUser().then(p => p?.regType)){
+    if (await this.getUser() !== undefined) {
+      switch (await this.getUser().then(p => p?.RegType)) {
         case RegType.DJ || RegType.Mcee || RegType.Band:
           {
             try {
-              await this.apiFetch(this.endpoints.updateDispatch(dispatch_id), 
+              await this.apiFetch(this.endpoints.updateDispatch(dispatch_id),
                 {
-                  method:"PUT",
-                  body:JSON.stringify(status)
+                  method: "PUT",
+                  body: JSON.stringify(status)
                 }
               );
               this.toaster('Ready for dispatch', 'success');
@@ -135,14 +142,14 @@ export default class User {
             }
           }
         default:
-          if(!RegType.DJ || !RegType.Mcee || !RegType.Band){
+          if (!RegType.DJ || !RegType.Mcee || !RegType.Band) {
             errorLogger('Invalid registration type');
           }
       }
     }
   }
 
-  public async soundSystemGetLending():Promise<Lending[]>{
+  public async soundSystemGetLending(): Promise<Lending[]> {
     try {
       this.toaster('Lendings fetched successfully', 'info');
       return await this.apiFetch<Lending[]>(this.endpoints.getAllLendingRequests);
@@ -152,16 +159,16 @@ export default class User {
     }
   }
 
-  public async soundSystemApproveLending(id:number){
-    let status:Partial<Lending> = {
-      Performed:'Yes'
+  public async soundSystemApproveLending(id: number) {
+    let status: Partial<Lending> = {
+      Performed: 'Yes'
     }
 
     try {
-      await this.apiFetch(this.endpoints.updateLending(id), 
+      await this.apiFetch(this.endpoints.updateLending(id),
         {
-          method:'PUT',
-          body:JSON.stringify(status)
+          method: 'PUT',
+          body: JSON.stringify(status)
         }
       );
       this.toaster('Lending approved successfully', 'success');

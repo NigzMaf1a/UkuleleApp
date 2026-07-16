@@ -16,6 +16,7 @@ import Inspector from '../../../scripts/classes/inspector';
 import describer from '../../../scripts/utils/describer';
 import stringToNumber from '../../../scripts/utils/stringToNumber';
 import { equipmentConditionArray } from '../../../scripts/utils/equipment';
+import toaster from '../../../scripts/utils/toaster';
 
 //auth
 import storage from '../../../scripts/auth/storage';
@@ -23,13 +24,14 @@ import storage from '../../../scripts/auth/storage';
 //interfaces
 import Inspection from '../../../scripts/interfaces/inspection';
 import Penalty from '../../../scripts/interfaces/penalty';
-import Services from '../../../scripts/interfaces/services';
-import Lending from '../../../scripts/interfaces/lending';
 import { DropDownItem } from '../../../components/DropDown';
 
 //enum
-import { EquipmentCondition } from '../../../scripts/enums/equipment';
-import { EquipmentDescription } from '../../../scripts/enums/equipment';
+import {
+  EquipmentCondition,
+  EquipmentDescription
+} from '../../../scripts/enums/equipment';
+
 import { PenaltyStatus } from '../../../scripts/enums/penalty';
 
 interface PenaltyData {
@@ -39,41 +41,56 @@ interface PenaltyData {
 }
 
 export default function InspectorPenalties() {
+
   const [dropdownvalues] = useState<DropDownItem[]>(equipmentConditionArray());
+
   const [inspections, setInspections] = useState<Inspection[]>([]);
+
   const [showModal, setShowModal] = useState<boolean>(false);
+
   const [inspector, setInspector] = useState<Inspector>();
-  const [itemData, setItemData] = useState<PenaltyData | undefined>();
+
+  const [itemData, setItemData] = useState<PenaltyData>();
+
   const [selectedInspectionId, setSelectedInspectionId] = useState<number>(0);
+
   const [condition, setCondition] = useState<string>('');
+
   const [penalty, setPenalty] = useState<string>('');
-  const [currentPenalty, setCurrentPenalty] = useState<Penalty>();
 
   useEffect(() => {
     (async () => {
-      const id = await storage.get.profile().then(prof => prof?.RegID);
-      const key = await storage.get.key().then(key => key);
+
+      const id = await storage.get.profile()
+        .then(prof => prof?.RegID);
+
+      const key = await storage.get.key();
+
       if (typeof id === 'number' && typeof key === 'string') {
+
         const man = new Inspector(id, key);
+
         const insp = await man.getAllInspections();
 
         setInspections(insp);
+
         setInspector(man);
       }
+
     })();
   }, []);
 
   useEffect(() => {
     (async () => {
+
       const data = await equipmentData(selectedInspectionId);
-      if (typeof data !== 'undefined') setItemData(data);
+
+      if (data) {
+        setItemData(data);
+      }
+
     })();
   }, [selectedInspectionId]);
-
-  useEffect(() => {
-    const pen = penaltyPayload();
-    setCurrentPenalty(pen);
-  }, [itemData, condition, penalty]);
 
   function toggleModal() {
     setShowModal(prev => !prev);
@@ -88,86 +105,137 @@ export default function InspectorPenalties() {
     setSelectedInspectionId(0);
     setPenalty('');
     setCondition('');
+    setItemData(undefined);
     toggleModal();
   }
 
-  async function equipmentData(inspection_id: number): Promise<PenaltyData | undefined> {
-    if (inspector) {
-      const inventory = await inspector.getAllEquipment();
-      const equip_alloc = await inspector.getAllAllocatedEquipment();
+  async function equipmentData(
+    inspection_id: number
+  ): Promise<PenaltyData | undefined> {
 
-      if (inspections) {
-        const equip_id = inspections.find(i => i.InspectionID === inspection_id)?.EquipmentID;
-        if (typeof equip_id === 'number') {
-          const alloc = equip_alloc.find(e => e.EquipmentID === equip_id);
-          const equip_desc = inventory.find(i => i.EquipmentID === equip_id)?.Description;
-          if (typeof alloc !== 'undefined') {
-            const cust_id = alloc.RegID;
-            if (typeof cust_id === 'number' && typeof equip_desc !== 'undefined') {
-              return {
-                equipment_id: equip_id,
-                customer_id: cust_id,
-                description: equip_desc as EquipmentDescription
-              };
-            }
-          }
-        }
-      }
-    }
-  }
+    if (!inspector) return;
 
-  function penaltyPayload(): Penalty {
+    const inventory = await inspector.getAllEquipment();
+
+    const equipAlloc = await inspector.getAllAllocatedEquipment();
+
+    const inspection = inspections.find(
+      i => i.InspectionID === inspection_id
+    );
+
+    if (!inspection) return;
+
+    const equipId = inspection.EquipmentID;
+
+    const allocation = equipAlloc.find(
+      e => e.EquipmentID === equipId
+    );
+
+    const equipment = inventory.find(
+      e => e.EquipmentID === equipId
+    );
+
+    if (!allocation || !equipment) return;
+
     return {
-      EquipmentID: itemData?.equipment_id as number,
-      CustomerID: itemData?.customer_id as number,
-      Description: itemData?.description as EquipmentDescription,
-      dCondition: condition as EquipmentCondition,
-      Penalty: stringToNumber(penalty),
-      PenaltyStatus: PenaltyStatus.NotPaid
+      equipment_id: equipId,
+      customer_id: allocation.RegID,
+      description: equipment.Description as EquipmentDescription
     };
   }
 
-  async function penalize(penaltyObj: Penalty) {
-    if (inspector) {
-      await inspector.penalizeDamage(penaltyObj);
-      unmountModal();
+  async function penalize() {
+
+    if (!inspector) {
+      toaster("Inspector not initialized", "danger");
+      return;
     }
+
+    if (!itemData) {
+      toaster("Unable to retrieve equipment information", "danger");
+      return;
+    }
+
+    if (!condition) {
+      toaster("Please select the equipment condition", "danger");
+      return;
+    }
+
+    const penaltyAmount = stringToNumber(penalty);
+
+    if (penaltyAmount === null) {
+      toaster("Please enter a valid penalty amount", "danger");
+      return;
+    }
+
+    const penaltyObj: Penalty = {
+      EquipmentID: itemData.equipment_id,
+      CustomerID: itemData.customer_id,
+      Description: itemData.description,
+      dCondition: condition as EquipmentCondition,
+      Penalty: penaltyAmount,
+      PenaltyStatus: PenaltyStatus.NotPaid
+    };
+
+    await inspector.penalizeDamage(penaltyObj);
+
+    unmountModal();
   }
 
   return (
     <ScrollScreen>
-      {inspections.length > 0 ? (
-        inspections.map((i) => (
-          <ListItemWithButton
-            key={i.InspectionID}
-            rowOneData={{ label: 'Inspection ID', text: String(i.InspectionID) }}
-            rowTwoData={{ label: 'Condition', text: describer(i.dCondition) }}
-            buttonLabel='Penalize'
-            fun={() => mountModal(i.InspectionID as number)}
-          />
-        ))
-      ) : (
-        <DispText text='No inspections found' />
-      )}
+
+      {
+        inspections.length > 0 ? (
+
+          inspections.map(i => (
+
+            <ListItemWithButton
+              key={i.InspectionID}
+              rowOneData={{
+                label: 'Inspection ID',
+                text: String(i.InspectionID)
+              }}
+              rowTwoData={{
+                label: 'Condition',
+                text: describer(i.dCondition)
+              }}
+              buttonLabel='Penalize'
+              fun={() => mountModal(i.InspectionID as number)}
+            />
+
+          ))
+
+        ) : (
+
+          <DispText text='No inspections found' />
+
+        )
+      }
 
       <MyModal
         visible={showModal}
-        onClose={() => unmountModal()}
+        onClose={unmountModal}
         title='Penalize'
         footer={
           <FormStrip>
+
             <Button
               label='Cancel'
-              fun={() => unmountModal()}
+              fun={unmountModal}
             />
+
             <Button
               label='Penalize'
-              fun={async () => await penalize(currentPenalty as Penalty)}
+              fun={penalize}
             />
+
           </FormStrip>
         }
       >
+
         <SmallForm>
+
           <LabelledDropdown
             label='Condition'
             values={dropdownvalues}
@@ -181,8 +249,11 @@ export default function InspectorPenalties() {
             value={penalty}
             onChange={setPenalty}
           />
+
         </SmallForm>
+
       </MyModal>
+
     </ScrollScreen>
   );
 }

@@ -3,18 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Login from "../views/Login";
 import Registration from "../views/Register";
-
-type RegType =
-    | "Customer"
-    | "Band"
-    | "Accountant"
-    | "DJ"
-    | "Dispatch"
-    | "Inspector"
-    | "Mcee"
-    | "Service"
-    | "Store"
-    | "Supplier";
+import RegType from "../scripts/enums/regTypeTwo";
 
 export type AuthStackParamList = {
     Login: undefined;

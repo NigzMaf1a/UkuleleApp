@@ -38,7 +38,6 @@ export default function PendingPayments() {
 
     return (
         <ScrollScreen>
-            <DispText text={'Remove This'} />
             {
                 pendingPayments.length > 0 ? pendingPayments.map((p, idx) => <ListItemWithButton key={idx}
                     buttonLabel='Approve'

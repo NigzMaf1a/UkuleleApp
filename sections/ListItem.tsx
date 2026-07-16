@@ -38,6 +38,7 @@ export default function ListItem({ rowOneData, rowTwoData, rightSideText }: List
 const cardStyles = StyleSheet.create({
   strip: {
     width: "100%",
+    height: "20%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

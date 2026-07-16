@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 //components
 import ScrollScreen from '../components/ScrollScreen';
@@ -14,28 +14,67 @@ import User from '../scripts/classes/user';
 import storage from '../scripts/auth/storage';
 
 export default function ContacUs() {
-    const[contacts, setContacts] = useState<Contact>();
+    const [contacts, setContacts] = useState<Contact>();
 
-    useEffect(()=>{
-        (async ()=>{
-            const id = await storage.get.profile().then(prof => prof?.RegID);
-            const key = await storage.get.key().then(key => key);
-            
-            if(typeof id === 'number' && typeof key === 'string' ) {
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile()
+                .then(prof => prof?.RegID);
+
+            const key = await storage.get.key();
+
+            if (typeof id === 'number' && typeof key === 'string') {
                 const user = new User(id, key);
+
                 const contact = await user?.getContact();
 
-                setContacts(contact[contact.length - 1]);
+                console.log("Contact response:", contact);
+
+                if (contact) {
+                    console.log("Email:", contact.emailaddress);
+                    console.log("Facebook:", contact.facebook);
+
+                    setContacts(contact);
+                }
             }
         })();
     }, []);
-  return (
-    <ScrollScreen>
-        <LabelledText label='P.O Box' text={String(contacts?.PoBox)}/>
-        <LabelledText label='Phone' text={String(contacts?.PhoneNo)}/>
-        <LabelledText label='Email' text={String(contacts?.EmailAddress)}/>
-        <LabelledText label='Facebook' text={String(contacts?.Facebook)}/>
-        <LabelledText label='Instagram' text={String(contacts?.Instagram)}/>
-    </ScrollScreen>
-  );
+
+    // Runs whenever contacts state updates
+    useEffect(() => {
+        if (contacts) {
+            console.log("Updated contacts state:", contacts);
+            console.log("Email:", contacts.emailaddress);
+            console.log("Facebook:", contacts.facebook);
+        }
+    }, [contacts]);
+
+    return (
+        <ScrollScreen>
+            <LabelledText
+                label='P.O Box'
+                text={contacts?.pobox ?? ''}
+            />
+
+            <LabelledText
+                label='Phone'
+                text={contacts?.phoneno ?? ''}
+            />
+
+            <LabelledText
+                label='Email'
+                text={contacts?.emailaddress ?? ''}
+            />
+
+            <LabelledText
+                label='Facebook'
+                text={contacts?.facebook ?? ''}
+            />
+
+            <LabelledText
+                label='Instagram'
+                text={contacts?.instagram ?? ''}
+            />
+        </ScrollScreen>
+    );
 }

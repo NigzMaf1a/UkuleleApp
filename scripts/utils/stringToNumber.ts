@@ -1,13 +1,16 @@
-//utils
-import toaster from "./toaster";
+// utils/stringToNumber.ts
 
-export default function stringToNumber(val:string):number{
-    if(val !== null){
-        const num = Number(val);
-        if(typeof num === 'number' && num > 0 ){
-            return num;
-        }
+export default function stringToNumber(val: string): number | null {
+
+    const parsed = Number(val.trim());
+
+    if (
+        val.trim().length === 0 ||
+        Number.isNaN(parsed) ||
+        parsed <= 0
+    ) {
+        return null;
     }
-    toaster('Please enter a valid number', 'danger');
-    throw new Error('Invalid input : numbers only accepted');
+
+    return parsed;
 }
