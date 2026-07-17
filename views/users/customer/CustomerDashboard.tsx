@@ -29,7 +29,7 @@ export default function CustomerDashboard() {
 
     useEffect(() => {
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
+            const id = await storage.get.profile().then(prof => prof?.regid);
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const customer = new Customer(id, key);
@@ -49,10 +49,10 @@ export default function CustomerDashboard() {
             {
                 <DashTray>
                     {
-                        services.length > 0 ? services.map((s) => <ListItem key={s.ServiceID}
-                            rowOneData={{ label: 'Service Id', text: String(s.ServiceID) }}
-                            rowTwoData={{ label: 'Genre', text: s.Genre }}
-                            rightSideText={s.ServiceType}
+                        services.length > 0 ? services.map((s) => <ListItem key={s.serviceid}
+                            rowOneData={{ label: 'Service Id', text: String(s.serviceid) }}
+                            rowTwoData={{ label: 'Genre', text: s.genre }}
+                            rightSideText={s.servicetype}
                         />) : <DispText text="No services booked yet" />
                     }
                 </DashTray>
@@ -60,10 +60,10 @@ export default function CustomerDashboard() {
             {
                 <DashTray>
                     {
-                        payments.length > 0 ? payments.map((p) => <ListItem key={p.TransactionID}
-                            rowOneData={{ label: 'Code', text: p.TransactionName }}
-                            rowTwoData={{ label: 'Date', text: String(p.TransactionDate) }}
-                            rightSideText={String(p.Amount)}
+                        payments.length > 0 ? payments.map((p) => <ListItem key={p.transactionid}
+                            rowOneData={{ label: 'Code', text: p.transactionname }}
+                            rowTwoData={{ label: 'Date', text: String(p.transactiondate) }}
+                            rightSideText={String(p.amount)}
                         />) : <DispText text="No payments made yet" />
                     }
                 </DashTray>
@@ -71,10 +71,10 @@ export default function CustomerDashboard() {
             {
                 <DashTray>
                     {
-                        penalties.length > 0 ? penalties.map((p) => <ListItem key={p.PenaltyID}
-                            rowOneData={{ label: 'Penalty Id', text: String(p.PenaltyID) }}
-                            rowTwoData={{ label: 'Equip Type', text: p.Description }}
-                            rightSideText={String(p.Penalty)}
+                        penalties.length > 0 ? penalties.map((p) => <ListItem key={p.penaltyid}
+                            rowOneData={{ label: 'Penalty Id', text: String(p.penaltyid) }}
+                            rowTwoData={{ label: 'Equip Type', text: p.description }}
+                            rightSideText={String(p.penalty)}
                         />) : <DispText text="No penalties found" />
                     }
                 </DashTray>

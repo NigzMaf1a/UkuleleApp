@@ -9,7 +9,7 @@ export const containerStyles = StyleSheet.create({
     flexGrow: 1,
     width: "100%",
     minHeight: "100%",
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
     backgroundColor: colors.background
   },

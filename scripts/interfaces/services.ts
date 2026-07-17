@@ -1,11 +1,11 @@
 import { PaymentStatus } from "../enums/services";
 export default interface Services {
-    ServiceID?: number;
-    CustomerID: number;
-    Genre: 'Reggae' | 'Rhumba' | 'Zilizopendwa' | 'Benga' | 'Soul' | 'RnB';
-    Cost: number;
-    Hours: number;
-    ServiceType:'Lending' | 'Booking';
-    ServiceStatus: 'Approved' | 'Pending';
-    PaymentStatus?: PaymentStatus;
+    serviceid?: number;
+    customerid: number;
+    genre: 'Reggae' | 'Rhumba' | 'Zilizopendwa' | 'Benga' | 'Soul' | 'RnB';
+    cost: number;
+    hours: number;
+    servicetype: 'Lending' | 'Booking';
+    servicestatus: 'Approved' | 'Pending';
+    paymentstatus?: PaymentStatus;
 }

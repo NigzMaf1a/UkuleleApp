@@ -26,8 +26,8 @@ export default function CustomerPaymentItem({ payment }: CustomerPaymentItemProp
         <>
             <Strip>
                 <Tray>
-                    <LabelledText label='Code' text={payment.TransactionName} />
-                    <LabelledText label='Amount' text={String(payment.Amount)} />
+                    <LabelledText label='Code' text={payment.transactionname} />
+                    <LabelledText label='Amount' text={String(payment.amount)} />
                 </Tray>
                 <Button label='View' fun={() => toggleModal()} />
             </Strip>
@@ -42,12 +42,12 @@ export default function CustomerPaymentItem({ payment }: CustomerPaymentItemProp
                     </Strip>
                 }
             >
-                <LabelledText label='Service ID' text={String(payment.ServiceID)} />
-                <LabelledText label='Transaction ID' text={String(payment.TransactionID)} />
-                <LabelledText label='Transaction Code' text={payment.TransactionName} />
-                <LabelledText label='Date' text={String(payment.TransactionDate)} />
-                <LabelledText label='Amount' text={String(payment.Amount)} />
-                <LabelledText label='Status' text={payment.TransactionStatus} />
+                <LabelledText label='Service ID' text={String(payment.serviceid)} />
+                <LabelledText label='Transaction ID' text={String(payment.transactionid)} />
+                <LabelledText label='Transaction Code' text={payment.transactionname} />
+                <LabelledText label='Date' text={String(payment.transactiondate)} />
+                <LabelledText label='Amount' text={String(payment.amount)} />
+                <LabelledText label='Status' text={payment.transactionstatus} />
             </MyModal>
         </>
     );

@@ -18,12 +18,12 @@ export default function ServiceRecords() {
 
     useEffect(() => {
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
+            const id = await storage.get.profile().then(prof => prof?.regid);
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const man = new ServiceManager(id, key);
                 const services = await man?.getAllServiceRequests();
-                setRecords(services.filter(s => s.PaymentStatus === PaymentStatus.Paid && s.ServiceStatus === ServiceStatus.Approved));
+                setRecords(services.filter(s => s.paymentstatus === PaymentStatus.Paid && s.servicestatus === ServiceStatus.Approved));
             }
         })();
     }, []);
@@ -31,10 +31,10 @@ export default function ServiceRecords() {
     return (
         <ScrollScreen>
             {
-                records.length > 0 ? records.map((r) => <ListItem key={r.ServiceID}
-                    rowOneData={{ label: 'Type', text: r.ServiceType }}
-                    rowTwoData={{ label: 'Status', text: String(r.PaymentStatus) }}
-                    rightSideText={r.ServiceStatus}
+                records.length > 0 ? records.map((r) => <ListItem key={r.serviceid}
+                    rowOneData={{ label: 'Type', text: r.servicetype }}
+                    rowTwoData={{ label: 'Status', text: String(r.paymentstatus) }}
+                    rightSideText={r.servicestatus}
                 />) : <DispText text={'No service records found'} />
             }
         </ScrollScreen>

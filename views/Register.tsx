@@ -83,14 +83,14 @@ export default function Registration() {
 
   function registrationPayload(): Users {
     return {
-      Name: name,
-      PhoneNo: phoneNo,
-      Email: email,
-      Password: password,
-      Gender: gender,
-      RegType: regType as RegType,
-      dLocation,
-      AccStatus: "Pending"
+      name: name,
+      phoneno: phoneNo,
+      email: email,
+      password: password,
+      gender: gender,
+      regtype: regType as RegType,
+      dlocation: dLocation,
+      accstatus: "Pending"
     };
   }
 

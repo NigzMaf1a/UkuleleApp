@@ -21,7 +21,7 @@ export default function SoundSystemApproveLending() {
 
     useEffect(() => {
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.regID);
+            const id = await storage.get.profile().then(prof => prof?.regid);
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const acc = new User(id, key);
@@ -42,11 +42,11 @@ export default function SoundSystemApproveLending() {
         <ScrollScreen>
             {
                 lendings.length > 0 ? lendings.map((g) => <ListItemWithButton
-                    key={g.LendID}
-                    rowOneData={{ label: 'ID', text: String(g.LendID) }}
-                    rowTwoData={{ label: 'Genre', text: String(g.Genre) }}
+                    key={g.lendid}
+                    rowOneData={{ label: 'ID', text: String(g.lendid) }}
+                    rowTwoData={{ label: 'Genre', text: String(g.genre) }}
                     buttonLabel='Approve'
-                    fun={async () => await markPerformed(g.LendID)}
+                    fun={async () => await markPerformed(g.lendid)}
                 />) : <DispText text='No available lendings' />
             }
         </ScrollScreen>

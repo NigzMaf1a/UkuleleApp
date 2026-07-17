@@ -24,13 +24,13 @@ export default function ServiceManagerDashboard() {
 
   useEffect(() => {
     (async () => {
-      const id = await storage.get.profile().then(prof => prof?.RegID);
+      const id = await storage.get.profile().then(prof => prof?.regid);
       const key = await storage.get.key().then(key => key);
       if (typeof id === 'number' && typeof key === 'string') {
         const man = new ServiceManager(id, key);
         setManager(man);
         const requests = await man?.getAllServiceRequests();
-        setServices(requests.filter(s => s.PaymentStatus === PaymentStatus.Paid && s.ServiceStatus === ServiceStatus.Pending));
+        setServices(requests.filter(s => s.paymentstatus === PaymentStatus.Paid && s.servicestatus === ServiceStatus.Pending));
       }
     })();
   }, []);
@@ -38,10 +38,10 @@ export default function ServiceManagerDashboard() {
     <ScrollScreen>
       {
         services.length > 0 ? services.map((s) => <ListItem
-          key={s.ServiceID}
-          rowOneData={{ label: 'Type', text: s.ServiceType }}
-          rowTwoData={{ label: 'Genre', text: s.Genre }}
-          rightSideText={s.ServiceStatus}
+          key={s.serviceid}
+          rowOneData={{ label: 'Type', text: s.servicetype }}
+          rowTwoData={{ label: 'Genre', text: s.genre }}
+          rightSideText={s.servicestatus}
         />) : <DispText text='No services booked yet' />
       }
     </ScrollScreen>

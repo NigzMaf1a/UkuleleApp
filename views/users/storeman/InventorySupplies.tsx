@@ -78,9 +78,9 @@ export default function InventorySupplies() {
 
     function returnCartItem(): CartItem {
         return {
-            productId: selectedSupply?.SupplyID as number,
+            productId: selectedSupply?.supplyid as number,
             quantity: orderQty,
-            price: selectedSupply?.Price as number,
+            price: selectedSupply?.price as number,
         }
     }
 
@@ -94,14 +94,14 @@ export default function InventorySupplies() {
                     OrderStatus: OrderStatus.Processing,
                     items: [
                         {
-                            SupplyType: supplies?.find(s => s.SupplyID === item.productId)?.SupplyType as EquipmentDescription,
+                            SupplyType: supplies?.find(s => s.supplyid === item.productId)?.supplytype as EquipmentDescription,
                             Quantity: item.quantity
                         }
                     ]
                 }
 
                 await storeman?.orderSupplies(payload);
-                toaster(`${supplies?.find(s => s.SupplyID === item.productId)?.SupplyType as EquipmentDescription} ordered successfully`, 'info');
+                toaster(`${supplies?.find(s => s.supplyid === item.productId)?.supplytype as EquipmentDescription} ordered successfully`, 'info');
             }
         }
     }
@@ -135,8 +135,8 @@ export default function InventorySupplies() {
         <ScrollScreen>
             {
                 supplies.length > 0 ? supplies.map((s) => <ListItemWithButton
-                    rowOneData={{ label: 'Supplier Name', text: s.SupplierName }}
-                    rowTwoData={{ label: 'Supply Type', text: s.SupplyType }}
+                    rowOneData={{ label: 'Supplier Name', text: s.suppliername }}
+                    rowTwoData={{ label: 'Supply Type', text: s.supplytype }}
                     buttonLabel='View'
                     fun={() => mountModal(s)}
                 />) : <DispText text='No supplies available' />
@@ -150,17 +150,17 @@ export default function InventorySupplies() {
                 <BigForm>
                     <LabelledText
                         label='Supplier name'
-                        text={selectedSupply?.SupplierName as string}
+                        text={selectedSupply?.suppliername as string}
                     />
 
                     <LabelledText
                         label='Supply type'
-                        text={selectedSupply?.SupplyType as string}
+                        text={selectedSupply?.supplytype as string}
                     />
 
                     <LabelledText
                         label='Available units'
-                        text={String(selectedSupply?.AvailableUnits)}
+                        text={String(selectedSupply?.availableunits)}
                     />
 
                     <FormStrip>

@@ -62,7 +62,7 @@ export default function InspectorPenalties() {
     (async () => {
 
       const id = await storage.get.profile()
-        .then(prof => prof?.RegID);
+        .then(prof => prof?.regid);
 
       const key = await storage.get.key();
 
@@ -120,19 +120,19 @@ export default function InspectorPenalties() {
     const equipAlloc = await inspector.getAllAllocatedEquipment();
 
     const inspection = inspections.find(
-      i => i.InspectionID === inspection_id
+      i => i.inspectionid === inspection_id
     );
 
     if (!inspection) return;
 
-    const equipId = inspection.EquipmentID;
+    const equipId = inspection.equipmentid;
 
     const allocation = equipAlloc.find(
       e => e.EquipmentID === equipId
     );
 
     const equipment = inventory.find(
-      e => e.EquipmentID === equipId
+      e => e.equipmentid === equipId
     );
 
     if (!allocation || !equipment) return;
@@ -140,7 +140,7 @@ export default function InspectorPenalties() {
     return {
       equipment_id: equipId,
       customer_id: allocation.RegID,
-      description: equipment.Description as EquipmentDescription
+      description: equipment.description as EquipmentDescription
     };
   }
 
@@ -169,12 +169,12 @@ export default function InspectorPenalties() {
     }
 
     const penaltyObj: Penalty = {
-      EquipmentID: itemData.equipment_id,
-      CustomerID: itemData.customer_id,
-      Description: itemData.description,
-      dCondition: condition as EquipmentCondition,
-      Penalty: penaltyAmount,
-      PenaltyStatus: PenaltyStatus.NotPaid
+      equipmentid: itemData.equipment_id,
+      customerid: itemData.customer_id,
+      description: itemData.description,
+      dcondition: condition as EquipmentCondition,
+      penalty: penaltyAmount,
+      penaltystatus: PenaltyStatus.NotPaid
     };
 
     await inspector.penalizeDamage(penaltyObj);
@@ -191,17 +191,17 @@ export default function InspectorPenalties() {
           inspections.map(i => (
 
             <ListItemWithButton
-              key={i.InspectionID}
+              key={i.inspectionid}
               rowOneData={{
                 label: 'Inspection ID',
-                text: String(i.InspectionID)
+                text: String(i.inspectionid)
               }}
               rowTwoData={{
                 label: 'Condition',
-                text: describer(i.dCondition)
+                text: describer(i.dcondition)
               }}
               buttonLabel='Penalize'
-              fun={() => mountModal(i.InspectionID as number)}
+              fun={() => mountModal(i.inspectionid as number)}
             />
 
           ))

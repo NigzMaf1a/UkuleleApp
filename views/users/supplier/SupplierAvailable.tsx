@@ -21,12 +21,12 @@ export default function SupplierAvailable() {
 
     useEffect(() => {
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
+            const id = await storage.get.profile().then(prof => prof?.regid);
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const supplier = new Supplier(id, key);
                 const sup = await supplier.getSupplies();
-                setSupplies(sup.filter(s => s.Available === SupplyAvailable.Yes));
+                setSupplies(sup.filter(s => s.available === SupplyAvailable.Yes));
             }
         })();
     }, []);
@@ -34,10 +34,10 @@ export default function SupplierAvailable() {
     return (
         <ScrollScreen>
             {
-                supplies.length > 0 ? supplies.map((sup) => <ListItem key={sup.SupplyID}
-                    rowOneData={{ label: 'Type', text: sup.SupplyType }}
-                    rowTwoData={{ label: 'Price', text: String(sup.Price) }}
-                    rightSideText={String(sup.AvailableUnits)}
+                supplies.length > 0 ? supplies.map((sup) => <ListItem key={sup.supplyid}
+                    rowOneData={{ label: 'Type', text: sup.supplytype }}
+                    rowTwoData={{ label: 'Price', text: String(sup.price) }}
+                    rightSideText={String(sup.availableunits)}
                 />) : <DispText text='No available supplies' />
             }
         </ScrollScreen>

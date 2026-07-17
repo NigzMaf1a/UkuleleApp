@@ -1,43 +1,86 @@
 import React, { useState, useEffect } from 'react';
 
-//components
+// components
 import ScrollScreen from '../../../components/ScrollScreen';
-import ListItem from '../../../sections/ListItem';
+import ListItemAdv from '../../../components/revisited/cutting edge/ListItemAdv';
 import DispText from '../../../components/DispText';
+import FancyLoad from '../../../sections/FancyLoad';
 
-
-//scripts
+// scripts
 import Storeman from '../../../scripts/classes/storeman';
 import Inventory from '../../../scripts/interfaces/inventory';
 import { EquipmentAvailabilty } from '../../../scripts/enums/equipment';
 
-//auth
+// auth
 import storage from '../../../scripts/auth/storage';
 
 export default function InventoryInventory() {
     const [inventory, setInventory] = useState<Inventory[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
-            const key = await storage.get.key().then(key => key);
-            if (typeof id === 'number' && typeof key === 'string') {
-                const storeman = new Storeman(id, key);
-                const equipment = await storeman?.getEquipment();
-                setInventory(equipment.filter(e => e.Availability === EquipmentAvailabilty.Available));
+        const loadInventory = async () => {
+            try {
+                setLoading(true);
+
+                const [profile, key] = await Promise.all([
+                    storage.get.profile(),
+                    storage.get.key(),
+                ]);
+
+                if (
+                    typeof profile?.RegID === 'number' &&
+                    typeof key === 'string'
+                ) {
+                    const storeman = new Storeman(profile.RegID, key);
+
+                    const equipment = await storeman.getEquipment();
+
+                    setInventory(
+                        equipment.filter(
+                            e =>
+                                e.availability ===
+                                EquipmentAvailabilty.Available
+                        )
+                    );
+                } else {
+                    setInventory([]);
+                }
+            } catch (error) {
+                console.error('Failed to load inventory:', error);
+                setInventory([]);
+            } finally {
+                setLoading(false);
             }
-        })();
+        };
+
+        loadInventory();
     }, []);
 
     return (
         <ScrollScreen>
-            {
-                inventory.length > 0 ? inventory.map((i) => <ListItem key={i.EquipmentID}
-                    rowOneData={{ label: 'ID', text: String(i.EquipmentID) }}
-                    rowTwoData={{ label: 'Type', text: i.Description }}
-                    rightSideText={i.dCondition}
-                />) : <DispText text='No equipment is available in the inventory' />
-            }
+            <FancyLoad loading={loading} />
+
+            {!loading && (
+                inventory.length > 0 ? (
+                    inventory.map((i) => (
+                        <ListItemAdv
+                            key={i.equipmentid}
+                            rowOneData={{
+                                label: 'ID',
+                                text: String(i.equipmentid),
+                            }}
+                            rowTwoData={{
+                                label: 'Type',
+                                text: i.description,
+                            }}
+                            rightSideText={i.dcondition}
+                        />
+                    ))
+                ) : (
+                    <DispText text="No equipment is available in the inventory" />
+                )
+            )}
         </ScrollScreen>
     );
 }

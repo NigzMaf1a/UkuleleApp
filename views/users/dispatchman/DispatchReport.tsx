@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -21,28 +21,28 @@ import storage from '../../../scripts/auth/storage';
 export default function DispatchReport() {
     const [dispatches, setDispatches] = useState<Dispatch[]>([]);
 
-    useEffect(()=>{
-        ( async ()=> {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.regid);
             const key = await storage.get.key().then(key => key);
-            if(typeof id === 'number' && typeof key === 'string' ){
+            if (typeof id === 'number' && typeof key === 'string') {
                 const manager = new DispatchMan(id, key);
                 const disp = await manager?.getDispatchRequests();
 
-                setDispatches(disp.filter(d => d.Dispatched === DispatchStatus.Dispatched || d.Dispatched === DispatchStatus.Returned));                
+                setDispatches(disp.filter(d => d.dispatched === DispatchStatus.Dispatched || d.dispatched === DispatchStatus.Returned));
             }
         })();
     }, [dispatches]);
 
-  return (
-    <ScrollScreen>
-        {
-            dispatches.length > 0 ? dispatches.map((disp) => <ListItem key={disp.DispatchID}
-                                                                       rowOneData={{label:'Date', text:String(disp.DispatchDate)}}
-                                                                       rowTwoData={{label:'Location', text:disp.dLocation}}
-                                                                       rightSideText={disp.Dispatched}
-            />) : <DispText text='No dispatch reports found'/>
-        }
-    </ScrollScreen>
-  );
+    return (
+        <ScrollScreen>
+            {
+                dispatches.length > 0 ? dispatches.map((disp) => <ListItem key={disp.dispatchid}
+                    rowOneData={{ label: 'Date', text: String(disp.dispatchdate) }}
+                    rowTwoData={{ label: 'Location', text: disp.dlocation }}
+                    rightSideText={disp.dispatched}
+                />) : <DispText text='No dispatch reports found' />
+            }
+        </ScrollScreen>
+    );
 }

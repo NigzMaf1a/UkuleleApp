@@ -19,7 +19,7 @@ export default function CustomerReports() {
 
     useEffect(() => {
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
+            const id = await storage.get.profile().then(prof => prof?.regid);
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const customer = new Customer(id, key);
@@ -33,7 +33,7 @@ export default function CustomerReports() {
     return (
         <ScrollScreen>
             {
-                services.length > 0 ? services.map((s) => <CustomerReportItem key={s.ServiceID} service={s} />) : <DispText text='No service records found' />
+                services.length > 0 ? services.map((s) => <CustomerReportItem key={s.serviceid} service={s} />) : <DispText text='No service records found' />
             }
         </ScrollScreen>
     );

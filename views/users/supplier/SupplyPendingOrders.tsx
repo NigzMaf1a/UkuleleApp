@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -21,29 +21,29 @@ export default function SupplyPendingOrders() {
   const [supplies, setSupplies] = useState<Supply[]>([]);
   const [thisSupplier, setThisSupplier] = useState<Supplier>();
 
-  useEffect(()=>{
-    ( async ()=>{
-      const id = await storage.get.profile().then(prof => prof?.RegID);
+  useEffect(() => {
+    (async () => {
+      const id = await storage.get.profile().then(prof => prof?.regid);
       const key = await storage.get.key().then(key => key);
-      if(typeof id === 'number' && typeof key === 'string' ){
+      if (typeof id === 'number' && typeof key === 'string') {
         const supplier = new Supplier(id, key);
         const sup = await supplier?.getSupplies();
-        const ord = await supplier?.getOrders();        
+        const ord = await supplier?.getOrders();
         setThisSupplier(supplier);
         setSupplies(sup);
-        setOrders(ord.filter(o => o.OrderStatus === OrderStatus.Processing));        
-      }                  
+        setOrders(ord.filter(o => o.orderstatus === OrderStatus.Processing));
+      }
     })();
   }, []);
 
-  async function haulOrder(id:number){
+  async function haulOrder(id: number) {
     await thisSupplier?.updateOrder(id);
   }
 
   return (
     <ScrollScreen>
       {
-        orders.length > 0 ? orders.map((o) => <OrderListItem key={o.OrderID} order={o} supplies={supplies} fun={() => haulOrder(o.OrderID)}/>) : <DispText text='No pending orders found'/>
+        orders.length > 0 ? orders.map((o) => <OrderListItem key={o.orderid} order={o} supplies={supplies} fun={() => haulOrder(o.orderid)} />) : <DispText text='No pending orders found' />
       }
     </ScrollScreen>
   );

@@ -23,7 +23,7 @@ export default class Accountant extends User {
 
     async approvePayment(id: number): Promise<void> {
         let status: Partial<Finance> = {
-            TransactionStatus: Status.Approved
+            transactionstatus: Status.Approved
         };
 
         const service_id = await this.getPaymentServiceID(id);
@@ -46,7 +46,7 @@ export default class Accountant extends User {
 
     async approvePenaltyPayment(id: number) {
         let status: Partial<Penalty> = {
-            PenaltyStatus: PenaltyStatus.Paid
+            penaltystatus: PenaltyStatus.Paid
         }
         try {
             await this.apiFetch(this.endpoints.updatePenalty(id),
@@ -69,7 +69,7 @@ export default class Accountant extends User {
             let paidPenalties: Penalty[] = [];
             for (const paid of penaltyPayment) {
                 for (const penalty of penalties) {
-                    if (paid.PenaltyID === penalty.PenaltyID) {
+                    if (paid.PenaltyID === penalty.penaltyid) {
                         paidPenalties.push(penalty);
                     }
                 }
@@ -118,7 +118,7 @@ export default class Accountant extends User {
 
     async changeOrderStatus(id: number) {
         let status: Partial<Order> = {
-            OrderStatus: OrderStatus.Paid
+            orderstatus: OrderStatus.Paid
         }
         try {
             await this.apiFetch(this.endpoints.updateOrder(id),
@@ -155,14 +155,14 @@ export default class Accountant extends User {
 
     public async getPaymentServiceID(pay_id: number) {
         const allPayments = await this.getAllFinanceRecords();
-        const service_id = allPayments.find(p => p.TransactionID === pay_id)?.ServiceID;
+        const service_id = allPayments.find(p => p.transactionid === pay_id)?.serviceid;
         this.toaster('Payment service id fetched successfully', 'info');
         return service_id;
     }
 
     public async approveServicePaymentStatus(service_id: number) {
         let status: Partial<Services> = {
-            PaymentStatus: PaymentStatus.Paid
+            paymentstatus: PaymentStatus.Paid
         }
 
         try {

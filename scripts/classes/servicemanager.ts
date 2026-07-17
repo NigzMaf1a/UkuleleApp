@@ -11,109 +11,109 @@ import { LendingStatus, Performed } from "../enums/lendStatus";
 import BookingStatus from "../enums/bookStatus";
 import { ServiceStatus, ServiceType } from "../enums/services";
 
-export default class ServiceManager extends User{
-    constructor(regID: number, token: string, backendUrl: string = link){
+export default class ServiceManager extends User {
+    constructor(regID: number, token: string, backendUrl: string = link) {
         super(regID, token, backendUrl);
     }
 
-    public async getAllServiceRequests():Promise<Services[]>{
+    public async getAllServiceRequests(): Promise<Services[]> {
         try {
-            this.toaster('Requests fetched successfully','info');
+            this.toaster('Requests fetched successfully', 'info');
             return await this.apiFetch<Services[]>(this.endpoints.getAllServices);
-        } catch(err){
+        } catch (err) {
             console.error('Error', err, 'occurred');
             return [];
         }
     }
 
-    async getAllLendingRequests():Promise<Lending[]>{
-        try{ 
-            this.toaster('Requests fetched successfully','info');
+    async getAllLendingRequests(): Promise<Lending[]> {
+        try {
+            this.toaster('Requests fetched successfully', 'info');
             return await this.apiFetch<Lending[]>(this.endpoints.getAllLendingRequests);
-        } catch(err){
+        } catch (err) {
             console.error('Error', err, 'occurred')
             return [];
         }
     }
 
-    async getAllBookingRequest():Promise<Booking[]>{
-        try{
-            this.toaster('Requests fetched successfully','info');
+    async getAllBookingRequest(): Promise<Booking[]> {
+        try {
+            this.toaster('Requests fetched successfully', 'info');
             return await this.apiFetch<Booking[]>(this.endpoints.getAllBookings)
-        } catch(err){
+        } catch (err) {
             console.log('Error', err, 'Occurred');
             return [];
         }
     }
 
-    async approveService(id:number):Promise<void>{
-        let status:Partial<Services> = {
-            ServiceStatus:ServiceStatus.Approved
+    async approveService(id: number): Promise<void> {
+        let status: Partial<Services> = {
+            servicestatus: ServiceStatus.Approved
         }
 
         try {
-            await this.apiFetch(this.endpoints.updateService(id), 
+            await this.apiFetch(this.endpoints.updateService(id),
                 {
-                    method:"POST",
-                    body:JSON.stringify(status)
+                    method: "POST",
+                    body: JSON.stringify(status)
                 }
             );
 
-            if(await this.getServiceType(id) === 'Booking'){
+            if (await this.getServiceType(id) === 'Booking') {
                 const bookings = await this.getAllBookingRequest();
-                const thisBookingId = bookings.find(b => b.ServiceID === id)?.BookingID;
-                if(thisBookingId) await this.approveBookingRequest(thisBookingId);
+                const thisBookingId = bookings.find(b => b.serviceid === id)?.bookingid;
+                if (thisBookingId) await this.approveBookingRequest(thisBookingId);
             }
 
-            if(await this.getServiceType(id) === 'Lending'){
+            if (await this.getServiceType(id) === 'Lending') {
                 const lendings = await this.getAllLendingRequests();
-                const thisLendingId = lendings.find(l => l.ServiceID === id)?.LendID;
-                if(thisLendingId) await this.approveLendingRequest(thisLendingId);
+                const thisLendingId = lendings.find(l => l.serviceid === id)?.lendid;
+                if (thisLendingId) await this.approveLendingRequest(thisLendingId);
             }
-            this.toaster('Service updated successfully','success');
+            this.toaster('Service updated successfully', 'success');
 
-        } catch(err){
+        } catch (err) {
             console.error('Error', err, 'occurred');
         }
     }
 
-    public async getServiceType(id:number){
+    public async getServiceType(id: number) {
         const services = await this.getAllServiceRequests();
-        const thisService = services.find(s => s.ServiceID === id);
-        if(thisService?.ServiceType === ServiceType.Booking) return 'Booking';
-        if(thisService?.ServiceType === ServiceType.Lending) return 'Lending';
+        const thisService = services.find(s => s.serviceid === id);
+        if (thisService?.servicetype === ServiceType.Booking) return 'Booking';
+        if (thisService?.servicetype === ServiceType.Lending) return 'Lending';
     }
 
-    public async approveLendingRequest(id:number):Promise<void>{
-        let status:Partial<Lending> = {
-            LendingStatus:LendingStatus.Done
+    public async approveLendingRequest(id: number): Promise<void> {
+        let status: Partial<Lending> = {
+            lendingstatus: LendingStatus.Done
         }
 
         try {
-            await this.apiFetch(this.endpoints.updateLending(id), 
+            await this.apiFetch(this.endpoints.updateLending(id),
                 {
-                    method:"POST",
-                    body:JSON.stringify(status)
+                    method: "POST",
+                    body: JSON.stringify(status)
                 }
             );
-        } catch(err){
+        } catch (err) {
             console.log('Error', err, 'occurred')
         }
     }
 
-    public async approveBookingRequest(id:number):Promise<void>{
-        let status:Partial<Booking> = {
-            BookStatus:BookingStatus.Tick
+    public async approveBookingRequest(id: number): Promise<void> {
+        let status: Partial<Booking> = {
+            bookstatus: BookingStatus.Tick
         }
 
         try {
-            await this.apiFetch(this.endpoints.updateBooking(id), 
+            await this.apiFetch(this.endpoints.updateBooking(id),
                 {
-                    method:"POST",
-                    body:JSON.stringify(status)
+                    method: "POST",
+                    body: JSON.stringify(status)
                 }
             );
-        } catch(err){
+        } catch (err) {
             console.log(`Error ${err} occurred`);
         }
     }

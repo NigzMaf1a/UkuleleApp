@@ -25,8 +25,8 @@ export default function CustomerReportItem({ service }: CustomerReportProps) {
         <>
             <Strip>
                 <Tray>
-                    <LabelledText label='ID' text={String(service.ServiceID)} />
-                    <LabelledText label='Type' text={service.ServiceType} />
+                    <LabelledText label='ID' text={String(service.serviceid)} />
+                    <LabelledText label='Type' text={service.servicetype} />
                 </Tray>
                 <Button label='View' fun={() => toggleModal()} />
             </Strip>
@@ -41,13 +41,13 @@ export default function CustomerReportItem({ service }: CustomerReportProps) {
                     </Strip>
                 }
             >
-                <LabelledText label='Service ID' text={String(service.ServiceID)} />
-                <LabelledText label='Genre' text={service.Genre} />
-                <LabelledText label='Cost' text={String(service.Cost)} />
-                <LabelledText label='Hours' text={String(service.Hours)} />
-                <LabelledText label='Type' text={service.ServiceType} />
-                <LabelledText label='Status' text={service.ServiceStatus} />
-                <LabelledText label='Payment' text={String(service.PaymentStatus)} />
+                <LabelledText label='Service ID' text={String(service.serviceid)} />
+                <LabelledText label='Genre' text={service.genre} />
+                <LabelledText label='Cost' text={String(service.cost)} />
+                <LabelledText label='Hours' text={String(service.hours)} />
+                <LabelledText label='Type' text={service.servicetype} />
+                <LabelledText label='Status' text={service.servicestatus} />
+                <LabelledText label='Payment' text={String(service.paymentstatus)} />
             </MyModal>
         </>
     );

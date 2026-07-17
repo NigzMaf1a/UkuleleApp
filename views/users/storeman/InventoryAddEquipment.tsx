@@ -109,16 +109,15 @@ export default function InventoryAddEquipment() {
         }
 
         const equipment: Inventory = {
-            Price: parsedPrice,
-            Description: description as EquipmentDescription,
-            dCondition: condition,
-            Availability: availability,
-            PurchaseDate: date()
+            price: parsedPrice,
+            description: description as EquipmentDescription,
+            dcondition: condition,
+            availability: availability,
+            purchasedate: date()
         };
 
         await manager?.addEquipment(equipment);
 
-        // Optional: Clear the form after a successful submission
         setPrice('');
         setDescription('');
     }

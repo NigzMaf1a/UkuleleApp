@@ -4,7 +4,7 @@ export default async function classApiFetch<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  
+
   if (!token) {
     console.error("Invalid token");
     throw new Error("Unauthorized access");

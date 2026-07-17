@@ -33,7 +33,7 @@ export default function InventoryOrders() {
                 const thisSupplies = await manager?.getSupplies();
 
                 setStoreman(manager);
-                setOrders(thisOrders.filter(o => o.OrderStatus === OrderStatus.Hauled));
+                setOrders(thisOrders.filter(o => o.orderstatus === OrderStatus.Hauled));
                 setSupplies(thisSupplies);
             }
         })();
@@ -46,7 +46,7 @@ export default function InventoryOrders() {
     return (
         <ScrollScreen>
             {
-                orders.length > 0 ? orders.map((o) => <OrderListItem key={o.OrderID} order={o} supplies={supplies} fun={() => markSupplyDelivered(o.OrderID)} />) : <DispText text='No hauled supplies found' />
+                orders.length > 0 ? orders.map((o) => <OrderListItem key={o.orderid} order={o} supplies={supplies} fun={() => markSupplyDelivered(o.orderid)} />) : <DispText text='No hauled supplies found' />
             }
         </ScrollScreen>
     );

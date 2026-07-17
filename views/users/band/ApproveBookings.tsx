@@ -30,7 +30,7 @@ export default function ApproveBookings() {
                 const b = new Band(id, key);
                 setBand(b);
                 const booked = await b?.getAllBookings();
-                setBookings(booked.filter(b => b.BookStatus === BookingStatus.Tick && b.Performed === Performed.No));
+                setBookings(booked.filter(b => b.bookstatus === BookingStatus.Tick && b.performed === Performed.No));
             }
         })();
     }, []);
@@ -38,11 +38,11 @@ export default function ApproveBookings() {
     return (
         <ScrollScreen>
             {
-                bookings.length > 0 ? bookings.map((booking) => <ListItemWithButton key={booking.BookingID}
+                bookings.length > 0 ? bookings.map((booking) => <ListItemWithButton key={booking.bookingid}
                     buttonLabel={'Approve'}
-                    rowOneData={{ label: 'Genre', text: booking.Genre }}
-                    rowTwoData={{ label: 'Hours', text: String(booking.BookingDate) }}
-                    fun={() => approve(booking.BookingID)}
+                    rowOneData={{ label: 'Genre', text: booking.genre }}
+                    rowTwoData={{ label: 'Hours', text: String(booking.bookingdate) }}
+                    fun={() => approve(booking.bookingid)}
                 />) : <DispText text={'No unperformed bookings found'} />
             }
         </ScrollScreen>

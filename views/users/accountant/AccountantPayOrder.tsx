@@ -93,11 +93,11 @@ export default function AccountantPayOrder() {
             {orders.length > 0 ? (
                 orders.map((o) => (
                     <ListItemWithButton
-                        key={o.OrderID}
-                        rowOneData={{ label: 'ID', text: String(o.OrderID) }}
-                        rowTwoData={{ label: 'Amount', text: String(o.OrderAmount) }}
+                        key={o.orderid}
+                        rowOneData={{ label: 'ID', text: String(o.orderid) }}
+                        rowTwoData={{ label: 'Amount', text: String(o.orderamount) }}
                         buttonLabel='Pay'
-                        fun={() => triggerModal(o.OrderID)}
+                        fun={() => triggerModal(o.orderid)}
                     />
                 ))
             ) : (

@@ -44,11 +44,11 @@ export default function AccountantDashboard() {
             const serv = await accountant.getAllServices();
 
             setPayments(
-                pay.filter(p => p.TransactionStatus === Status.Pending)
+                pay.filter(p => p.transactionstatus === Status.Pending)
             );
 
             setServices(
-                serv.filter(s => s.PaymentStatus === PaymentStatus.NotPaid)
+                serv.filter(s => s.paymentstatus === PaymentStatus.NotPaid)
             );
         })();
     }, [accountant]);
@@ -58,10 +58,10 @@ export default function AccountantDashboard() {
 
             <DashTray>
                 {
-                    payments.length > 0 && payments.map((p) => <ListItem key={p.TransactionID}
-                        rowOneData={{ label: 'Code', text: p.TransactionName }}
-                        rowTwoData={{ label: 'Date', text: String(p.TransactionDate) }}
-                        rightSideText={String(p.Amount)}
+                    payments.length > 0 && payments.map((p) => <ListItem key={p.transactionid}
+                        rowOneData={{ label: 'Code', text: p.transactionname }}
+                        rowTwoData={{ label: 'Date', text: String(p.transactiondate) }}
+                        rightSideText={String(p.amount)}
                     />)
                 }
             </DashTray>

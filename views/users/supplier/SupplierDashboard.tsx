@@ -31,13 +31,13 @@ export default function SupplierDashboard() {
 
     useEffect(() => {
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
+            const id = await storage.get.profile().then(prof => prof?.regid);
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const supplier = new Supplier(id, key);
 
-                const sup = (await supplier.getSupplies()).filter(s => s.Available === SupplyAvailable.Yes);
-                const ord = (await supplier.getOrders()).filter(o => o.OrderStatus === OrderStatus.Processing);
+                const sup = (await supplier.getSupplies()).filter(s => s.available === SupplyAvailable.Yes);
+                const ord = (await supplier.getOrders()).filter(o => o.orderstatus === OrderStatus.Processing);
                 setSupplies(sup);
                 setOrders(ord);
             }
@@ -48,19 +48,19 @@ export default function SupplierDashboard() {
         <ScrollScreen>
             <DashTray>
                 {
-                    supplies.length > 0 ? supplies.map((s) => <ListItem key={s.SupplyID}
-                        rowOneData={{ label: 'ID', text: String(s.SupplyID) }}
-                        rowTwoData={{ label: 'Type', text: s.SupplyType }}
-                        rightSideText={String(s.AvailableUnits)}
+                    supplies.length > 0 ? supplies.map((s) => <ListItem key={s.supplyid}
+                        rowOneData={{ label: 'ID', text: String(s.supplyid) }}
+                        rowTwoData={{ label: 'Type', text: s.supplytype }}
+                        rightSideText={String(s.availableunits)}
                     />) : <DispText text="No supplies found" />
                 }
             </DashTray>
             <DashTray>
                 {
-                    orders.length > 0 ? orders.map((o) => <ListItem key={o.OrderID}
-                        rowOneData={{ label: 'ID:', text: String(o.OrderID) }}
-                        rowTwoData={{ label: 'Items', text: String(o.OrderStatus) }}
-                        rightSideText={String(o.OrderAmount)}
+                    orders.length > 0 ? orders.map((o) => <ListItem key={o.orderid}
+                        rowOneData={{ label: 'ID:', text: String(o.orderid) }}
+                        rowTwoData={{ label: 'Items', text: String(o.orderstatus) }}
+                        rightSideText={String(o.orderamount)}
                     />) : <DispText text="No orders found." />
                 }
             </DashTray>

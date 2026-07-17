@@ -16,6 +16,7 @@ const cardStyles = StyleSheet.create({
 
   strip: {
     width: "100%",
+    height: "30%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -34,7 +35,7 @@ const cardStyles = StyleSheet.create({
   },
 
   tray: {
-    width: "75%",
+    width: "60%",
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "flex-start",

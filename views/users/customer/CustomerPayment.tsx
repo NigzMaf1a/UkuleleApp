@@ -85,7 +85,7 @@ export default function CustomerPayment() {
 
         setPendingServices(
             services.filter(
-                s => s.PaymentStatus === PaymentStatus.NotPaid
+                s => s.paymentstatus === PaymentStatus.NotPaid
             )
         );
     }
@@ -104,7 +104,7 @@ export default function CustomerPayment() {
         (async () => {
 
             const id = await storage.get.profile()
-                .then(prof => prof?.RegID);
+                .then(prof => prof?.regid);
 
             const key = await storage.get.key();
 
@@ -133,7 +133,7 @@ export default function CustomerPayment() {
         setServiceId(id);
 
         const service = pendingServices.find(
-            s => s.ServiceID === id
+            s => s.serviceid === id
         );
 
         setSelectedService(service);
@@ -190,23 +190,23 @@ export default function CustomerPayment() {
 
         const request: Finance = {
 
-            CustomerID: user.RegID as number,
+            customerid: user.regid as number,
 
-            Name: user.Name,
+            name: user.name,
 
-            PhoneNo: user.PhoneNo,
+            phoneno: user.phoneno,
 
-            TransactionName: transactionCode,
+            transactionname: transactionCode,
 
-            TransactionDate: date(),
+            transactiondate: date(),
 
-            Amount: parsedAmount,
+            amount: parsedAmount,
 
-            TransactType: 'Payment',
+            transacttype: 'Payment',
 
-            TransactionStatus: Status.Pending,
+            transactionstatus: Status.Pending,
 
-            ServiceID: validateServiceId(serviceId)
+            serviceid: validateServiceId(serviceId)
 
         };
 
@@ -234,17 +234,17 @@ export default function CustomerPayment() {
                         pendingServices.map(s => (
 
                             <ListItemWithButton
-                                key={s.ServiceID}
+                                key={s.serviceid}
                                 rowOneData={{
                                     label: 'Service Type',
-                                    text: s.ServiceType
+                                    text: s.servicetype
                                 }}
                                 rowTwoData={{
                                     label: 'Amount',
-                                    text: String(s.Cost)
+                                    text: String(s.cost)
                                 }}
                                 buttonLabel='Pay'
-                                fun={() => mountModal(s.ServiceID as number)}
+                                fun={() => mountModal(s.serviceid as number)}
                             />
 
                         ))
@@ -267,7 +267,7 @@ export default function CustomerPayment() {
                         payments.map(p => (
 
                             <CustomerPaymentItem
-                                key={p.TransactionID}
+                                key={p.transactionid}
                                 payment={p}
                             />
 

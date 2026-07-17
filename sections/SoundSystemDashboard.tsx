@@ -22,10 +22,10 @@ export default function SoundSystemDashboard({ lendings }: SoundSystemDashboardP
         <ScrollScreen>
             <DashTray>
                 {
-                    lendings.length > 0 ? lendings.map((l) => <ListItem key={l.LendID}
-                        rowOneData={{ label: 'Genre', text: l.Genre }}
-                        rowTwoData={{ label: 'Hours', text: String(l.Hours) }}
-                        rightSideText={String(l.LendingDate)}
+                    lendings.length > 0 ? lendings.map((l) => <ListItem key={l.lendid}
+                        rowOneData={{ label: 'Genre', text: l.genre }}
+                        rowTwoData={{ label: 'Hours', text: String(l.hours) }}
+                        rightSideText={String(l.lendingdate)}
                     />) : <DispText text='No unperformed lendings found' />
                 }
             </DashTray>

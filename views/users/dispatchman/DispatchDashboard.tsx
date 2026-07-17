@@ -29,14 +29,14 @@ export default function DispatchDashboard() {
 
     useEffect(() => {
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
+            const id = await storage.get.profile().then(prof => prof?.regid);
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const man = new DispatchMan(id, key);
 
                 const requests = await man.getDispatchRequests();
-                setPending(requests.filter(r => r.Dispatched === DispatchStatus.Pending));
-                setPacked(requests.filter(r => r.Dispatched === DispatchStatus.Packed));
+                setPending(requests.filter(r => r.dispatched === DispatchStatus.Pending));
+                setPacked(requests.filter(r => r.dispatched === DispatchStatus.Packed));
             }
         })();
     }, []);
@@ -45,19 +45,19 @@ export default function DispatchDashboard() {
         <ScrollScreen>
             <DashTray>
                 {
-                    pending.length > 0 ? pending.map((p) => <ListItem key={p.DispatchID}
-                        rowOneData={{ label: 'Location:', text: p.dLocation }}
-                        rowTwoData={{ label: 'Phone:', text: p.PhoneNo }}
-                        rightSideText={p.DispatchDate}
+                    pending.length > 0 ? pending.map((p) => <ListItem key={p.dispatchid}
+                        rowOneData={{ label: 'Location:', text: p.dlocation }}
+                        rowTwoData={{ label: 'Phone:', text: p.phoneno }}
+                        rightSideText={p.dispatchdate}
                     />) : <DispText text="No pending dispatch requests found" />
                 }
             </DashTray>
             <DashTray>
                 {
-                    packed.length > 0 ? packed.map((p) => <ListItem key={p.DispatchID}
-                        rowOneData={{ label: 'Location:', text: p.dLocation }}
-                        rowTwoData={{ label: 'Phone:', text: p.PhoneNo }}
-                        rightSideText={p.DispatchDate}
+                    packed.length > 0 ? packed.map((p) => <ListItem key={p.dispatchid}
+                        rowOneData={{ label: 'Location:', text: p.dlocation }}
+                        rowTwoData={{ label: 'Phone:', text: p.phoneno }}
+                        rightSideText={p.dispatchdate}
                     />) : <DispText text="No pending dispatch requests found" />
                 }
             </DashTray>

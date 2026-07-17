@@ -45,19 +45,19 @@ export default function CustomerPenalty() {
 
     const paid = penalties.filter(
         p =>
-            p.PenaltyStatus === PenaltyStatus.Paid ||
-            p.PenaltyStatus === PenaltyStatus.Processing
+            p.penaltystatus === PenaltyStatus.Paid ||
+            p.penaltystatus === PenaltyStatus.Processing
     );
 
     const unpaid = penalties.filter(
-        p => p.PenaltyStatus === PenaltyStatus.NotPaid
+        p => p.penaltystatus === PenaltyStatus.NotPaid
     );
 
     useEffect(() => {
         (async () => {
 
             const id = await storage.get.profile()
-                .then(prof => prof?.RegID);
+                .then(prof => prof?.regid);
 
             const key = await storage.get.key();
 
@@ -112,7 +112,7 @@ export default function CustomerPenalty() {
         }
 
         return penalties.find(
-            p => p.PenaltyID === selectedPenaltyId
+            p => p.penaltyid === selectedPenaltyId
         );
     }
 
@@ -142,7 +142,7 @@ export default function CustomerPenalty() {
         try {
 
             await customer?.payPenalty(
-                selectedPenalty.PenaltyID as number,
+                selectedPenalty.penaltyid as number,
                 code,
                 amount
             );
@@ -170,17 +170,17 @@ export default function CustomerPenalty() {
                         unpaid.map(u => (
 
                             <ListItemWithButton
-                                key={u.PenaltyID}
+                                key={u.penaltyid}
                                 rowOneData={{
                                     label: 'ID',
-                                    text: String(u.PenaltyID)
+                                    text: String(u.penaltyid)
                                 }}
                                 rowTwoData={{
                                     label: 'Amount',
-                                    text: String(u.Penalty)
+                                    text: String(u.penalty)
                                 }}
                                 buttonLabel='Pay'
-                                fun={() => mountModal(u.PenaltyID as number)}
+                                fun={() => mountModal(u.penaltyid as number)}
                             />
 
                         ))
@@ -201,17 +201,17 @@ export default function CustomerPenalty() {
                         paid.map(p => (
 
                             <ListItemWithButton
-                                key={p.PenaltyID}
+                                key={p.penaltyid}
                                 rowOneData={{
                                     label: 'ID',
-                                    text: String(p.PenaltyID)
+                                    text: String(p.penaltyid)
                                 }}
                                 rowTwoData={{
                                     label: 'Amount',
-                                    text: String(p.Penalty)
+                                    text: String(p.penalty)
                                 }}
                                 buttonLabel='View'
-                                fun={() => mountModalTwo(p.PenaltyID as number)}
+                                fun={() => mountModalTwo(p.penaltyid as number)}
                             />
 
                         ))
@@ -285,36 +285,36 @@ export default function CustomerPenalty() {
 
                     <LabelledText
                         label='Penalty ID'
-                        text={String(selectedPenalty?.PenaltyID ?? '')}
+                        text={String(selectedPenalty?.penaltyid ?? '')}
                     />
 
                     <LabelledText
                         label='Equipment ID'
-                        text={String(selectedPenalty?.EquipmentID ?? '')}
+                        text={String(selectedPenalty?.equipmentid ?? '')}
                     />
 
                     <LabelledText
                         label='Description'
-                        text={String(selectedPenalty?.Description ?? '')}
+                        text={String(selectedPenalty?.description ?? '')}
                     />
 
                     <LabelledText
                         label='Condition'
                         text={
                             selectedPenalty
-                                ? describer(selectedPenalty.dCondition as EquipmentCondition)
+                                ? describer(selectedPenalty.dcondition as EquipmentCondition)
                                 : ''
                         }
                     />
 
                     <LabelledText
                         label='Penalty Amount'
-                        text={String(selectedPenalty?.Penalty ?? '')}
+                        text={String(selectedPenalty?.penalty ?? '')}
                     />
 
                     <LabelledText
                         label='Penalty Status'
-                        text={String(selectedPenalty?.PenaltyStatus ?? '')}
+                        text={String(selectedPenalty?.penaltystatus ?? '')}
                     />
 
                 </BigForm>

@@ -19,7 +19,7 @@ export default function SupplyReport() {
 
     useEffect(() => {
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
+            const id = await storage.get.profile().then(prof => prof?.regid);
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const supplier = new Supplier(22, '');
@@ -32,10 +32,10 @@ export default function SupplyReport() {
     return (
         <ScrollScreen>
             {
-                orders.length > 0 ? orders.map((order) => <ListItem key={order.OrderID}
-                    rowOneData={{ label: 'ID', text: String(order.OrderID) }}
-                    rowTwoData={{ label: 'Date', text: String(order.OrderDate.toLocaleDateString()) }}
-                    rightSideText={order.OrderStatus}
+                orders.length > 0 ? orders.map((order) => <ListItem key={order.orderid}
+                    rowOneData={{ label: 'ID', text: String(order.orderid) }}
+                    rowTwoData={{ label: 'Date', text: String(order.orderdate.toLocaleDateString()) }}
+                    rightSideText={order.orderstatus}
                 />) : <DispText text='No available orders' />
             }
         </ScrollScreen>

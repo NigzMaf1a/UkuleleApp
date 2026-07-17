@@ -29,7 +29,7 @@ export default function PendingPayments() {
                 const acc = new Accountant(id, key);
                 setAccountant(acc);
                 const finances = await acc.getAllFinanceRecords();
-                setPendingPayments(finances.filter(f => f.TransactionStatus === Status.Pending));
+                setPendingPayments(finances.filter(f => f.transactionstatus === Status.Pending));
             }
         })();
     }, []);
@@ -41,9 +41,9 @@ export default function PendingPayments() {
             {
                 pendingPayments.length > 0 ? pendingPayments.map((p, idx) => <ListItemWithButton key={idx}
                     buttonLabel='Approve'
-                    rowOneData={{ label: 'Code', text: p.TransactionName }}
-                    rowTwoData={{ label: 'Amount', text: String(p.Amount) }}
-                    fun={() => approvePayment(p.TransactionID as number)}
+                    rowOneData={{ label: 'Code', text: p.transactionname }}
+                    rowTwoData={{ label: 'Amount', text: String(p.amount) }}
+                    fun={() => approvePayment(p.transactionid as number)}
                 />) : <DispText text='No Pending Payments' />
             }
         </ScrollScreen>

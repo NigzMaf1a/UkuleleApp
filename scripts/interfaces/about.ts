@@ -1,3 +1,3 @@
-export default interface About{
-    detail:string;
+export default interface About {
+    detail: string;
 }

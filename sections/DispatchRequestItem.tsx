@@ -29,10 +29,10 @@ export default function DispatchRequestItem({ item, fun }: DispatchRequestItemPr
         <>
             <Strip>
                 <Tray>
-                    <LabelledText label='ID' text={String(item.DispatchID)} />
-                    <LabelledText label='Location' text={item.dLocation} />
+                    <LabelledText label='ID' text={String(item.dispatchid)} />
+                    <LabelledText label='Location' text={item.dlocation} />
                 </Tray>
-                <Button label={item.Dispatched} fun={() => toggleModal()} />
+                <Button label={item.dispatched} fun={() => toggleModal()} />
             </Strip>
 
             <MyModal
@@ -44,9 +44,9 @@ export default function DispatchRequestItem({ item, fun }: DispatchRequestItemPr
                         <Button label='Close' fun={() => toggleModal()} />
                         <Button
                             label={
-                                item.Dispatched === DispatchStatus.Pending
+                                item.dispatched === DispatchStatus.Pending
                                     ? 'Dispatch'
-                                    : item.Dispatched === DispatchStatus.Dispatched
+                                    : item.dispatched === DispatchStatus.Dispatched
                                         ? 'Pack'
                                         : 'Return'
                             }
@@ -55,14 +55,14 @@ export default function DispatchRequestItem({ item, fun }: DispatchRequestItemPr
                     </Strip>
                 }
             >
-                <LabelledText label='Dispatch ID' text={String(item.DispatchID)} />
-                <LabelledText label='Customer ID' text={String(item.CustomerID)} />
-                <LabelledText label='Name' text={String(item.Name)} />
-                <LabelledText label='Location' text={String(item.dLocation)} />
-                <LabelledText label='Service ID' text={String(item.ServiceID)} />
-                <LabelledText label='Phone' text={item.PhoneNo} />
-                <LabelledText label='Status' text={item.Dispatched} />
-                <LabelledText label='Date' text={item.DispatchDate} />
+                <LabelledText label='Dispatch ID' text={String(item.dispatchid)} />
+                <LabelledText label='Customer ID' text={String(item.customerid)} />
+                <LabelledText label='Name' text={String(item.name)} />
+                <LabelledText label='Location' text={String(item.dlocation)} />
+                <LabelledText label='Service ID' text={String(item.serviceid)} />
+                <LabelledText label='Phone' text={item.phoneno} />
+                <LabelledText label='Status' text={item.dispatched} />
+                <LabelledText label='Date' text={item.dispatchdate} />
             </MyModal>
         </>
     );

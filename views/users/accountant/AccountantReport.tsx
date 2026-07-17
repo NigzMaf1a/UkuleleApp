@@ -37,10 +37,10 @@ export default function AccountantReport() {
         <ScrollScreen>
             {loading}
             {
-                data.length > 0 ? data.map((record) => <ListItem key={record.TransactionID}
-                    rowOneData={{ label: 'Code', text: record.TransactionName }}
-                    rowTwoData={{ label: 'Amount', text: String(record.Amount) }}
-                    rightSideText={record.TransactionStatus}
+                data.length > 0 ? data.map((record) => <ListItem key={record.transactionid}
+                    rowOneData={{ label: 'Code', text: record.transactionname }}
+                    rowTwoData={{ label: 'Amount', text: String(record.amount) }}
+                    rightSideText={record.transactionstatus}
                 />) : <DispText text={'No records to display'} />
             }
         </ScrollScreen>

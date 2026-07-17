@@ -1,9 +1,9 @@
 import apiFetch from "./apiFetch";
-import type Users from "../interfaces/user";
+import type { UserPayload } from "../interfaces/login";
 
 interface LoginResponse {
   token: string;
-  user?: Users;
+  user?: UserPayload;
 }
 
 interface LogginCreds {

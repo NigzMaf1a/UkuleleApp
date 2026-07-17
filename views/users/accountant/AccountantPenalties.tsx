@@ -29,7 +29,7 @@ export default function AccountantPenalties() {
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const acc = new Accountant(id, key);
-                const pen = (await acc.getPenalties()).filter(p => p.PenaltyStatus === PenaltyStatus.Processing);
+                const pen = (await acc.getPenalties()).filter(p => p.penaltystatus === PenaltyStatus.Processing);
                 const pay = await acc.getPenaltyPayments();
 
                 setAccountant(acc);
@@ -49,11 +49,11 @@ export default function AccountantPenalties() {
     return (
         <ScrollScreen>
             {
-                penalties.length > 0 ? penalties.map((p) => <ListItemWithButton key={p.PenaltyID}
-                    rowOneData={{ label: 'Pay Code', text: returnCode(Number(p.PenaltyID)) }}
-                    rowTwoData={{ label: 'Amount', text: String(p.Penalty) }}
+                penalties.length > 0 ? penalties.map((p) => <ListItemWithButton key={p.penaltyid}
+                    rowOneData={{ label: 'Pay Code', text: returnCode(Number(p.penaltyid)) }}
+                    rowTwoData={{ label: 'Amount', text: String(p.penalty) }}
                     buttonLabel='Approve'
-                    fun={() => accountant?.approvePenaltyPayment(Number(p.PenaltyID))}
+                    fun={() => accountant?.approvePenaltyPayment(Number(p.penaltyid))}
                 />) : <DispText text='No pending penalty payments found' />
             }
         </ScrollScreen>

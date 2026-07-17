@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // interfaces
-import User from "../interfaces/user";
+import { UserPayload } from "../interfaces/login";
 
 /**
  * Safe JSON stringify
@@ -31,7 +31,7 @@ const storage = {
     set: async function (
         token: string,
         role: string,
-        thisUser: User
+        thisUser: UserPayload
     ): Promise<void> {
 
         // remove sensitive data
@@ -69,11 +69,11 @@ const storage = {
         /**
          * Get user profile safely
          */
-        profile: async function (): Promise<User | null> {
+        profile: async function (): Promise<UserPayload | null> {
 
             const raw = await AsyncStorage.getItem('profile');
 
-            return jsonParser<User>(raw);
+            return jsonParser<UserPayload>(raw);
         }
     },
 

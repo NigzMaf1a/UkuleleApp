@@ -38,8 +38,8 @@ export default function CustomerPenaltyItem({ penalty, amountInput, onAmountInpu
         <>
             <Strip>
                 <Tray>
-                    <LabelledText label='Amount' text={String(penalty.Penalty)} />
-                    <LabelledText label='Status' text={String(penalty.PenaltyStatus)} />
+                    <LabelledText label='Amount' text={String(penalty.penalty)} />
+                    <LabelledText label='Status' text={String(penalty.penaltystatus)} />
                 </Tray>
                 <Button label='View' fun={() => toggleModal()} />
             </Strip>
@@ -52,13 +52,13 @@ export default function CustomerPenaltyItem({ penalty, amountInput, onAmountInpu
                     <Strip>
                         <Button label='Close' fun={() => toggleModal()} />
                         {
-                            penalty.PenaltyStatus === PenaltyStatus.NotPaid && <Button label='Pay' fun={() => toggleModalTwo()} />
+                            penalty.penaltystatus === PenaltyStatus.NotPaid && <Button label='Pay' fun={() => toggleModalTwo()} />
                         }
                     </Strip>
                 }
             >
-                <LabelledText label='Amount' text={String(penalty.Penalty)} />
-                <LabelledText label='Status' text={String(penalty.PenaltyStatus)} />
+                <LabelledText label='Amount' text={String(penalty.penalty)} />
+                <LabelledText label='Status' text={String(penalty.penaltystatus)} />
             </MyModal>
 
             <MyModal

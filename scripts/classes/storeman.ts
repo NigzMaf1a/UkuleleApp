@@ -14,91 +14,91 @@ import errorLogger from "../utils/errorLogger";
 import { OrderStatus } from "../enums/order";
 
 
-export default class Storeman extends User{
-    constructor(regID: number, token: string, backendUrl: string = link){
+export default class Storeman extends User {
+    constructor(regID: number, token: string, backendUrl: string = link) {
         super(regID, token, backendUrl);
     }
-    
-    async addEquipment(equip: Inventory):Promise<void>{
-        try{
-            this.toaster('Equipment added successfully','success');
-            await this.apiFetch(this.endpoints.addEquipment, {body: JSON.stringify(equip), method: 'POST'});
-        }catch(error){
+
+    async addEquipment(equip: Inventory): Promise<void> {
+        try {
+            this.toaster('Equipment added successfully', 'success');
+            await this.apiFetch(this.endpoints.addEquipment, { body: JSON.stringify(equip), method: 'POST' });
+        } catch (error) {
             throw error;
         }
     }
-    async getEquipment():Promise<Inventory[]>{
-        try{
-            this.toaster('Equipment fetched successfully','info');
+    async getEquipment(): Promise<Inventory[]> {
+        try {
+            this.toaster('Equipment fetched successfully', 'info');
             return await this.apiFetch<Inventory[]>(this.endpoints.getAllEquipment);
-        } catch(error){
+        } catch (error) {
             console.error("Error getting equipment:", error);
             return [];
         }
     }
-    async updateEquipment(id:number, equip:Inventory):Promise<void>{
-        try{
-            this.toaster('Equipment updated successfully','success');
-            await this.apiFetch(`${this.endpoints.updateEquipment}/${id}`, {body: JSON.stringify(equip), method: 'PUT'});
-        }catch(error){
+    async updateEquipment(id: number, equip: Inventory): Promise<void> {
+        try {
+            this.toaster('Equipment updated successfully', 'success');
+            await this.apiFetch(`${this.endpoints.updateEquipment}/${id}`, { body: JSON.stringify(equip), method: 'PUT' });
+        } catch (error) {
             throw error;
         }
     }
 
-    async deleteEquipment(id:number):Promise<void>{
-        try{
-            this.toaster('Equipment deleted successfully','success');
-            await this.apiFetch(`${this.endpoints.deleteEquipment}/${id}`, {method: 'DELETE'});
-        }catch(error){
+    async deleteEquipment(id: number): Promise<void> {
+        try {
+            this.toaster('Equipment deleted successfully', 'success');
+            await this.apiFetch(`${this.endpoints.deleteEquipment}/${id}`, { method: 'DELETE' });
+        } catch (error) {
             throw error;
         }
     }
 
-    async getSupplies():Promise<Supply[]>{
-        try{
-            this.toaster('Supplies fetched successfully','info');
+    async getSupplies(): Promise<Supply[]> {
+        try {
+            this.toaster('Supplies fetched successfully', 'info');
             return await this.apiFetch<Supply[]>(this.endpoints.getAllSupplies);
-        } catch(error){
+        } catch (error) {
             console.error("Error getting supplies:", error);
             return [];
         }
     }
-    async orderSupplies(order:SupplyOrder):Promise<void>{
-        try{
-            await this.apiFetch(this.endpoints.addOrder, 
+    async orderSupplies(order: SupplyOrder): Promise<void> {
+        try {
+            await this.apiFetch(this.endpoints.addOrder,
                 {
                     method: 'POST',
-                    body:JSON.stringify(order)
+                    body: JSON.stringify(order)
                 }
             );
-        }catch(error){
+        } catch (error) {
             throw error;
         }
     }
 
-    async getOrders():Promise<Order[]>{
+    async getOrders(): Promise<Order[]> {
         try {
-            this.toaster('Equipment updated successfully','info');
+            this.toaster('Equipment updated successfully', 'info');
             return await this.apiFetch(this.endpoints.getAllOrders)
-        }catch(err){
+        } catch (err) {
             errorLogger(err);
             return [];
         }
     }
 
-    async updateOrder(id:number){
-        let order_status:Partial<Order> = {
-            OrderStatus:OrderStatus.Delivered
+    async updateOrder(id: number) {
+        let order_status: Partial<Order> = {
+            orderstatus: OrderStatus.Delivered
         }
-        try{
-            await this.apiFetch(this.endpoints.updateOrder(id), 
+        try {
+            await this.apiFetch(this.endpoints.updateOrder(id),
                 {
-                    method:"PUT",
-                    body:JSON.stringify(order_status)
+                    method: "PUT",
+                    body: JSON.stringify(order_status)
                 }
             );
-            this.toaster('Order updated successfully','success');
-        } catch(err){
+            this.toaster('Order updated successfully', 'success');
+        } catch (err) {
             errorLogger(err);
         }
     }

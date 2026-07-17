@@ -47,7 +47,7 @@ export default function CustomerServices() {
 
   useEffect(() => {
     (async () => {
-      const id = await storage.get.profile().then(prof => prof?.RegID);
+      const id = await storage.get.profile().then(prof => prof?.regid);
       const key = await storage.get.key().then(key => key);
 
       if (typeof id === 'number' && typeof key === 'string') {
@@ -136,13 +136,13 @@ export default function CustomerServices() {
     }
 
     return {
-      CustomerID: customerId,
-      Genre: genre as Genre,
-      Cost: total,
-      Hours: hrs,
-      ServiceType: serviceType as ServiceType,
-      ServiceStatus: serviceStatus,
-      PaymentStatus: paymentStatus
+      customerid: customerId,
+      genre: genre as Genre,
+      cost: total,
+      hours: hrs,
+      servicetype: serviceType as ServiceType,
+      servicestatus: serviceStatus,
+      paymentstatus: paymentStatus
     };
   }
 

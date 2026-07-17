@@ -27,14 +27,14 @@ export default function DispatchRequests() {
 
     useEffect(() => {
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
+            const id = await storage.get.profile().then(prof => prof?.regid);
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const man = new DispatchMan(id, key);
                 const disp = await man?.getDispatchRequests();
 
                 setManager(man);
-                setDispatches(disp.filter(d => d.Dispatched === DispatchStatus.Pending));
+                setDispatches(disp.filter(d => d.dispatched === DispatchStatus.Pending));
             }
         })();
     }, []);
@@ -42,7 +42,7 @@ export default function DispatchRequests() {
     return (
         <ScrollScreen>
             {
-                dispatches.length > 0 ? dispatches.map((d) => <DispatchRequestItem item={d} fun={() => markRequestDispatched(d.DispatchID)} />) : <DispText text='No dispatch requests found' />
+                dispatches.length > 0 ? dispatches.map((d) => <DispatchRequestItem item={d} fun={() => markRequestDispatched(d.dispatchid)} />) : <DispText text='No dispatch requests found' />
             }
         </ScrollScreen>
     );

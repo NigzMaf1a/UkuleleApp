@@ -26,7 +26,7 @@ export default function Profile() {
 
     useEffect(() => {
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
+            const id = await storage.get.profile().then(prof => prof?.regid);
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const us = new User(id, key);
@@ -34,9 +34,6 @@ export default function Profile() {
                 setUser(us);
                 setReg(thisUser);
                 console.log(reg);
-                console.log(user);
-
-
             }
         })();
     }, []);
@@ -46,19 +43,19 @@ export default function Profile() {
             <DashTray>
                 <LabelledText
                     label='Name'
-                    text={reg?.Name as string}
+                    text={reg?.name as string}
                 />
                 <LabelledText
                     label='Phone'
-                    text={reg?.PhoneNo as string}
+                    text={reg?.phoneno as string}
                 />
                 <LabelledText
                     label='Email'
-                    text={reg?.Email as string}
+                    text={reg?.email as string}
                 />
                 <LabelledText
                     label='Reg Type'
-                    text={reg?.RegType as string}
+                    text={reg?.regtype as string}
                 />
             </DashTray>
         </ScrollScreen>

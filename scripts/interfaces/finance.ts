@@ -1,17 +1,17 @@
 export default interface Finance {
-    CustomerID: number;
-    Name: string;
-    PhoneNo: string;
-    TransactionID?: number;
-    TransactionName:string;
-    TransactionDate: Date;
-    Amount: number;
-    TransactType:'Deposit' | 'Payment';
-    TransactionStatus:Status;
-    ServiceID:number;
+    customerid: number;
+    name: string;
+    phoneno: string;
+    transactionid?: number;
+    transactionname: string;
+    transactiondate: Date;
+    amount: number;
+    transacttype: 'Deposit' | 'Payment';
+    transactionstatus: Status;
+    serviceid: number;
 }
 
-export enum Status{
+export enum Status {
     Pending = 'Pending',
     Approved = 'Approved',
     Rejected = 'Rejected'

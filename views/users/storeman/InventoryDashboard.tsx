@@ -31,7 +31,7 @@ export default function InventoryDashboard() {
             if (typeof id === 'number' && typeof key === 'string') {
                 const manager = new Storeman(id, key);
 
-                const inventory = (await manager.getEquipment()).filter(i => i.Availability === 'Available');
+                const inventory = (await manager.getEquipment()).filter(i => i.availability === 'Available');
                 setEquipment(inventory);
             }
         })();
@@ -42,10 +42,10 @@ export default function InventoryDashboard() {
             {
                 <DashTray>
                     {
-                        equipment.length > 0 ? equipment.map((e) => <ListItem key={e.EquipmentID}
-                            rowOneData={{ label: 'ID', text: String(e.EquipmentID) }}
-                            rowTwoData={{ label: 'Description', text: e.Description }}
-                            rightSideText={e.dCondition}
+                        equipment.length > 0 ? equipment.map((e) => <ListItem key={e.equipmentid}
+                            rowOneData={{ label: 'ID', text: String(e.equipmentid) }}
+                            rowTwoData={{ label: 'Description', text: e.description }}
+                            rightSideText={e.dcondition}
                         />) : <DispText text="No available equipment" />
                     }
                 </DashTray>

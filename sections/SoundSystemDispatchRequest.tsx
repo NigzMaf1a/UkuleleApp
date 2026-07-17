@@ -1,4 +1,4 @@
-import React, {useState, useEffect }from 'react';
+import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../components/ScrollScreen';
@@ -30,78 +30,78 @@ export default function SoundSystemDispatchRequest() {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [user, setUser] = useState<User>();
 
-    function toggleModal(){
+    function toggleModal() {
         setShowModal(prev => !prev);
     }
 
-    function mountModal(item:Dispatch){
+    function mountModal(item: Dispatch) {
         toggleModal();
         setSelectedItem(item);
     }
 
-    function unmountModal(){
+    function unmountModal() {
         toggleModal();
         setSelectedItem(undefined);
-    }  
-    
-    async function requestDispatch(){
-        if(user && selectedItem !== undefined){
-            await user.packForDispatch(selectedItem.DispatchID);
-            setTimeout(()=>{
+    }
+
+    async function requestDispatch() {
+        if (user && selectedItem !== undefined) {
+            await user.packForDispatch(selectedItem.dispatchid);
+            setTimeout(() => {
                 toaster('Dispatch status update successful', 'success');
             }, 3000);
             unmountModal();
         }
     }
 
-    useEffect(() =>{
-        ( async ()=> {
-                const id = await storage.get.profile().then(prof => prof?.regID);
-                const key = await storage.get.key().then(key => key);
-                if(typeof id === 'number' && typeof key === 'string' ){
-                    const acc = new User(id, key);
-                    const disp = await acc.soundSystemDispatches();
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.regid);
+            const key = await storage.get.key().then(key => key);
+            if (typeof id === 'number' && typeof key === 'string') {
+                const acc = new User(id, key);
+                const disp = await acc.soundSystemDispatches();
 
-                    if(disp !== undefined) setDispatches(disp);
-                    setUser(acc);
-                }        
+                if (disp !== undefined) setDispatches(disp);
+                setUser(acc);
+            }
         })();
     }, []);
 
-    useEffect(()=> {
-        setData(dispatches.filter(d => d.Dispatched === DispatchStatus.Dispatched));
+    useEffect(() => {
+        setData(dispatches.filter(d => d.dispatched === DispatchStatus.Dispatched));
     }, [dispatches]);
 
-  return (
-    <ScrollScreen>
-        {
-            data.length > 0 ? data.map((d) => <ListItemWithButton
-                                                    key={d.DispatchID}
-                                                    rowOneData={{label:'Name', text:d.Name}}
-                                                    rowTwoData={{label:'Location', text:d.dLocation}}
-                                                    buttonLabel='Actions'
-                                                    fun={() => mountModal(d)}
-            />) : <DispText text={'No unreturned equipment found'}/>
-        }
-        <MyModal
-            visible = {showModal}
-            onClose={()=> unmountModal()}
-            title='Request Dispatch'
-        >
-            <BigForm>
-                <FormStrip>
-                    <Button
-                        label='Close'
-                        fun={() => unmountModal()}
-                    />
+    return (
+        <ScrollScreen>
+            {
+                data.length > 0 ? data.map((d) => <ListItemWithButton
+                    key={d.dispatchid}
+                    rowOneData={{ label: 'Name', text: d.name }}
+                    rowTwoData={{ label: 'Location', text: d.dlocation }}
+                    buttonLabel='Actions'
+                    fun={() => mountModal(d)}
+                />) : <DispText text={'No unreturned equipment found'} />
+            }
+            <MyModal
+                visible={showModal}
+                onClose={() => unmountModal()}
+                title='Request Dispatch'
+            >
+                <BigForm>
+                    <FormStrip>
+                        <Button
+                            label='Close'
+                            fun={() => unmountModal()}
+                        />
 
-                    <Button
-                        label='Request'
-                        fun={async () => requestDispatch()}
-                    />                    
-                </FormStrip>
-            </BigForm>
-        </MyModal>
-    </ScrollScreen>
-  );
+                        <Button
+                            label='Request'
+                            fun={async () => requestDispatch()}
+                        />
+                    </FormStrip>
+                </BigForm>
+            </MyModal>
+        </ScrollScreen>
+    );
 }

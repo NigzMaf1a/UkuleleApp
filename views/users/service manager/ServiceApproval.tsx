@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -19,34 +19,34 @@ export default function ServiceApproval() {
     const [manager, setManager] = useState<ServiceManager>();
     const [services, setServices] = useState<Services[]>([]);
 
-    async function approveService(id:number){
+    async function approveService(id: number) {
         await manager?.approveService(id);
     }
 
 
-    useEffect(()=>{
-        ( async ()=> {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
+    useEffect(() => {
+        (async () => {
+            const id = await storage.get.profile().then(prof => prof?.regid);
             const key = await storage.get.key().then(key => key);
-            if(typeof id === 'number' && typeof key === 'string' ){
+            if (typeof id === 'number' && typeof key === 'string') {
                 const man = new ServiceManager(id, key);
                 setManager(man);
                 const requests = await man?.getAllServiceRequests();
-                setServices(requests.filter(s => s.PaymentStatus === PaymentStatus.Paid && s.ServiceStatus === ServiceStatus.Pending));                
-            }                    
+                setServices(requests.filter(s => s.paymentstatus === PaymentStatus.Paid && s.servicestatus === ServiceStatus.Pending));
+            }
         })();
     }, []);
 
-  return (
-    <ScrollScreen>
-        {
-            services.length > 0 ? services.map((s) => <ListItemWithButton key={s.ServiceID}
-                                                                          buttonLabel={'Approve'}
-                                                                          rowOneData={{label:'Type', text:s.ServiceType}}
-                                                                          rowTwoData={{label:'Amount', text:String(s.Cost)}}
-                                                                          fun={() => approveService(s.ServiceID as number)}
-            />) : <DispText text={'No unapproved services found'}/>
-        }
-    </ScrollScreen>
-  );
+    return (
+        <ScrollScreen>
+            {
+                services.length > 0 ? services.map((s) => <ListItemWithButton key={s.serviceid}
+                    buttonLabel={'Approve'}
+                    rowOneData={{ label: 'Type', text: s.servicetype }}
+                    rowTwoData={{ label: 'Amount', text: String(s.cost) }}
+                    fun={() => approveService(s.serviceid as number)}
+                />) : <DispText text={'No unapproved services found'} />
+            }
+        </ScrollScreen>
+    );
 }

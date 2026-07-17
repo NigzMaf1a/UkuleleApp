@@ -1,10 +1,10 @@
 import { EquipmentCondition } from "../enums/equipment";
 
 export default interface Inspection {
-    EquipmentID:number;
-    ServiceID:number;
-    InspectionID?:number;
-    InspectionDate:Date;
-    InspectorName:string;
-    dCondition: EquipmentCondition;
+    equipmentid: number;
+    serviceid: number;
+    inspectionid?: number;
+    inspectiondate: Date;
+    inspectorname: string;
+    dcondition: EquipmentCondition;
 }

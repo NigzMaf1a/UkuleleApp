@@ -21,7 +21,7 @@ export default function InspectorReport() {
 
     useEffect(() => {
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
+            const id = await storage.get.profile().then(prof => prof?.regid);
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const inspector = new Inspector(id, key);
@@ -35,10 +35,10 @@ export default function InspectorReport() {
     return (
         <ScrollScreen>
             {
-                inspections.length > 0 ? inspections.map((i) => <ListItem key={i.InspectionID}
-                    rowOneData={{ label: 'ID', text: String(i.InspectionID) }}
-                    rowTwoData={{ label: 'Date', text: String(i.InspectionDate) }}
-                    rightSideText={describer(i.dCondition)}
+                inspections.length > 0 ? inspections.map((i) => <ListItem key={i.inspectionid}
+                    rowOneData={{ label: 'ID', text: String(i.inspectionid) }}
+                    rowTwoData={{ label: 'Date', text: String(i.inspectiondate) }}
+                    rightSideText={describer(i.dcondition)}
                 />) : <DispText text='No inspection records found' />
             }
         </ScrollScreen>

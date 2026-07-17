@@ -48,7 +48,7 @@ export default class User {
   }
 
   async getRegType() {
-    return await this.getUser().then(u => u?.RegType);
+    return await this.getUser().then(u => u?.regtype);
   }
 
   public apiFetch = async <T = unknown>(
@@ -89,8 +89,9 @@ export default class User {
     try {
       const allUsers = await this.apiFetch<Users[]>(this.endpoints.getAllUsers);
       this.toaster('User fetch successful', 'info');
+      console.log(allUsers)
       if (allUsers !== undefined && allUsers.length > 0) {
-        return allUsers.find(u => u.RegID === this.getRegID());
+        return allUsers.find(u => u.regid === this.getRegID());
       }
     } catch (err) {
       errorLogger(err);
@@ -101,7 +102,7 @@ export default class User {
   public async soundSystemDispatches(): Promise<Dispatch[] | undefined> {
     const user = await this.getUser();
     if (user) {
-      switch (user.RegType) {
+      switch (user.regtype) {
         case RegType.DJ || RegType.Mcee || RegType.Band:
           {
             try {
@@ -122,11 +123,11 @@ export default class User {
 
   public async packForDispatch(dispatch_id: number) {
     let status: Partial<Dispatch> = {
-      Dispatched: DispatchStatus.Packed
+      dispatched: DispatchStatus.Packed
     }
 
     if (await this.getUser() !== undefined) {
-      switch (await this.getUser().then(p => p?.RegType)) {
+      switch (await this.getUser().then(p => p?.regtype)) {
         case RegType.DJ || RegType.Mcee || RegType.Band:
           {
             try {
@@ -161,7 +162,7 @@ export default class User {
 
   public async soundSystemApproveLending(id: number) {
     let status: Partial<Lending> = {
-      Performed: 'Yes'
+      performed: 'Yes'
     }
 
     try {
