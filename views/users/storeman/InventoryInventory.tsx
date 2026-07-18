@@ -9,7 +9,8 @@ import FancyLoad from '../../../sections/FancyLoad';
 // scripts
 import Storeman from '../../../scripts/classes/storeman';
 import Inventory from '../../../scripts/interfaces/inventory';
-import { EquipmentAvailabilty } from '../../../scripts/enums/equipment';
+import { EquipmentAvailabilty, EquipmentCondition } from '../../../scripts/enums/equipment';
+import describer from '../../../scripts/utils/describer';
 
 // auth
 import storage from '../../../scripts/auth/storage';
@@ -74,7 +75,12 @@ export default function InventoryInventory() {
                                 label: 'Type',
                                 text: i.description,
                             }}
-                            rightSideText={i.dcondition}
+                            rightSideText={describer(i.dcondition as EquipmentCondition)}
+                            text_three_variant={
+                                i.dcondition == EquipmentCondition.CAT1 ? 'success' :
+                                    i.dcondition == EquipmentCondition.CAT2 ? 'info' :
+                                        i.dcondition == EquipmentCondition.CAT3 ? 'warning' : 'danger'
+                            }
                         />
                     ))
                 ) : (

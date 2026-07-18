@@ -14,13 +14,21 @@ const revisited_styles = StyleSheet.create({
         justifyContent: "space-between",
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#F08080",
+        backgroundColor: "#FFFFFF",
         borderRadius: scale(12)
     },
     left_cont: {
         width: "75%",
-        flexDirection: "column",
         height: "100%",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        paddingHorizontal: 12,
+        gap: 8,
+    },
+    right_cont: {
+        width: "25%",
+        height: "100%",
+        justifyContent: "center",
         alignItems: "center"
     },
     label_text: {},
@@ -28,19 +36,42 @@ const revisited_styles = StyleSheet.create({
         width: "100%",
         flexDirection: "row",
         justifyContent: "flex-start",
+        alignItems: "center",
         marginTop: spacing.sm
     },
     text: {
-        width: "100%",
         flex: 1,
         flexShrink: 1
     },
-    text_info: {},
-    text_danger: {},
-    text_success: {},
-    text_default: {},
-    text_warning: {},
-    text_label: {}
+    text_info: {
+        color: colors.primary
+    },
+    text_danger: {
+        color: colors.danger
+    },
+    text_success: {
+        color: colors.success
+    },
+    text_default: {
+        color: colors.default
+    },
+    text_warning: {
+        color: colors.warn
+    },
+    text_label: {
+        color: colors.textCaption
+    },
+    label: {
+        width: 50,
+        marginRight: 10,
+    },
+
+    value: {
+        flex: 1,
+    },
+    right_side_text: {
+        width: 70
+    }
 });
 
 export default revisited_styles;

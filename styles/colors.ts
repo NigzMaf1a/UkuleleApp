@@ -14,6 +14,8 @@ export const colors = {
 
   danger: "#EF4444",
   success: "#10B981",
+  warn: "",
+  default: "",
 
   anim_one: "",
   anim_two: "",
