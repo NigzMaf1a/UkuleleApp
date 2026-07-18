@@ -69,7 +69,7 @@ export default class Accountant extends User {
             let paidPenalties: Penalty[] = [];
             for (const paid of penaltyPayment) {
                 for (const penalty of penalties) {
-                    if (paid.PenaltyID === penalty.penaltyid) {
+                    if (paid.penaltyid === penalty.penaltyid) {
                         paidPenalties.push(penalty);
                     }
                 }

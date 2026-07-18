@@ -41,7 +41,7 @@ export default function AccountantPenalties() {
 
     function returnCode(id: number): string {
         if (payments.length > 0) {
-            const match = payments.find(p => p.PenaltyID === id)?.PaymentCode;
+            const match = payments.find(p => p.penaltyid === id)?.paymentcode;
             if (typeof match === 'string') return match;
         }
         return '';

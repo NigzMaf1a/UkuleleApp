@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import { colors } from "../../../styles/colors";
 import { scale } from "../../../styles/responsive";
 import { spacing } from "../../../styles/spacing";
+import { typography } from "../../../styles/typography";
 
 const revisited_styles = StyleSheet.create({
     container: {
@@ -71,7 +72,20 @@ const revisited_styles = StyleSheet.create({
     },
     right_side_text: {
         width: 70
-    }
+    },
+    btn: {
+        height: 10,
+        width: 30
+    },
+    btn_label: {},
+    btn_info: {},
+    btn_success: {},
+    btn_danger: {},
+    btn_warning: {},
+    btn_label_info: {},
+    btn_label_success: {},
+    btn_label_danger: {},
+    btn_label_warning: {}
 });
 
 export default revisited_styles;

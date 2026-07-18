@@ -62,7 +62,7 @@ export default function InspectorPenalties() {
     (async () => {
 
       const id = await storage.get.profile()
-        .then(prof => prof?.regid);
+        .then(prof => prof?.RegID);
 
       const key = await storage.get.key();
 
@@ -128,7 +128,7 @@ export default function InspectorPenalties() {
     const equipId = inspection.equipmentid;
 
     const allocation = equipAlloc.find(
-      e => e.EquipmentID === equipId
+      e => e.equipmentid === equipId
     );
 
     const equipment = inventory.find(
@@ -139,7 +139,7 @@ export default function InspectorPenalties() {
 
     return {
       equipment_id: equipId,
-      customer_id: allocation.RegID,
+      customer_id: allocation.regid,
       description: equipment.description as EquipmentDescription
     };
   }

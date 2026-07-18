@@ -152,10 +152,10 @@ export default class Customer extends User {
         }
 
         let penaltyPayment: PenaltyPayment = {
-            PenaltyID: id,
-            PaymentCode: code,
-            PaymentDate: date(),
-            Amount: amount
+            penaltyid: id,
+            paymentcode: code,
+            paymentdate: date(),
+            amount: amount
         }
 
         try {

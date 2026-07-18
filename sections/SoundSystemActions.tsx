@@ -18,16 +18,16 @@ export default function SoundSystemActions({ data, fun }: SoundSystemActionProps
     const [lending, setLending] = useState<Lending[]>([]);
 
     useEffect(() => {
-        setLending(data.filter(l => l.LendingStatus === LendingStatus.Done && l.Performed === Performed.No));
+        setLending(data.filter(l => l.lendingstatus === LendingStatus.Done && l.performed === Performed.No));
     }, [data]);
 
     return (
         <ScrollScreen>
             {
-                lending.length > 0 ? lending.map((lend) => <ListItemWithButton key={lend.LendID}
+                lending.length > 0 ? lending.map((lend) => <ListItemWithButton key={lend.lendid}
                     buttonLabel={'Lend'}
-                    rowOneData={{ label: 'Lend ID', text: String(lend.LendID) }}
-                    rowTwoData={{ label: 'Hours', text: String(lend.Hours) }}
+                    rowOneData={{ label: 'Lend ID', text: String(lend.lendid) }}
+                    rowTwoData={{ label: 'Hours', text: String(lend.hours) }}
                     fun={fun}
                 />) : <DispText text={'No unperformed lendings found'} />
             }

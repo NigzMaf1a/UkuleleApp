@@ -40,7 +40,7 @@ export default function CustomerFeedback() {
 
     useEffect(() => {
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.regid);
+            const id = await storage.get.profile().then(prof => prof?.RegID);
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const cust = new Customer(id, key);
@@ -65,10 +65,10 @@ export default function CustomerFeedback() {
                     if (!customer) return;
 
                     const feed: Feedback = {
-                        CustomerID: customer.getRegID(),
-                        Comments: newFeedback,
-                        Name: user?.name as string,
-                        Rating: rating as 1 | 2 | 3 | 4 | 5
+                        customerid: customer.getRegID(),
+                        comments: newFeedback,
+                        name: user?.name as string,
+                        rating: rating as 1 | 2 | 3 | 4 | 5
                     };
 
                     await addFeedback(feed);
@@ -82,7 +82,7 @@ export default function CustomerFeedback() {
             />
             <ScrollScreen>
                 {
-                    feedback.length > 0 ? feedback.map((f) => <CustomerFeedbackItem key={f.FeedbackID} feedback={f} />) : <DispText text='No feedback found' />
+                    feedback.length > 0 ? feedback.map((f) => <CustomerFeedbackItem key={f.feedbackid} feedback={f} />) : <DispText text='No feedback found' />
                 }
             </ScrollScreen>
         </Screen>

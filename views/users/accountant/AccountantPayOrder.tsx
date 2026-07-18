@@ -55,10 +55,10 @@ export default function AccountantPayOrder() {
             return;
         }
         const payment: OrderPayment = {
-            OrderID: id,
-            PaymentCode: paymentCode,
-            PaymentDate: date(),
-            Amount: money
+            orderid: id,
+            paymentcode: paymentCode,
+            paymentdate: date(),
+            amount: money
         };
         if (accountant) {
             await accountant.makeOrderPayment(payment);

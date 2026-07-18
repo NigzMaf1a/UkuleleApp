@@ -62,7 +62,7 @@ export default function SplashScreen() {
       </Animated.View>
 
       <Animated.View style={{ transform: [{ scale }] }}>
-        <MaterialIcons name="speaker" size={60} color={colors.anim_one} />
+        <MaterialIcons name="speaker" size={60} color={colors.anim_three} />
       </Animated.View>
 
     </View>

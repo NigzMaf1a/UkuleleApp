@@ -26,8 +26,8 @@ export default function CustomerFeedbackItem({ feedback }: FeedbackProps) {
         <>
             <Strip>
                 <Tray>
-                    <LabelledText label='Comment' text={feedback.Comments} />
-                    <LabelledText label='Response' text={String(feedback.Response)} />
+                    <LabelledText label='Comment' text={feedback.comments} />
+                    <LabelledText label='Response' text={String(feedback.response)} />
                 </Tray>
                 <Button label='View' fun={() => toggleModal()} variant='secondary' />
             </Strip>
@@ -43,9 +43,9 @@ export default function CustomerFeedbackItem({ feedback }: FeedbackProps) {
                     </Strip>
                 }
             >
-                <LabelledText label='Name' text={feedback.Name} />
-                <LabelledText label='Comment' text={feedback.Comments} />
-                <LabelledText label='Response' text={String(feedback.Response)} />
+                <LabelledText label='Name' text={feedback.name} />
+                <LabelledText label='Comment' text={feedback.comments} />
+                <LabelledText label='Response' text={String(feedback.response)} />
             </MyModal>
         </>
     );

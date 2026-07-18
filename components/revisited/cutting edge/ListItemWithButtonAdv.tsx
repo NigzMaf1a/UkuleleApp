@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 //components
 import TextDisplay from "./TextDisplay";
 import LabelledTextDisplay from "./LabelledTextDisplay";
+import LabelledButtonAdv from "./LabelledButtonAdv";
 
 //styles
 import revisited_styles from "../styles/styles";
@@ -12,6 +13,7 @@ import { typography } from "../../../styles/typography";
 
 //types
 import { TextVariant } from "./TextDisplay";
+import { ButtonVariant } from "./LabelledButtonAdv";
 
 interface RowOneData {
     text: string | number;
@@ -27,6 +29,8 @@ interface ListItemAdvProps {
     rowOneData: RowOneData;
     rowTwoData: RowTwoData;
     rightSideText: string | number;
+    fun: () => Promise<void> | void;
+    btn_label: string;
     cont_styles?: StyleProp<ViewStyle>;
     more_row_one_styles?: StyleProp<ViewStyle>;
     more_row_two_styles?: StyleProp<ViewStyle>;
@@ -40,25 +44,25 @@ interface ListItemAdvProps {
     text_one_variant?: TextVariant;
     text_two_variant?: TextVariant;
     text_three_variant?: TextVariant;
+    btn_variant?: ButtonVariant;
 }
 
 export default function ListItemAdv(
     {
         rowOneData,
         rowTwoData,
-        rightSideText, cont_styles,
+        cont_styles, btn_label, fun,
         more_row_one_styles,
         more_label_two_styles,
         more_label_one_styles,
         more_row_two_styles,
         more_text_one_styles,
         more_text_two_styles,
-        more_text_three_styles,
         label_one_variant = 'label',
         label_two_variant = 'label',
         text_one_variant = 'default',
         text_two_variant = 'default',
-        text_three_variant = 'default',
+        btn_variant = 'info',
 
     }: ListItemAdvProps
 ) {
@@ -77,7 +81,7 @@ export default function ListItemAdv(
                         more_row_one_styles
                     ]}
                     more_label_styles={[
-                        typography.h3,
+                        typography.caption,
                         more_label_one_styles
                     ]}
                     more_text_styles={[
@@ -106,13 +110,10 @@ export default function ListItemAdv(
             </View>
 
             <View style={revisited_styles.right_cont}>
-                <TextDisplay
-                    text={rightSideText}
-                    more_text_styles={[
-                        revisited_styles.right_side_text,
-                        more_text_three_styles
-                    ]}
-                    text_variant={text_three_variant}
+                <LabelledButtonAdv
+                    label={btn_label}
+                    onPress={fun}
+                    variant={btn_variant}
                 />
             </View>
         </View>

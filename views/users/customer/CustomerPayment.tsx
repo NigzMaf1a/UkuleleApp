@@ -104,7 +104,7 @@ export default function CustomerPayment() {
         (async () => {
 
             const id = await storage.get.profile()
-                .then(prof => prof?.regid);
+                .then(prof => prof?.RegID);
 
             const key = await storage.get.key();
 

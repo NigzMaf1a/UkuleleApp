@@ -88,14 +88,14 @@ export default function InventorySupplies() {
         if (cartItems.length > 0) {
             for (const item of cartItems) {
                 const payload: SupplyOrder = {
-                    SupplyID: item.productId,
-                    OrderDate: date(),
-                    OrderAmount: Number((() => item.price * item.quantity)()),
-                    OrderStatus: OrderStatus.Processing,
+                    supplyid: item.productId,
+                    orderdate: date(),
+                    orderamount: Number((() => item.price * item.quantity)()),
+                    orderstatus: OrderStatus.Processing,
                     items: [
                         {
-                            SupplyType: supplies?.find(s => s.supplyid === item.productId)?.supplytype as EquipmentDescription,
-                            Quantity: item.quantity
+                            supplytype: supplies?.find(s => s.supplyid === item.productId)?.supplytype as EquipmentDescription,
+                            quantity: item.quantity
                         }
                     ]
                 }

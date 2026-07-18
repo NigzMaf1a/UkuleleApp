@@ -26,7 +26,7 @@ export default function ServiceApproval() {
 
     useEffect(() => {
         (async () => {
-            const id = await storage.get.profile().then(prof => prof?.regid);
+            const id = await storage.get.profile().then(prof => prof?.RegID);
             const key = await storage.get.key().then(key => key);
             if (typeof id === 'number' && typeof key === 'string') {
                 const man = new ServiceManager(id, key);

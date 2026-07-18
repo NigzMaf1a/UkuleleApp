@@ -17,9 +17,9 @@ export const colors = {
   warn: "",
   default: "",
 
-  anim_one: "",
-  anim_two: "",
-  anim_three: ""
+  anim_one: "#FF0000",
+  anim_two: "#FFD700",
+  anim_three: "#008000"
 };
 
 export const gradients = {

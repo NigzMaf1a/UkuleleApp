@@ -79,7 +79,7 @@ export default function OrderListItem({ order, supplies, fun }: OrderListItemPro
   const [showModal, setShowModal] = useState<boolean>(false);
 
   function getDescription(): EquipmentDescription {
-    return supplies.find(supply => supply.SupplyID === order.OrderID)?.SupplyType as EquipmentDescription;
+    return supplies.find(supply => supply.supplyid === order.orderid)?.supplytype as EquipmentDescription;
   }
 
   function toggleModal() {
@@ -90,10 +90,10 @@ export default function OrderListItem({ order, supplies, fun }: OrderListItemPro
     <>
       <View style={cardStyles.strip}>
         <View style={cardStyles.tray}>
-          <LabelledText label={'ID'} text={String(order.OrderID)} />
-          <LabelledText label={'Date'} text={String(order.OrderDate)} />
+          <LabelledText label={'ID'} text={String(order.orderid)} />
+          <LabelledText label={'Date'} text={String(order.orderdate)} />
         </View>
-        <Button label={order.OrderStatus.toLowerCase()} fun={() => toggleModal()} />
+        <Button label={order.orderstatus.toLowerCase()} fun={() => toggleModal()} />
       </View>
 
       <MyModal
@@ -105,9 +105,9 @@ export default function OrderListItem({ order, supplies, fun }: OrderListItemPro
             <Button label={'Close'} fun={() => toggleModal()} />
             <Button
               label={
-                order.OrderStatus === OrderStatus.Processing
+                order.orderstatus === OrderStatus.Processing
                   ? 'Haul'
-                  : order.OrderStatus === OrderStatus.Hauled
+                  : order.orderstatus === OrderStatus.Hauled
                     ? 'Delivered'
                     : 'Cancel'
               }
@@ -117,12 +117,12 @@ export default function OrderListItem({ order, supplies, fun }: OrderListItemPro
           </Strip>
         }
       >
-        <LabelledText label='Order ID:' text={String(order.OrderID)} />
-        <LabelledText label='Supply ID:' text={String(order.SupplyID)} />
-        <LabelledText label='Order Date:' text={String(order.OrderDate)} />
+        <LabelledText label='Order ID:' text={String(order.orderid)} />
+        <LabelledText label='Supply ID:' text={String(order.supplyid)} />
+        <LabelledText label='Order Date:' text={String(order.orderdate)} />
         <LabelledText label='Description:' text={description} />
-        <LabelledText label='Order Amount:' text={String(order.OrderAmount)} />
-        <LabelledText label='Order Status:' text={order.OrderStatus} />
+        <LabelledText label='Order Amount:' text={String(order.orderamount)} />
+        <LabelledText label='Order Status:' text={order.orderstatus} />
       </MyModal>
     </>
   );

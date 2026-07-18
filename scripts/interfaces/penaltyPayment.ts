@@ -1,7 +1,7 @@
-export interface PenaltyPayment{
-    PenaltyPaymentID?: number;
-    PenaltyID:number;
-    PaymentCode:string;
-    PaymentDate:Date;
-    Amount:number;
+export interface PenaltyPayment {
+    penaltypaymentid?: number;
+    penaltyid: number;
+    paymentcode: string;
+    paymentdate: Date;
+    amount: number;
 }

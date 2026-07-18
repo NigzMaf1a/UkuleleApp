@@ -47,7 +47,7 @@ export default function InspectorInspection() {
 
   useEffect(() => {
     (async () => {
-      const id = await storage.get.profile().then(prof => prof?.regid);
+      const id = await storage.get.profile().then(prof => prof?.RegID);
       const key = await storage.get.key().then(key => key);
       if (typeof id === 'number' && typeof key === 'string') {
         const insp = new Inspector(id, key);
@@ -69,7 +69,7 @@ export default function InspectorInspection() {
   }, []);
 
   useEffect(() => {
-    const equip = getEquipmentData(selectedItem?.AllocatedEquipmentID as number);
+    const equip = getEquipmentData(selectedItem?.allocatedequipmentid as number);
     if (typeof equip !== 'undefined') setCurrentEquip(equip);
   }, [selectedItem]);
 
@@ -90,8 +90,8 @@ export default function InspectorInspection() {
 
   function inspectionPayload(): Inspection {
     return {
-      equipmentid: selectedItem?.EquipmentID as number,
-      serviceid: getServiceId(selectedItem?.AllocatedEquipmentID as number) as number,
+      equipmentid: selectedItem?.equipmentid as number,
+      serviceid: getServiceId(selectedItem?.allocatedequipmentid as number) as number,
       inspectiondate: date(),
       inspectorname: name,
       dcondition: condition as EquipmentCondition
@@ -100,7 +100,7 @@ export default function InspectorInspection() {
 
   function getEquipmentData(allocation_id: number): Inventory | undefined {
     if (typeof inventory !== 'undefined' && typeof allocated !== 'undefined') {
-      const equip_id = allocated.find(a => a.AllocatedEquipmentID === allocation_id)?.EquipmentID;
+      const equip_id = allocated.find(a => a.allocatedequipmentid === allocation_id)?.equipmentid;
       if (typeof equip_id === 'number') {
         const equipment = inventory.find(i => i.equipmentid === equip_id);
         if (typeof equipment !== 'undefined') return equipment;
@@ -110,7 +110,7 @@ export default function InspectorInspection() {
 
   function getServiceId(allocation_id: number): number | undefined {
     if (typeof lendings !== 'undefined' && typeof allocated !== 'undefined') {
-      const lend_id = allocated.find(a => a.AllocatedEquipmentID === allocation_id)?.LendID;
+      const lend_id = allocated.find(a => a.allocatedequipmentid === allocation_id)?.lendid;
       if (typeof lend_id === 'number') {
         const service_id = lendings.find(l => l.lendid === lend_id)?.serviceid;
         if (typeof service_id === 'number') return service_id;
@@ -130,9 +130,9 @@ export default function InspectorInspection() {
       {allocated.length > 0 ? (
         allocated.map((a) => (
           <ListItemWithButton
-            key={a.AllocatedEquipmentID}
-            rowOneData={{ label: 'Equip ID', text: String(a.EquipmentID) }}
-            rowTwoData={{ label: 'Lend ID', text: String(a.LendID) }}
+            key={a.allocatedequipmentid}
+            rowOneData={{ label: 'Equip ID', text: String(a.equipmentid) }}
+            rowTwoData={{ label: 'Lend ID', text: String(a.lendid) }}
             buttonLabel='View'
             fun={() => mountModal(a)}
           />
@@ -153,7 +153,7 @@ export default function InspectorInspection() {
             />
             <Button
               label='Inspect'
-              fun={async () => await inspectEquipmentItem(selectedItem?.AllocatedEquipmentID as number)}
+              fun={async () => await inspectEquipmentItem(selectedItem?.allocatedequipmentid as number)}
             />
           </FormStrip>
         }

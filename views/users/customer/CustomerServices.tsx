@@ -47,7 +47,7 @@ export default function CustomerServices() {
 
   useEffect(() => {
     (async () => {
-      const id = await storage.get.profile().then(prof => prof?.regid);
+      const id = await storage.get.profile().then(prof => prof?.RegID);
       const key = await storage.get.key().then(key => key);
 
       if (typeof id === 'number' && typeof key === 'string') {
@@ -135,6 +135,14 @@ export default function CustomerServices() {
       throw new Error('Invalid hours');
     }
 
+    console.log({
+      customerId,
+      genre,
+      hours,
+      serviceType,
+      total,
+    });
+
     return {
       customerid: customerId,
       genre: genre as Genre,
@@ -147,14 +155,28 @@ export default function CustomerServices() {
   }
 
   async function sendRequest() {
+    console.log("1. Button pressed");
+
     if (customer) {
+      console.log("2. Customer exists");
+
       toaster('Requesting.......', 'info');
 
-      await customer.requestService(request());
+      console.log("3. Before request()");
+
+      const req = request();
+
+      console.log("4. Request object:", req);
+
+      await customer.requestService(req);
+
+      console.log("5. After API call");
 
       setTimeout(() => {
         toaster('Service request successful', 'success');
       }, 3000);
+    } else {
+      console.log("Customer is undefined");
     }
   }
 
