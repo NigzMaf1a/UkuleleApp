@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
 import DispText from '../../../components/DispText';
-import ListItemWithButton from '../../../sections/ListItemwithButton';
+import ListItemWithButtonAdv from '../../../components/revisited/cutting edge/ListItemWithButtonAdv';
 
 //interfaces
 import Finance, { Status } from '../../../scripts/interfaces/finance';
@@ -39,7 +39,7 @@ export default function PendingPayments() {
     return (
         <ScrollScreen>
             {
-                pendingPayments.length > 0 ? pendingPayments.map((p, idx) => <ListItemWithButton key={idx}
+                pendingPayments.length > 0 ? pendingPayments.map((p, idx) => <ListItemWithButtonAdv key={idx}
                     buttonLabel='Approve'
                     rowOneData={{ label: 'Code', text: p.transactionname }}
                     rowTwoData={{ label: 'Amount', text: String(p.amount) }}

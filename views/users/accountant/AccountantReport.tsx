@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
-import ListItem from '../../../sections/ListItem';
+import ListItemAdv from '../../../components/revisited/cutting edge/ListItemAdv';
 import DispText from '../../../components/DispText';
 import FancyLoad from '../../../sections/FancyLoad';
 
@@ -37,7 +37,7 @@ export default function AccountantReport() {
         <ScrollScreen>
             {loading}
             {
-                data.length > 0 ? data.map((record) => <ListItem key={record.transactionid}
+                data.length > 0 ? data.map((record) => <ListItemAdv key={record.transactionid}
                     rowOneData={{ label: 'Code', text: record.transactionname }}
                     rowTwoData={{ label: 'Amount', text: String(record.amount) }}
                     rightSideText={record.transactionstatus}

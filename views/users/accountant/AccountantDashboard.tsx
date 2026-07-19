@@ -5,7 +5,7 @@ import storage from "../../../scripts/auth/storage";
 //components
 import ScrollScreen from "../../../components/ScrollScreen";
 import DashTray from "../../../sections/DashTray";
-import ListItem from "../../../sections/ListItem";
+import ListItemAdv from "../../../components/revisited/cutting edge/ListItemAdv";
 import ListItemWithButton from "../../../sections/ListItemwithButton";
 import DispText from "../../../components/DispText";
 
@@ -58,7 +58,7 @@ export default function AccountantDashboard() {
 
             <DashTray>
                 {
-                    payments.length > 0 && payments.map((p) => <ListItem key={p.transactionid}
+                    payments.length > 0 && payments.map((p) => <ListItemAdv key={p.transactionid}
                         rowOneData={{ label: 'Code', text: p.transactionname }}
                         rowTwoData={{ label: 'Date', text: String(p.transactiondate) }}
                         rightSideText={String(p.amount)}

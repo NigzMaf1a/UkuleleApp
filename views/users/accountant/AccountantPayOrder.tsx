@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
 import DispText from '../../../components/DispText';
-import ListItemWithButton from '../../../sections/ListItemwithButton';
+import ListItemWithButtonAdv from '../../../components/revisited/cutting edge/ListItemWithButtonAdv';
 import SmallForm from '../../../components/SmallForm';
 import MyModal from '../../../components/MyModal';
 import LabelledInput from '../../../sections/LabelledInput';
@@ -92,7 +92,7 @@ export default function AccountantPayOrder() {
         <ScrollScreen>
             {orders.length > 0 ? (
                 orders.map((o) => (
-                    <ListItemWithButton
+                    <ListItemWithButtonAdv
                         key={o.orderid}
                         rowOneData={{ label: 'ID', text: String(o.orderid) }}
                         rowTwoData={{ label: 'Amount', text: String(o.orderamount) }}

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
 import DispText from '../../../components/DispText';
-import ListItemWithButton from '../../../sections/ListItemwithButton';
+import ListItemWithButtonAdv from '../../../components/revisited/cutting edge/ListItemWithButtonAdv';
 
 //interfaces
 import Penalty from '../../../scripts/interfaces/penalty';
@@ -49,7 +49,7 @@ export default function AccountantPenalties() {
     return (
         <ScrollScreen>
             {
-                penalties.length > 0 ? penalties.map((p) => <ListItemWithButton key={p.penaltyid}
+                penalties.length > 0 ? penalties.map((p) => <ListItemWithButtonAdv key={p.penaltyid}
                     rowOneData={{ label: 'Pay Code', text: returnCode(Number(p.penaltyid)) }}
                     rowTwoData={{ label: 'Amount', text: String(p.penalty) }}
                     buttonLabel='Approve'

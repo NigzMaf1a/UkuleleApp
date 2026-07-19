@@ -28,9 +28,8 @@ interface RowTwoData {
 interface ListItemAdvProps {
     rowOneData: RowOneData;
     rowTwoData: RowTwoData;
-    rightSideText: string | number;
     fun: () => Promise<void> | void;
-    btn_label: string;
+    buttonLabel: string;
     cont_styles?: StyleProp<ViewStyle>;
     more_row_one_styles?: StyleProp<ViewStyle>;
     more_row_two_styles?: StyleProp<ViewStyle>;
@@ -47,11 +46,11 @@ interface ListItemAdvProps {
     btn_variant?: ButtonVariant;
 }
 
-export default function ListItemAdv(
+export default function ListItemWithButtonAdv(
     {
         rowOneData,
         rowTwoData,
-        cont_styles, btn_label, fun,
+        cont_styles, buttonLabel, fun,
         more_row_one_styles,
         more_label_two_styles,
         more_label_one_styles,
@@ -111,7 +110,7 @@ export default function ListItemAdv(
 
             <View style={revisited_styles.right_cont}>
                 <LabelledButtonAdv
-                    label={btn_label}
+                    label={buttonLabel}
                     onPress={fun}
                     variant={btn_variant}
                 />
