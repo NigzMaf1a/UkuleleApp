@@ -39,11 +39,11 @@ const genderItems = [
 
 const regTypeItems = [
   { label: "Customer", value: "Customer" },
-  { label: "DJ", value: "Deejay" },
+  { label: "DJ", value: "DJ" },
   { label: "Mcee", value: "Mcee" },
-  { label: "Storeman", value: "Store" },
+  { label: "Storeman", value: "Storeman" },
   { label: "Accountant", value: "Accountant" },
-  { label: "Dispatchman", value: "Dispatch" },
+  { label: "Dispatchman", value: "Dispatchman" },
   { label: "Inspector", value: "Inspector" },
   { label: "Band", value: "Band" },
   { label: "Supplier", value: "Supplier" },
@@ -90,6 +90,7 @@ export default function Registration() {
       gender: gender,
       regtype: regType as RegType,
       dlocation: dLocation,
+      photo: null,
       accstatus: "Pending"
     };
   }

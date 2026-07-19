@@ -10,6 +10,6 @@ export default interface Users {
     gender: string;
     regtype: RegType;
     dlocation: string;
+    photo: ImageData | null;
     accstatus: string;
-    image?: ImageData;
 }

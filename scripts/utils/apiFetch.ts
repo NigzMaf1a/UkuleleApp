@@ -32,8 +32,11 @@ export default async function apiFetch<T>(
     });
 
     if (!res.ok) {
+        const error = await res.json();
+        console.error(error);
+
         throw new Error(
-            `Fetch failed: ${res.status} ${res.statusText}`
+            `Fetch failed: ${res.status} ${JSON.stringify(error)}`
         );
     }
 

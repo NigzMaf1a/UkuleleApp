@@ -18,8 +18,14 @@ export default class ServiceManager extends User {
 
     public async getAllServiceRequests(): Promise<Services[]> {
         try {
+            const requests = await this.apiFetch<Services[]>(this.endpoints.getAllServices);
+
+            console.log("Requests:", requests);
+            console.log("Is array:", Array.isArray(requests));
+
             this.toaster('Requests fetched successfully', 'info');
-            return await this.apiFetch<Services[]>(this.endpoints.getAllServices);
+
+            return requests;
         } catch (err) {
             console.error('Error', err, 'occurred');
             return [];
