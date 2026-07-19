@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import NetInfo, { NetInfoState } from "@react-native-community/netinfo";
 
 // views
-import Login from "./views/Login";
+import AuthStack from "./navigation/AuthStack";
 import SplashScreen from "./views/SplashScreen";
 
 // navigation
@@ -191,7 +191,7 @@ export default function App() {
 
         ) : (
 
-          <Login
+          <AuthStack
             setRole={setRole}
           />
 

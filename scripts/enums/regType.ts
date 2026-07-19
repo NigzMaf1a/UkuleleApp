@@ -8,7 +8,7 @@ enum RegType {
     Inspector = 'Inspector',
     Band = 'Band',
     Supplier = 'Supplier',
-    ServiceManager = 'ServiceManager'
+    ServiceManager = 'Service Manager'
 }
 
 export default RegType;

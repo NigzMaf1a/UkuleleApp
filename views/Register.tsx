@@ -47,7 +47,7 @@ const regTypeItems = [
   { label: "Inspector", value: "Inspector" },
   { label: "Band", value: "Band" },
   { label: "Supplier", value: "Supplier" },
-  { label: "Service Provider", value: "Service" }
+  { label: "Service Manager", value: "Service Manager" }
 ];
 
 const locationItems = [
@@ -116,11 +116,17 @@ export default function Registration() {
       navigation.navigate("Login");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      console.log(error);
+
     }
   }
 
   return (
-    <ScrollScreen>
+    <ScrollScreen
+      contentContainerStyle={{
+        justifyContent: "center",
+      }}
+    >
       <BigForm>
         <FormStrip>
           <DispText text="Create Account" variant="h2" />
@@ -184,7 +190,7 @@ export default function Registration() {
         />
 
         <LabelledDropdown
-          label="Delivery Location"
+          label="Location Of Residence"
           values={locationItems}
           selectedValue={dLocation}
           onValueChange={setDLocation}
