@@ -6,14 +6,14 @@ import { View } from 'react-native';
 import { cardStyles } from '../styles/cardStyles';
 
 //interfaces
-interface DashTrayProps{
-    children:React.ReactNode;
+interface DashTrayProps {
+  children: React.ReactNode;
 }
 
-export default function DashTray({children}:DashTrayProps) {
+export default function DashTray({ children }: DashTrayProps) {
   return (
     <View style={cardStyles.dashTray}>
-        {children}
+      {children}
     </View>
   );
 }

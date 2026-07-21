@@ -19,7 +19,10 @@ export const colors = {
 
   anim_one: "#FF0000",
   anim_two: "#FFD700",
-  anim_three: "#008000"
+  anim_three: "#008000",
+  white: "#FFFFFF",
+  info: "",
+  black: "#000000"
 };
 
 export const gradients = {

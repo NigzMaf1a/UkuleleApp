@@ -22,17 +22,15 @@ export default class Accountant extends User {
     }
 
     async approvePayment(id: number): Promise<void> {
-        let status: Partial<Finance> = {
-            transactionstatus: Status.Approved
-        };
+
+        console.log('Transaction being approved', id);
 
         const service_id = await this.getPaymentServiceID(id);
 
         try {
             await this.apiFetch(this.endpoints.updateFinance(id),
                 {
-                    method: "POST",
-                    body: JSON.stringify(status)
+                    method: "PUT"
                 }
             );
 
@@ -161,15 +159,11 @@ export default class Accountant extends User {
     }
 
     public async approveServicePaymentStatus(service_id: number) {
-        let status: Partial<Services> = {
-            paymentstatus: PaymentStatus.Paid
-        }
 
         try {
             await this.apiFetch(this.endpoints.updateService(service_id),
                 {
-                    method: "POST",
-                    body: JSON.stringify(status)
+                    method: "PUT"
                 }
             );
             this.toaster('Payment approved successfully', 'success');

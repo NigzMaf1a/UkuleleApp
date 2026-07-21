@@ -13,6 +13,7 @@ import { colors } from "../styles/colors";
 import { spacing } from "../styles/spacing";
 import { scale } from "../styles/responsive";
 import { typography } from "../styles/typography";
+import revisited_styles from '../components/revisited/styles/styles';
 
 const cardStyles = StyleSheet.create({
   // Main horizontal container: tray + button
@@ -88,12 +89,15 @@ export default function OrderListItem({ order, supplies, fun }: OrderListItemPro
 
   return (
     <>
-      <View style={cardStyles.strip}>
-        <View style={cardStyles.tray}>
+
+      <View style={revisited_styles.container}>
+        <View style={revisited_styles.left_cont}>
           <LabelledText label={'ID'} text={String(order.orderid)} />
           <LabelledText label={'Date'} text={String(order.orderdate)} />
         </View>
-        <Button label={order.orderstatus.toLowerCase()} fun={() => toggleModal()} />
+        <View style={revisited_styles.right_cont}>
+          <Button label={order.orderstatus.toLowerCase()} fun={() => toggleModal()} />
+        </View>
       </View>
 
       <MyModal

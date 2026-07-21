@@ -35,7 +35,7 @@ export const containerStyles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center", // default when only one button
+    justifyContent: "space-between",
     paddingVertical: spacing.xs, // minimal extra vertical space
     paddingHorizontal: spacing.md
   },

@@ -5,8 +5,8 @@ import storage from "../../../scripts/auth/storage";
 //components
 import ScrollScreen from "../../../components/ScrollScreen";
 import DashTray from "../../../sections/DashTray";
-import ListItem from "../../../sections/ListItem";
-import ListItemWithButton from "../../../sections/ListItemwithButton";
+import ListItemAdv from "../../../components/revisited/cutting edge/ListItemAdv";
+import ListItemWithButtonAdv from "../../../components/revisited/cutting edge/ListItemWithButtonAdv";
 import DispText from "../../../components/DispText";
 
 //scripts
@@ -48,7 +48,7 @@ export default function SupplierDashboard() {
         <ScrollScreen>
             <DashTray>
                 {
-                    supplies.length > 0 ? supplies.map((s) => <ListItem key={s.supplyid}
+                    supplies.length > 0 ? supplies.map((s) => <ListItemAdv key={s.supplyid}
                         rowOneData={{ label: 'ID', text: String(s.supplyid) }}
                         rowTwoData={{ label: 'Type', text: s.supplytype }}
                         rightSideText={String(s.availableunits)}
@@ -57,7 +57,7 @@ export default function SupplierDashboard() {
             </DashTray>
             <DashTray>
                 {
-                    orders.length > 0 ? orders.map((o) => <ListItem key={o.orderid}
+                    orders.length > 0 ? orders.map((o) => <ListItemAdv key={o.orderid}
                         rowOneData={{ label: 'ID:', text: String(o.orderid) }}
                         rowTwoData={{ label: 'Items', text: String(o.orderstatus) }}
                         rightSideText={String(o.orderamount)}

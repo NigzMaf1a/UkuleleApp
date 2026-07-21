@@ -53,15 +53,10 @@ export default class ServiceManager extends User {
     }
 
     async approveService(id: number): Promise<void> {
-        let status: Partial<Services> = {
-            servicestatus: ServiceStatus.Approved
-        }
-
         try {
             await this.apiFetch(this.endpoints.updateService(id),
                 {
-                    method: "POST",
-                    body: JSON.stringify(status)
+                    method: "POST"
                 }
             );
 
@@ -83,6 +78,8 @@ export default class ServiceManager extends User {
         }
     }
 
+
+
     public async getServiceType(id: number) {
         const services = await this.getAllServiceRequests();
         const thisService = services.find(s => s.serviceid === id);
@@ -92,7 +89,8 @@ export default class ServiceManager extends User {
 
     public async approveLendingRequest(id: number): Promise<void> {
         let status: Partial<Lending> = {
-            lendingstatus: LendingStatus.Done
+            lendingstatus: LendingStatus.Done,
+            performed: "No"
         }
 
         try {
@@ -109,7 +107,8 @@ export default class ServiceManager extends User {
 
     public async approveBookingRequest(id: number): Promise<void> {
         let status: Partial<Booking> = {
-            bookstatus: BookingStatus.Tick
+            bookstatus: BookingStatus.Tick,
+            performed: "No"
         }
 
         try {

@@ -29,6 +29,8 @@ interface ListItemAdvProps {
     rowOneData: RowOneData;
     rowTwoData: RowTwoData;
     fun: () => Promise<void> | void;
+    isClicked?: boolean;
+    setIsClicked?: (clicked: boolean) => void;
     buttonLabel: string;
     cont_styles?: StyleProp<ViewStyle>;
     more_row_one_styles?: StyleProp<ViewStyle>;
@@ -51,6 +53,7 @@ export default function ListItemWithButtonAdv(
         rowOneData,
         rowTwoData,
         cont_styles, buttonLabel, fun,
+        isClicked = false, setIsClicked,
         more_row_one_styles,
         more_label_two_styles,
         more_label_one_styles,
@@ -66,10 +69,12 @@ export default function ListItemWithButtonAdv(
     }: ListItemAdvProps
 ) {
     return (
-        <View style={[
-            revisited_styles.container,
-            cont_styles && cont_styles
-        ]}
+        <View style={
+            isClicked === true ? [revisited_styles.clicked_container] : [
+                revisited_styles.container,
+                cont_styles && cont_styles
+            ]
+        }
         >
             <View style={revisited_styles.left_cont}>
                 <LabelledTextDisplay
@@ -113,6 +118,8 @@ export default function ListItemWithButtonAdv(
                     label={buttonLabel}
                     onPress={fun}
                     variant={btn_variant}
+                    isClicked={isClicked}
+                    setIsClicked={setIsClicked && setIsClicked}
                 />
             </View>
         </View>

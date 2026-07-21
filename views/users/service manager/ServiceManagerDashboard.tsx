@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
-import ListItem from '../../../sections/ListItem';
+import ListItemAdv from '../../../components/revisited/cutting edge/ListItemAdv';
 import DispText from '../../../components/DispText';
 
 //scripts
@@ -37,7 +37,7 @@ export default function ServiceManagerDashboard() {
   return (
     <ScrollScreen>
       {
-        services.length > 0 ? services.map((s) => <ListItem
+        services.length > 0 ? services.map((s) => <ListItemAdv
           key={s.serviceid}
           rowOneData={{ label: 'Type', text: s.servicetype }}
           rowTwoData={{ label: 'Genre', text: s.genre }}

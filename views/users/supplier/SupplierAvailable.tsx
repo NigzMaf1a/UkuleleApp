@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
-import ListItem from '../../../sections/ListItem';
+import ListItemAdv from '../../../components/revisited/cutting edge/ListItemAdv';
 import DispText from '../../../components/DispText';
 
 //interfaces
@@ -34,7 +34,7 @@ export default function SupplierAvailable() {
     return (
         <ScrollScreen>
             {
-                supplies.length > 0 ? supplies.map((sup) => <ListItem key={sup.supplyid}
+                supplies.length > 0 ? supplies.map((sup) => <ListItemAdv key={sup.supplyid}
                     rowOneData={{ label: 'Type', text: sup.supplytype }}
                     rowTwoData={{ label: 'Price', text: String(sup.price) }}
                     rightSideText={String(sup.availableunits)}

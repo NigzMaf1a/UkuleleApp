@@ -47,7 +47,8 @@ const regTypeItems = [
   { label: "Inspector", value: "Inspector" },
   { label: "Band", value: "Band" },
   { label: "Supplier", value: "Supplier" },
-  { label: "Service Manager", value: "Service Manager" }
+  { label: "Service Manager", value: "Service Manager" },
+  { label: "Admin", value: "Admin" }
 ];
 
 const locationItems = [
@@ -80,6 +81,7 @@ export default function Registration() {
   const [dLocation, setDLocation] = useState<string>("");
 
   const [error, setError] = useState<string | null>(null);
+  const [btnClicked, setBtnClicked] = useState<boolean>(false);
 
   function registrationPayload(): Users {
     return {
@@ -119,6 +121,8 @@ export default function Registration() {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
       console.log(error);
 
+    } finally {
+      setBtnClicked(false);
     }
   }
 
@@ -207,7 +211,12 @@ export default function Registration() {
         <RegLogRedirector view="register" />
 
         <FormStrip>
-          <Button label="Register" fun={registerUser} />
+          <Button
+            label="Register"
+            fun={registerUser}
+            isClicked={btnClicked}
+            setIsClicked={() => setBtnClicked(true)}
+          />
         </FormStrip>
       </BigForm>
     </ScrollScreen>

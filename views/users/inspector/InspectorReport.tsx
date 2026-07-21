@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
-import ListItem from '../../../sections/ListItem';
+import ListItemAdv from '../../../components/revisited/cutting edge/ListItemAdv';
 import DispText from '../../../components/DispText';
 
 //interfaces
@@ -35,7 +35,7 @@ export default function InspectorReport() {
     return (
         <ScrollScreen>
             {
-                inspections.length > 0 ? inspections.map((i) => <ListItem key={i.inspectionid}
+                inspections.length > 0 ? inspections.map((i) => <ListItemAdv key={i.inspectionid}
                     rowOneData={{ label: 'ID', text: String(i.inspectionid) }}
                     rowTwoData={{ label: 'Date', text: String(i.inspectiondate) }}
                     rightSideText={describer(i.dcondition)}

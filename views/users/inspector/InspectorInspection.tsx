@@ -5,7 +5,7 @@ import ScrollScreen from '../../../components/ScrollScreen';
 import MyModal from '../../../components/MyModal';
 import LabelledInput from '../../../sections/LabelledInput';
 import DispText from '../../../components/DispText';
-import ListItemWithButton from '../../../sections/ListItemwithButton';
+import ListItemWithButtonAdv from '../../../components/revisited/cutting edge/ListItemWithButtonAdv';
 import Button from '../../../components/Button';
 import BigForm from '../../../components/BigForm';
 import FormStrip from '../../../components/FormStript';
@@ -129,7 +129,7 @@ export default function InspectorInspection() {
     <ScrollScreen>
       {allocated.length > 0 ? (
         allocated.map((a) => (
-          <ListItemWithButton
+          <ListItemWithButtonAdv
             key={a.allocatedequipmentid}
             rowOneData={{ label: 'Equip ID', text: String(a.equipmentid) }}
             rowTwoData={{ label: 'Lend ID', text: String(a.lendid) }}

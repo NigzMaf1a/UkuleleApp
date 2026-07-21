@@ -6,8 +6,8 @@ import storage from "../../../scripts/auth/storage";
 import ScrollScreen from "../../../components/ScrollScreen";
 import DashTray from "../../../sections/DashTray";
 import ListItemAdv from "../../../components/revisited/cutting edge/ListItemAdv";
-import ListItemWithButton from "../../../sections/ListItemwithButton";
-import DispText from "../../../components/DispText";
+import DashLabel from "../../../components/revisited/cutting edge/DashLabel";
+import FancyLoad from "../../../sections/FancyLoad";
 
 //interfaces
 import Finance from "../../../scripts/interfaces/finance";
@@ -24,39 +24,68 @@ export default function AccountantDashboard() {
     const [accountant, setAccountant] = useState<Accountant>();
     const [payments, setPayments] = useState<Finance[]>([]);
     const [services, setServices] = useState<Services[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [displayLabel, setDisplayLabel] = useState<boolean>(false);
 
     useEffect(() => {
-        (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
-            const key = await storage.get.key().then(key => key);
-            if (typeof id === 'number' && typeof key === 'string') {
-                const acc = new Accountant(id, key);
-                setAccountant(acc);
+        async function initialize() {
+            try {
+                setLoading(true);
+
+                const [id, key] = await Promise.all([
+                    storage.get.profile().then(prof => prof?.RegID),
+                    storage.get.key()
+                ]);
+
+                if (
+                    typeof id === 'number' &&
+                    typeof key === 'string'
+                ) {
+                    const acc = new Accountant(id, key);
+                    setAccountant(acc);
+
+                    if (!accountant) return;
+
+                    const pay = await accountant.getAllFinanceRecords();
+                    const serv = await accountant.getAllServices();
+
+                    setPayments(
+                        pay.filter(p => p.transactionstatus === Status.Pending)
+                    );
+
+                    setServices(
+                        serv.filter(s => s.paymentstatus === PaymentStatus.NotPaid)
+                    );
+                } else {
+                    setPayments([]);
+                    setServices([]);
+                }
+            } catch (err) {
+                console.error('Failed to load inventory:', err);
+                setPayments([]);
+                setServices([]);
+            } finally {
+                setLoading(false);
+                payments.length > 0 && setDisplayLabel(true);
+                displayLabel && setTimeout(() => setDisplayLabel(false), 5000);
             }
-        })();
+        }
+
+        initialize();
     }, []);
-
-    useEffect(() => {
-        (async () => {
-            if (!accountant) return;
-
-            const pay = await accountant.getAllFinanceRecords();
-            const serv = await accountant.getAllServices();
-
-            setPayments(
-                pay.filter(p => p.transactionstatus === Status.Pending)
-            );
-
-            setServices(
-                serv.filter(s => s.paymentstatus === PaymentStatus.NotPaid)
-            );
-        })();
-    }, [accountant]);
 
     return (
         <ScrollScreen>
+            <FancyLoad loading={loading} />
 
             <DashTray>
+                {
+                    displayLabel && <DashLabel
+                        text="Current Transactions"
+                        text_color="info"
+                    />
+                }
+
                 {
                     payments.length > 0 && payments.map((p) => <ListItemAdv key={p.transactionid}
                         rowOneData={{ label: 'Code', text: p.transactionname }}

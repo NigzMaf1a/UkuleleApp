@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { TouchableOpacity, Text, StyleSheet} from 'react-native';
+import React, { useState } from 'react';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 //interfaces
 import Inspection from '../scripts/interfaces/inspection';
@@ -8,16 +8,16 @@ import Inspection from '../scripts/interfaces/inspection';
 import { buttonStyles } from '../styles/buttonStyles';
 
 
-interface ButtonProps{
-    label:string;
-    fun:(par?:Inspection) => Promise<void> | void;
+interface ButtonProps {
+  label: string;
+  fun: (par?: Inspection ) => Promise<void> | void;
 }
 
-export default function ButtonComplex({label, fun}:ButtonProps) {
+export default function ButtonComplex({ label, fun }: ButtonProps) {
 
   return (
     <TouchableOpacity style={buttonStyles.primaryButton} onPress={() => fun()}>
-        <Text style={buttonStyles.buttonText}>{label}</Text>
+      <Text style={buttonStyles.buttonText}>{label}</Text>
     </TouchableOpacity>
   );
 }

@@ -37,3 +37,19 @@ export const buttonStyles = StyleSheet.create({
   }
 
 });
+
+export const clicked_button_styles = StyleSheet.create({
+  button: {
+    width: "100%",
+    paddingVertical: scale(14),
+    borderRadius: scale(8),
+    backgroundColor: colors.warn,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  label: {
+    fontSize: moderateScale(16),
+    color: colors.black,
+    fontWeight: "600"
+  }
+});

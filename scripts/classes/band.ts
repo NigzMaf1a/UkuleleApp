@@ -37,7 +37,10 @@ export default class Band extends User {
     }
 
     async markAsPerformed(book_id: number) {
-        let status: Partial<Booking> = { performed: Performed.Yes }
+        let status: Partial<Booking> = {
+            bookstatus: "Tick",
+            performed: Performed.Yes
+        }
         try {
             await this.apiFetch(this.endpoints.updateBooking(book_id),
                 {

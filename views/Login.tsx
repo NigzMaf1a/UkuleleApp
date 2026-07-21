@@ -28,6 +28,7 @@ export default function Login({ setRole }: LoginProps) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [btnClicked, setBtnClicked] = useState<boolean>(false);
 
   useEffect(() => {
     console.log(password);
@@ -48,6 +49,8 @@ export default function Login({ setRole }: LoginProps) {
     } catch (err) {
       console.error("Login screen:", err);
       setError("Something went wrong. Please try again.");
+    } finally {
+      setBtnClicked(false);
     }
   };
 
@@ -92,7 +95,12 @@ export default function Login({ setRole }: LoginProps) {
         <RegLogRedirector view="login" />
 
         <FormStrip>
-          <Button label="Login" fun={handleLogin} />
+          <Button
+            label="Login"
+            fun={handleLogin}
+            isClicked={btnClicked}
+            setIsClicked={() => setBtnClicked(true)}
+          />
         </FormStrip>
       </SmallForm>
     </ScrollScreen>

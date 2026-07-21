@@ -6,9 +6,10 @@ import MyModal from '../../../components/MyModal';
 import DispText from '../../../components/DispText';
 import Button from '../../../components/Button';
 import BigForm from '../../../components/BigForm';
-import ListItemWithButton from '../../../sections/ListItemwithButton';
+import ListItemWithButtonAdv from '../../../components/revisited/cutting edge/ListItemWithButtonAdv';
 import FormStrip from '../../../components/FormStript';
 import LabelledText from '../../../components/LabelledText';
+import FancyLoad from '../../../sections/FancyLoad';
 
 //scripts
 import Storeman from '../../../scripts/classes/storeman';
@@ -33,6 +34,7 @@ export default function InventorySupplies() {
     const [supplies, setSupplies] = useState<Supply[]>([]);
     const [selectedSupply, setSelectedSupply] = useState<Supply | undefined>();
     const [storeman, setStoreman] = useState<Storeman>();
+    const [loading, setLoading] = useState<boolean>(false);
 
     //modal state
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -116,25 +118,42 @@ export default function InventorySupplies() {
         if (typeof item !== 'undefined') setCurrentCartItem(item);
     }, [selectedSupply, orderQty]);
 
+
     useEffect(() => {
-        (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
-            const key = await storage.get.key().then(key => key);
-            if (typeof id === 'number' && typeof key === 'string') {
-                const manager = new Storeman(id, key);
-                const sup = await manager.getSupplies();
-                const c = new Cart(id);
-                setCart(c);
-                setStoreman(manager);
-                setSupplies(sup);
+        const loadSupplies = async () => {
+            try {
+                setLoading(true);
+
+                const id = await storage.get.profile().then(prof => prof?.RegID);
+                const key = await storage.get.key().then(key => key);
+
+                if (typeof id === 'number' && typeof key === 'string') {
+                    const manager = new Storeman(id, key);
+                    const sup = await manager.getSupplies();
+                    const c = new Cart(id);
+
+                    setCart(c);
+                    setStoreman(manager);
+                    setSupplies(sup);
+                } else {
+                    setSupplies([]);
+                }
+            } catch (error) {
+                console.error('Failed to load supplies:', error);
+                setSupplies([]);
+            } finally {
+                setLoading(false);
             }
-        })();
+        };
+
+        loadSupplies();
     }, []);
 
     return (
         <ScrollScreen>
+            <FancyLoad loading={loading} />
             {
-                supplies.length > 0 ? supplies.map((s) => <ListItemWithButton
+                !loading && supplies.length > 0 ? supplies.map((s) => <ListItemWithButtonAdv
                     rowOneData={{ label: 'Supplier Name', text: s.suppliername }}
                     rowTwoData={{ label: 'Supply Type', text: s.supplytype }}
                     buttonLabel='View'
@@ -183,7 +202,7 @@ export default function InventorySupplies() {
             >
                 <BigForm>
                     {
-                        cartItems && cartItems.map((c) => <ListItemWithButton
+                        cartItems && cartItems.map((c) => <ListItemWithButtonAdv
                             key={c.productId}
                             rowOneData={{ label: 'Price', text: String(c.price) }}
                             rowTwoData={{ label: 'Total', text: String((() => c.price * c.quantity)()) }}

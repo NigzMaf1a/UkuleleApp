@@ -146,12 +146,9 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: scale(480),
     maxHeight: '85%',
-    borderRadius: scale(16),
-    elevation: 10,
   },
 
   modalContainer: {
-    flex: 1,
     backgroundColor: colors.background,
     borderRadius: scale(16),
     overflow: 'hidden',
@@ -175,5 +172,12 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
+    width: "100%",
+    height: 100,
+    elevation: 3,
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF"
   },
 });

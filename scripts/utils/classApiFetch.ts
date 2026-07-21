@@ -18,6 +18,12 @@ export default async function classApiFetch<T>(
     ...(options.headers ?? {}),
   };
 
+  console.log({
+    fullUrl,
+    method: options.method,
+    body: options.body
+  });
+
   const response = await fetch(fullUrl, {
     ...options,
     headers: mergedHeaders,

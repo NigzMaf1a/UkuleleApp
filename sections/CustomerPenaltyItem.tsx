@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { View } from 'react-native';
 
 //components
 import Strip from '../components/Strip';
 import Tray from '../components/Tray';
 import LabelledText from '../components/LabelledText';
 import Button from '../components/Button';
+import ButtonComplex from '../components/ButtonComplex';
 import InputPlusButton from './InputPlusButton';
 import MyModal from '../components/MyModal';
 
@@ -13,6 +15,9 @@ import { PenaltyStatus } from '../scripts/enums/penalty';
 
 //interfaces
 import Penalty from '../scripts/interfaces/penalty';
+
+//styles
+import revisited_styles from '../components/revisited/styles/styles';
 
 interface CustomerPenaltyProps {
     penalty: Penalty;
@@ -41,7 +46,9 @@ export default function CustomerPenaltyItem({ penalty, amountInput, onAmountInpu
                     <LabelledText label='Amount' text={String(penalty.penalty)} />
                     <LabelledText label='Status' text={String(penalty.penaltystatus)} />
                 </Tray>
-                <Button label='View' fun={() => toggleModal()} />
+                <View style={revisited_styles.right_cont}>
+                    <ButtonComplex label='View' fun={() => toggleModal()} />
+                </View>
             </Strip>
 
             <MyModal

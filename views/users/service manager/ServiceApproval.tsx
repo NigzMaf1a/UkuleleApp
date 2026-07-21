@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
 import DispText from '../../../components/DispText';
-import ListItemWithButton from '../../../sections/ListItemwithButton';
+import ListItemWithButtonAdv from '../../../components/revisited/cutting edge/ListItemWithButtonAdv';
 
 //scripts
 import ServiceManager from '../../../scripts/classes/servicemanager';
@@ -40,7 +40,7 @@ export default function ServiceApproval() {
     return (
         <ScrollScreen>
             {
-                services.length > 0 ? services.map((s) => <ListItemWithButton key={s.serviceid}
+                services.length > 0 ? services.map((s) => <ListItemWithButtonAdv key={s.serviceid}
                     buttonLabel={'Approve'}
                     rowOneData={{ label: 'Type', text: s.servicetype }}
                     rowTwoData={{ label: 'Amount', text: String(s.cost) }}

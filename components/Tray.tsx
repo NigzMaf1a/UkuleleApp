@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 //styles
-import { cardStyles } from '../styles/cardStyles';
+import revisited_styles from './revisited/styles/styles';
 
 interface StripProps {
   children: React.ReactNode;
@@ -10,7 +10,7 @@ interface StripProps {
 
 export default function Tray({ children }: StripProps) {
   return (
-    <View style={cardStyles.tray}>
+    <View style={revisited_styles.left_cont}>
       {children}
     </View>
   );

@@ -169,6 +169,9 @@ export default function CustomerServices() {
       console.log("4. Request object:", req);
 
       await customer.requestService(req);
+      setHours('');
+      setGenre('');
+      setServiceType('');
 
       console.log("5. After API call");
 

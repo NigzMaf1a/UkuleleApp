@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
-import ListItemWithButton from '../../../sections/ListItemwithButton';
+import ListItemWithButtonAdv from '../../../components/revisited/cutting edge/ListItemWithButtonAdv';
 import DispText from '../../../components/DispText';
 import DashTray from '../../../sections/DashTray';
 import MyModal from '../../../components/MyModal';
@@ -12,6 +12,9 @@ import LabelledInput from '../../../sections/LabelledInput';
 import LabelledText from '../../../components/LabelledText';
 import FormStrip from '../../../components/FormStript';
 import Button from '../../../components/Button';
+import DashLabel from '../../../components/revisited/cutting edge/DashLabel';
+import FancyLoad from '../../../sections/FancyLoad';
+import LabelledButtonAdv from '../../../components/revisited/cutting edge/LabelledButtonAdv';
 
 //interfaces
 import Penalty from '../../../scripts/interfaces/penalty';
@@ -43,36 +46,68 @@ export default function CustomerPenalty() {
     const [selectedPenaltyId, setSelectedPenaltyId] = useState(0);
     const [selectedPenalty, setSelectedPenalty] = useState<Penalty>();
 
-    const paid = penalties.filter(
-        p =>
-            p.penaltystatus === PenaltyStatus.Paid ||
-            p.penaltystatus === PenaltyStatus.Processing
+    const [loading, setLoading] = useState<boolean>(false);
+    const [showLabelOne, setShowLabelOne] = useState<boolean>(false);
+    const [showLabelTwo, setShowLabelTwo] = useState<boolean>(false);
+
+    const [listItemOneClicked, setListItemOneClicked] = useState<boolean>(false);
+    const [listItemTwoClicked, setListItemTwoClicked] = useState<boolean>(false);
+    const [modalOneBtnClicked, setModalOneBtnClicked] = useState<boolean>(false);
+
+
+    const paid = useMemo(
+        () => penalties.filter(
+            p =>
+                p.penaltystatus === PenaltyStatus.Paid ||
+                p.penaltystatus === PenaltyStatus.Processing
+        ),
+        [penalties]
     );
 
-    const unpaid = penalties.filter(
-        p => p.penaltystatus === PenaltyStatus.NotPaid
+    const unpaid = useMemo(
+        () => penalties.filter(
+            p => p.penaltystatus === PenaltyStatus.NotPaid
+        ),
+        [penalties]
     );
 
     useEffect(() => {
-        (async () => {
+        async function initialize() {
+            try {
+                setLoading(true);
 
-            const id = await storage.get.profile()
-                .then(prof => prof?.regid);
+                const [id, key] = await Promise.all([
+                    storage.get.profile().then(prof => prof?.RegID),
+                    storage.get.key()
+                ]);
 
-            const key = await storage.get.key();
+                if (typeof id === 'number' && typeof key === 'string') {
 
-            if (typeof id === 'number' && typeof key === 'string') {
+                    const cust = new Customer(id, key);
 
-                const cust = new Customer(id, key);
+                    const pen = await cust.getPenaltyHistory();
 
-                const pen = await cust.getPenaltyHistory();
+                    setPenalties(pen);
 
-                setPenalties(pen);
+                    setCustomer(cust);
+                } else setPenalties([]);
 
-                setCustomer(cust);
+            } catch (error) {
+                console.log('Error occurred while initializing the penalty screen', error);;
+                setPenalties([]);
+            } finally {
+                setLoading(false);
+                !loading && unpaid.length > 0 && setShowLabelOne(true);
+                !loading && paid.length > 0 && setShowLabelTwo(true);
+
+                setTimeout(() => {
+                    showLabelOne && setShowLabelOne(false);
+                    showLabelTwo && setShowLabelTwo(false);
+                }, 3000);
             }
+        }
 
-        })();
+        initialize();
     }, []);
 
     function toggleModal() {
@@ -85,6 +120,7 @@ export default function CustomerPenalty() {
 
     function mountModal(id: number) {
         setSelectedPenaltyId(id);
+        setListItemOneClicked(false);
         toggleModal();
     }
 
@@ -147,6 +183,7 @@ export default function CustomerPenalty() {
                 amount
             );
 
+            setModalOneBtnClicked(false);
             unMountModal();
 
         } catch (error) {
@@ -161,15 +198,22 @@ export default function CustomerPenalty() {
 
     return (
         <ScrollScreen>
+            <FancyLoad loading={loading} />
 
             <DashTray>
+                {
+                    showLabelOne && <DashLabel
+                        text='Unpaid Penalties'
+                        text_color='danger'
+                    />
+                }
 
                 {
                     unpaid.length > 0 ?
 
                         unpaid.map(u => (
 
-                            <ListItemWithButton
+                            <ListItemWithButtonAdv
                                 key={u.penaltyid}
                                 rowOneData={{
                                     label: 'ID',
@@ -181,6 +225,8 @@ export default function CustomerPenalty() {
                                 }}
                                 buttonLabel='Pay'
                                 fun={() => mountModal(u.penaltyid as number)}
+                                isClicked={listItemOneClicked}
+                                setIsClicked={() => setListItemOneClicked(true)}
                             />
 
                         ))
@@ -194,13 +240,19 @@ export default function CustomerPenalty() {
             </DashTray>
 
             <DashTray>
+                {
+                    showLabelOne && <DashLabel
+                        text='Paid Penalties'
+                        text_color='success'
+                    />
+                }
 
                 {
                     paid.length > 0 ?
 
                         paid.map(p => (
 
-                            <ListItemWithButton
+                            <ListItemWithButtonAdv
                                 key={p.penaltyid}
                                 rowOneData={{
                                     label: 'ID',
@@ -212,6 +264,8 @@ export default function CustomerPenalty() {
                                 }}
                                 buttonLabel='View'
                                 fun={() => mountModalTwo(p.penaltyid as number)}
+                                isClicked={listItemTwoClicked}
+                                setIsClicked={() => setListItemTwoClicked(true)}
                             />
 
                         ))
@@ -229,19 +283,23 @@ export default function CustomerPenalty() {
                 onClose={unMountModal}
                 title='Pay Penalty'
                 footer={
-                    <FormStrip>
+                    <>
 
-                        <Button
+                        <LabelledButtonAdv
                             label='Close'
-                            fun={unMountModal}
+                            onPress={unMountModal}
+                            variant='danger'
                         />
 
-                        <Button
+                        <LabelledButtonAdv
                             label='Pay'
-                            fun={initiatePaymentRequest}
+                            onPress={initiatePaymentRequest}
+                            variant='success'
+                            isClicked={modalOneBtnClicked}
+                            setIsClicked={() => setModalOneBtnClicked(true)}
                         />
 
-                    </FormStrip>
+                    </>
                 }
             >
 
@@ -270,14 +328,15 @@ export default function CustomerPenalty() {
                 onClose={unMountModalTwo}
                 title='View Penalty'
                 footer={
-                    <FormStrip>
+                    <>
 
-                        <Button
+                        <LabelledButtonAdv
                             label='Close'
-                            fun={unMountModalTwo}
+                            onPress={unMountModalTwo}
+                            variant='info'
                         />
 
-                    </FormStrip>
+                    </>
                 }
             >
 

@@ -24,7 +24,10 @@ export default class Mcee extends User {
     }
 
     async markAsPerformed(id: number) {
-        let performed: Partial<Lending> = { performed: Performed.Yes }
+        let performed: Partial<Lending> = {
+            lendingstatus: "Done",
+            performed: Performed.Yes
+        }
 
         try {
             await this.apiFetch(this.endpoints.updateLending(id),

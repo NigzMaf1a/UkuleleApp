@@ -5,9 +5,10 @@ import storage from "../../../scripts/auth/storage";
 //components
 import ScrollScreen from "../../../components/ScrollScreen";
 import DashTray from "../../../sections/DashTray";
-import ListItem from "../../../sections/ListItem";
-import ListItemWithButton from "../../../sections/ListItemwithButton";
+import ListItemAdv from "../../../components/revisited/cutting edge/ListItemAdv";
 import DispText from "../../../components/DispText";
+import FancyLoad from "../../../sections/FancyLoad";
+import DashLabel from "../../../components/revisited/cutting edge/DashLabel";
 
 //interfaces
 import Services from "../../../scripts/interfaces/services";
@@ -22,39 +23,62 @@ import { PaymentStatus } from "../../../scripts/enums/services";
 import Band from "../../../scripts/classes/band";
 
 export default function BandDashboard() {
-    let [views, setViews] = useState<number>(1);
     const [services, setServices] = useState<Services[]>([]);
     const [bookings, setBookings] = useState<Booking[]>([]);
-
-    function reset() {
-        setViews(1);
-    }
-
+    const [loading, setLoading] = useState<boolean>(false);
+    const [showLabelOne, setShowLabelOne] = useState<boolean>(false);
+    const [showLabelTwo, setShowLabelTwo] = useState<boolean>(false);
 
     useEffect(() => {
-        (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
-            const key = await storage.get.key().then(key => key);
-            if (typeof id === 'number' && typeof key === 'string') {
-                const band = new Band(id, key);
-                const served = await band.getAllServices();
-                const bookings = await band.getAllBookings();
+        async function initialize() {
+            try {
+                setLoading(true);
+                const id = await storage.get.profile().then(prof => prof?.RegID);
+                const key = await storage.get.key().then(key => key);
+                if (typeof id === 'number' && typeof key === 'string') {
+                    const band = new Band(id, key);
+                    const served = await band.getAllServices();
+                    const bookings = await band.getAllBookings();
 
-                setServices(served.filter(s => s.paymentstatus !== PaymentStatus.Paid && s.servicetype === 'Booking'));
-                setBookings(bookings.filter(b => b.bookstatus !== BookingStatus.Tick))
+                    setServices(served.filter(s => s.paymentstatus !== PaymentStatus.Paid && s.servicetype === 'Booking'));
+                    setBookings(bookings.filter(b => b.bookstatus !== BookingStatus.Tick))
+                } else {
+                    setServices([]);
+                    setBookings([]);
+                }
+            } catch (error) {
+                console.log('Error occurred while initializing the dashboard');
+                console.log(error);
+                setServices([]);
+                setBookings([]);
+            } finally {
+                setLoading(false);
+                services.length > 0 && setShowLabelOne(true);
+                bookings.length > 0 && setShowLabelTwo(true);
+
+                setTimeout(() => {
+                    showLabelOne === true && setShowLabelOne(false);
+                    showLabelTwo === true && setShowLabelTwo(false);
+                }, 5000);
             }
-        })();
+        }
+
+        initialize();
     }, []);
 
-    useEffect(() => {
-        // toggleViews();
-    }, []);
 
     return (
         <ScrollScreen>
+            <FancyLoad loading={loading} />
             <DashTray>
                 {
-                    services.length > 0 ? services.map((s) => <ListItem key={s.serviceid}
+                    showLabelOne && <DashLabel
+                        text="Approved services"
+                        text_color="success"
+                    />
+                }
+                {
+                    services.length > 0 ? services.map((s) => <ListItemAdv key={s.serviceid}
                         rowOneData={{ label: 'Genre', text: s.genre }}
                         rowTwoData={{ label: 'Hours', text: String(s.hours) }}
                         rightSideText={String(s.cost)}
@@ -63,7 +87,13 @@ export default function BandDashboard() {
             </DashTray>
             <DashTray>
                 {
-                    bookings.length > 0 ? bookings.map((b) => <ListItem key={b.bookingid}
+                    showLabelTwo && <DashLabel
+                        text="Pending Performances"
+                        text_color="success"
+                    />
+                }
+                {
+                    bookings.length > 0 ? bookings.map((b) => <ListItemAdv key={b.bookingid}
                         rowOneData={{ label: 'Booking ID', text: String(b.bookingid) }}
                         rowTwoData={{ label: 'Date', text: String(b.bookingdate) }}
                         rightSideText={b.genre}

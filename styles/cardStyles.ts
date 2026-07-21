@@ -36,6 +36,7 @@ export const cardStyles = StyleSheet.create({
   },
   input_plus_btn: {
     width: "100%",
+    height: 120,
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",

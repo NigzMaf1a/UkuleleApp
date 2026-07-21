@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
+import { View } from 'react-native';
 
 //components
-import Screen from '../components/Screen';
 import Strip from '../components/Strip';
-import Tray from '../components/Tray';
 import Button from '../components/Button';
 import LabelledText from '../components/LabelledText';
 import MyModal from '../components/MyModal';
+import ListItemWithButtonAdv from '../components/revisited/cutting edge/ListItemWithButtonAdv';
 
 //interfaces
 import Feedback from '../scripts/interfaces/feedback';
+
 
 export interface FeedbackProps {
     feedback: Feedback;
@@ -24,13 +25,15 @@ export default function CustomerFeedbackItem({ feedback }: FeedbackProps) {
 
     return (
         <>
-            <Strip>
-                <Tray>
-                    <LabelledText label='Comment' text={feedback.comments} />
-                    <LabelledText label='Response' text={String(feedback.response)} />
-                </Tray>
-                <Button label='View' fun={() => toggleModal()} variant='secondary' />
-            </Strip>
+            <ListItemWithButtonAdv
+                rowOneData={{ label: 'Comment', text: feedback.comments }}
+                rowTwoData={{ label: 'Response', text: feedback.response ? feedback.response : 'No response' }}
+                buttonLabel='View'
+                fun={() => toggleModal()}
+                btn_variant={
+                    typeof feedback.response === null ? 'warning' : 'success'
+                }
+            />
 
             <MyModal
                 visible={showModal}
@@ -45,7 +48,7 @@ export default function CustomerFeedbackItem({ feedback }: FeedbackProps) {
             >
                 <LabelledText label='Name' text={feedback.name} />
                 <LabelledText label='Comment' text={feedback.comments} />
-                <LabelledText label='Response' text={String(feedback.response)} />
+                <LabelledText label='Response' text={String(typeof feedback.response === null ? feedback.response : '-')} />
             </MyModal>
         </>
     );

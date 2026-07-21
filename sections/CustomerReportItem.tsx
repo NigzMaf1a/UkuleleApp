@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
+import { View } from 'react-native';
 
 //components
 import Strip from '../components/Strip';
-import Tray from '../components/Tray';
+import ButtonComplex from '../components/ButtonComplex';
 import LabelledText from '../components/LabelledText';
 import Button from '../components/Button';
 import MyModal from '../components/MyModal';
+import LabelledButtonAdv from '../components/revisited/cutting edge/LabelledButtonAdv';
 
 //interfaces
 import Services from '../scripts/interfaces/services';
+
+//styles
+import revisited_styles from '../components/revisited/styles/styles';
 
 interface CustomerReportProps {
     service: Services;
@@ -23,13 +28,19 @@ export default function CustomerReportItem({ service }: CustomerReportProps) {
 
     return (
         <>
-            <Strip>
-                <Tray>
+            <View style={revisited_styles.container}>
+                <View style={revisited_styles.left_cont}>
                     <LabelledText label='ID' text={String(service.serviceid)} />
                     <LabelledText label='Type' text={service.servicetype} />
-                </Tray>
-                <Button label='View' fun={() => toggleModal()} />
-            </Strip>
+                </View>
+                <View style={revisited_styles.right_cont}>
+                    <LabelledButtonAdv
+                        label='View'
+                        onPress={() => toggleModal()}
+                        variant='success'
+                    />
+                </View>
+            </View>
 
             <MyModal
                 visible={showModal}

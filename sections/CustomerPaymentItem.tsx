@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
+import { View } from 'react-native';
 
 //components
-import Screen from '../components/Screen';
 import Strip from '../components/Strip';
 import Tray from '../components/Tray';
 import LabelledText from '../components/LabelledText';
 import Button from '../components/Button';
 import MyModal from '../components/MyModal';
+import ListItemWithButtonAdv from '../components/revisited/cutting edge/ListItemWithButtonAdv';
 
 //interfaces
 import Finance from '../scripts/interfaces/finance';
+
+//styles
+import revisited_styles from '../components/revisited/styles/styles';
 
 interface CustomerPaymentItemProps {
     payment: Finance;
@@ -17,20 +21,24 @@ interface CustomerPaymentItemProps {
 
 export default function CustomerPaymentItem({ payment }: CustomerPaymentItemProps) {
     const [showModal, setShowModal] = useState<boolean>(false);
+    const [btnClicked, setBtnClicked] = useState<boolean>(false);
 
     function toggleModal() {
+        if (btnClicked === true) setBtnClicked(false);
         setShowModal(prev => !prev);
     }
 
     return (
         <>
-            <Strip>
-                <Tray>
-                    <LabelledText label='Code' text={payment.transactionname} />
-                    <LabelledText label='Amount' text={String(payment.amount)} />
-                </Tray>
-                <Button label='View' fun={() => toggleModal()} />
-            </Strip>
+            <ListItemWithButtonAdv
+                rowOneData={{ label: 'Code', text: payment.transactionname }}
+                rowTwoData={{ label: 'Amount', text: String(payment.amount) }}
+                buttonLabel='view'
+                fun={() => toggleModal()}
+                btn_variant='info'
+                isClicked={btnClicked}
+                setIsClicked={() => setBtnClicked(true)}
+            />
 
             <MyModal
                 visible={showModal}

@@ -6,6 +6,7 @@ import Screen from '../../../components/Screen';
 import CustomerFeedbackItem from '../../../sections/CustomerFeedbackItem';
 import DispText from '../../../components/DispText';
 import InputPlusButton from '../../../sections/InputPlusButton';
+import FancyLoad from '../../../sections/FancyLoad';
 
 //interfaces
 import Feedback from '../../../scripts/interfaces/feedback';
@@ -23,6 +24,7 @@ export default function CustomerFeedback() {
     const [newFeedback, setNewFeedback] = useState<string>('');
     const [user, setUser] = useState<Users>();
     const [rating] = useState<number>(4);
+    const [loading, setLoading] = useState<boolean>(false);
 
     async function addFeedback(feed: Feedback) {
         console.log('Feedback is about to be added');
@@ -39,22 +41,33 @@ export default function CustomerFeedback() {
     }
 
     useEffect(() => {
-        (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
-            const key = await storage.get.key().then(key => key);
-            if (typeof id === 'number' && typeof key === 'string') {
-                const cust = new Customer(id, key);
-                const feed = await cust?.getFeedback();
+        async function initialize() {
+            try {
+                setLoading(true);
+                const id = await storage.get.profile().then(prof => prof?.RegID);
+                const key = await storage.get.key().then(key => key);
+                if (typeof id === 'number' && typeof key === 'string') {
+                    const cust = new Customer(id, key);
+                    const feed = await cust?.getFeedback();
 
-                setCustomer(cust);
-                setFeedback(feed);
-                await getCurrentUser();
+                    setCustomer(cust);
+                    setFeedback(feed);
+                    await getCurrentUser();
+                }
+            } catch (error) {
+                console.log('Error occurred while initializing feedback');
+                setFeedback([]);
+            } finally {
+                setLoading(false)
             }
-        })();
+        }
+
+        initialize();
     }, []);
 
     return (
         <Screen>
+            <FancyLoad loading={loading} />
             <InputPlusButton
                 inputPlaceholder='Enter feedback here'
                 inputValue={newFeedback}
@@ -67,7 +80,7 @@ export default function CustomerFeedback() {
                     const feed: Feedback = {
                         customerid: customer.getRegID(),
                         comments: newFeedback,
-                        name: user?.name as string,
+                        name: await storage.get.profile().then(prof => prof?.Name as string),
                         rating: rating as 1 | 2 | 3 | 4 | 5
                     };
 

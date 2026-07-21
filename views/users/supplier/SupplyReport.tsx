@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
-import ListItem from '../../../sections/ListItem';
+import ListItemAdv from '../../../components/revisited/cutting edge/ListItemAdv';
 import DispText from '../../../components/DispText';
 
 //interfaces
@@ -32,7 +32,7 @@ export default function SupplyReport() {
     return (
         <ScrollScreen>
             {
-                orders.length > 0 ? orders.map((order) => <ListItem key={order.orderid}
+                orders.length > 0 ? orders.map((order) => <ListItemAdv key={order.orderid}
                     rowOneData={{ label: 'ID', text: String(order.orderid) }}
                     rowTwoData={{ label: 'Date', text: String(order.orderdate.toLocaleDateString()) }}
                     rightSideText={order.orderstatus}

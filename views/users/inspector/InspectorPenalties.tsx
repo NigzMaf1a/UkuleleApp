@@ -5,7 +5,7 @@ import ScrollScreen from '../../../components/ScrollScreen';
 import MyModal from '../../../components/MyModal';
 import SmallForm from '../../../components/SmallForm';
 import FormStrip from '../../../components/FormStript';
-import ListItemWithButton from '../../../sections/ListItemwithButton';
+import ListItemWithButtonAdv from '../../../components/revisited/cutting edge/ListItemWithButtonAdv';
 import DispText from '../../../components/DispText';
 import LabelledDropdown from '../../../components/LabelledDropdown';
 import Button from '../../../components/Button';
@@ -190,7 +190,7 @@ export default function InspectorPenalties() {
 
           inspections.map(i => (
 
-            <ListItemWithButton
+            <ListItemWithButtonAdv
               key={i.inspectionid}
               rowOneData={{
                 label: 'Inspection ID',

@@ -5,7 +5,7 @@ import storage from "../../../scripts/auth/storage";
 //components
 import ScrollScreen from "../../../components/ScrollScreen";
 import DashTray from "../../../sections/DashTray";
-import ListItem from "../../../sections/ListItem";
+import ListItemAdv from "../../../components/revisited/cutting edge/ListItemAdv";
 import ListItemWithButton from "../../../sections/ListItemwithButton";
 import DispText from "../../../components/DispText";
 
@@ -45,7 +45,7 @@ export default function DispatchDashboard() {
         <ScrollScreen>
             <DashTray>
                 {
-                    pending.length > 0 ? pending.map((p) => <ListItem key={p.dispatchid}
+                    pending.length > 0 ? pending.map((p) => <ListItemAdv key={p.dispatchid}
                         rowOneData={{ label: 'Location:', text: p.dlocation }}
                         rowTwoData={{ label: 'Phone:', text: p.phoneno }}
                         rightSideText={p.dispatchdate}
@@ -54,7 +54,7 @@ export default function DispatchDashboard() {
             </DashTray>
             <DashTray>
                 {
-                    packed.length > 0 ? packed.map((p) => <ListItem key={p.dispatchid}
+                    packed.length > 0 ? packed.map((p) => <ListItemAdv key={p.dispatchid}
                         rowOneData={{ label: 'Location:', text: p.dlocation }}
                         rowTwoData={{ label: 'Phone:', text: p.phoneno }}
                         rightSideText={p.dispatchdate}

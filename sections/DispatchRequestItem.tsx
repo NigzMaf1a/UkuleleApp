@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { View } from 'react-native';
 
 //components
 import LabelledText from '../components/LabelledText';
 import Strip from '../components/Strip';
-import Tray from '../components/Tray';
+import ButtonComplex from '../components/ButtonComplex';
 import Button from '../components/Button';
 import MyModal from '../components/MyModal';
 
@@ -12,6 +13,9 @@ import DispatchStatus from '../scripts/enums/dispatch';
 
 //interfaces
 import Dispatch from '../scripts/interfaces/dispatch';
+
+//styles
+import revisited_styles from '../components/revisited/styles/styles';
 
 interface DispatchRequestItemProps {
     item: Dispatch;
@@ -27,13 +31,15 @@ export default function DispatchRequestItem({ item, fun }: DispatchRequestItemPr
 
     return (
         <>
-            <Strip>
-                <Tray>
+            <View style={revisited_styles.container}>
+                <View style={revisited_styles.left_cont}>
                     <LabelledText label='ID' text={String(item.dispatchid)} />
                     <LabelledText label='Location' text={item.dlocation} />
-                </Tray>
-                <Button label={item.dispatched} fun={() => toggleModal()} />
-            </Strip>
+                </View>
+                <View style={revisited_styles.right_cont}>
+                    <ButtonComplex label={item.dispatched} fun={() => toggleModal()} />
+                </View>
+            </View>
 
             <MyModal
                 visible={showModal}

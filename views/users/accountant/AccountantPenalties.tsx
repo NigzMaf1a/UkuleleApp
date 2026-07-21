@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import ScrollScreen from '../../../components/ScrollScreen';
 import DispText from '../../../components/DispText';
 import ListItemWithButtonAdv from '../../../components/revisited/cutting edge/ListItemWithButtonAdv';
+import FancyLoad from '../../../sections/FancyLoad';
 
 //interfaces
 import Penalty from '../../../scripts/interfaces/penalty';
@@ -22,32 +23,48 @@ export default function AccountantPenalties() {
     const [penalties, setPenalties] = useState<Penalty[]>([]);
     const [payments, setPayments] = useState<PenaltyPayment[]>([]);
     const [accountant, setAccountant] = useState<Accountant>();
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
-            const key = await storage.get.key().then(key => key);
-            if (typeof id === 'number' && typeof key === 'string') {
-                const acc = new Accountant(id, key);
-                const pen = (await acc.getPenalties()).filter(p => p.penaltystatus === PenaltyStatus.Processing);
-                const pay = await acc.getPenaltyPayments();
+        async function initialize() {
+            try {
+                setLoading(true);
+                const id = await storage.get.profile().then(prof => prof?.RegID);
+                const key = await storage.get.key().then(key => key);
+                if (typeof id === 'number' && typeof key === 'string') {
+                    const acc = new Accountant(id, key);
+                    const pen = (await acc.getPenalties()).filter(p => p.penaltystatus === PenaltyStatus.Processing);
+                    const pay = await acc.getPenaltyPayments();
 
-                setAccountant(acc);
-                setPenalties(pen);
-                setPayments(pay);
+                    setAccountant(acc);
+                    setPenalties(pen);
+                    setPayments(pay);
+                } else {
+                    setPayments([]);
+                    setPenalties([]);
+                }
+            } catch (error) {
+                console.log('An error occurred while initializing penalties', error);
+                setPayments([]);
+                setPenalties([]);
+            } finally {
+                setLoading(false);
             }
-        })();
+        }
+
+        initialize();
     }, []);
 
     function returnCode(id: number): string {
         if (payments.length > 0) {
-            const match = payments.find(p => p.penaltyid === id)?.paymentcode;
-            if (typeof match === 'string') return match;
+            const match = String(payments.find(p => p.penaltyid === id)?.paymentcode);
+            return match;
         }
         return '';
     }
     return (
         <ScrollScreen>
+            <FancyLoad loading={loading} />
             {
                 penalties.length > 0 ? penalties.map((p) => <ListItemWithButtonAdv key={p.penaltyid}
                     rowOneData={{ label: 'Pay Code', text: returnCode(Number(p.penaltyid)) }}

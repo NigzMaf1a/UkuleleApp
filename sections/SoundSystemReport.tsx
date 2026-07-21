@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 //components
 import ScrollScreen from '../components/ScrollScreen';
 import DispText from '../components/DispText';
-import ListItem from './ListItem';
+import ListItemAdv from '../components/revisited/cutting edge/ListItemAdv';
 
 //scripts
 import Lending from '../scripts/interfaces/lending';
@@ -23,7 +23,7 @@ export default function SoundSystemReport({ data }: SoundSystemReportProps) {
     return (
         <ScrollScreen>
             {
-                records.length > 0 ? records.map((r) => <ListItem key={r.lendid}
+                records.length > 0 ? records.map((r) => <ListItemAdv key={r.lendid}
                     rowOneData={{ label: 'Date', text: String(r.lendingdate) }}
                     rowTwoData={{ label: 'Hours', text: String(r.hours) }}
                     rightSideText={r.performed}

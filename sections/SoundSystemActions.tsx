@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../components/ScrollScreen';
-import ListItemWithButton from './ListItemwithButton';
+import ListItemWithButtonAdv from '../components/revisited/cutting edge/ListItemWithButtonAdv';
 import DispText from '../components/DispText';
 
 //scripts
@@ -24,7 +24,7 @@ export default function SoundSystemActions({ data, fun }: SoundSystemActionProps
     return (
         <ScrollScreen>
             {
-                lending.length > 0 ? lending.map((lend) => <ListItemWithButton key={lend.lendid}
+                lending.length > 0 ? lending.map((lend) => <ListItemWithButtonAdv key={lend.lendid}
                     buttonLabel={'Lend'}
                     rowOneData={{ label: 'Lend ID', text: String(lend.lendid) }}
                     rowTwoData={{ label: 'Hours', text: String(lend.hours) }}

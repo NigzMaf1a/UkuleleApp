@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
 import DispText from '../../../components/DispText';
-import ListItem from '../../../sections/ListItem';
+import ListItemAdv from '../../../components/revisited/cutting edge/ListItemAdv';
 
 //scripts
 import ServiceManager from '../../../scripts/classes/servicemanager';
@@ -31,7 +31,7 @@ export default function ServiceRecords() {
     return (
         <ScrollScreen>
             {
-                records.length > 0 ? records.map((r) => <ListItem key={r.serviceid}
+                records.length > 0 ? records.map((r) => <ListItemAdv key={r.serviceid}
                     rowOneData={{ label: 'Type', text: r.servicetype }}
                     rowTwoData={{ label: 'Status', text: String(r.paymentstatus) }}
                     rightSideText={r.servicestatus}

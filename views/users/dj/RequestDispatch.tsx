@@ -5,6 +5,6 @@ import SoundSystemDispatchRequest from '../../../sections/SoundSystemDispatchReq
 
 export default function DjRequestDispatch() {
   return (
-    <SoundSystemDispatchRequest/>
+    <SoundSystemDispatchRequest />
   );
 } 

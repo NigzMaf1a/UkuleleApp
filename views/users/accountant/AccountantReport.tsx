@@ -20,22 +20,30 @@ export default function AccountantReport() {
 
 
     useEffect(() => {
-        setLoading(true);
-        (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
-            const key = await storage.get.key().then(key => key);
-            if (typeof id === 'number' && typeof key === 'string') {
-                const acc = new Accountant(id, key);
-                const f = await acc?.getAllFinanceRecords();
-                setData(f)
+        async function initialize() {
+            try {
+                setLoading(true);
+                const id = await storage.get.profile().then(prof => prof?.RegID);
+                const key = await storage.get.key().then(key => key);
+                if (typeof id === 'number' && typeof key === 'string') {
+                    const acc = new Accountant(id, key);
+                    const f = await acc?.getAllFinanceRecords();
+                    setData(f)
+                } else setData([]);
+            } catch (error) {
+                console.log('Error while initializing accountant reports', error);
+                setData([]);
+            } finally {
+                setLoading(false);
             }
-        })();
-        setLoading(false);
+        }
+
+        initialize();
     }, []);
 
     return (
         <ScrollScreen>
-            {loading}
+            <FancyLoad loading={loading} />
             {
                 data.length > 0 ? data.map((record) => <ListItemAdv key={record.transactionid}
                     rowOneData={{ label: 'Code', text: record.transactionname }}

@@ -18,6 +18,19 @@ const revisited_styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         borderRadius: scale(12)
     },
+    clicked_container: {
+        width: "100%",
+        height: 100,
+        marginBottom: spacing.sm,
+        elevation: 3,
+        justifyContent: "space-between",
+        flexDirection: "row",
+        alignItems: "center",
+        backgroundColor: "#FFFFFF",
+        borderRadius: scale(12),
+        borderColor: colors.info,
+        borderWidth: 2
+    },
     left_cont: {
         width: "75%",
         height: "100%",
@@ -30,7 +43,8 @@ const revisited_styles = StyleSheet.create({
         width: "25%",
         height: "100%",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        paddingEnd: spacing.sm
     },
     label_text: {},
     text_group: {
@@ -60,7 +74,8 @@ const revisited_styles = StyleSheet.create({
         color: colors.warn
     },
     text_label: {
-        color: colors.textCaption
+        color: colors.textCaption,
+        fontSize: 12
     },
     label: {
         width: 50,
@@ -74,18 +89,41 @@ const revisited_styles = StyleSheet.create({
         width: 70
     },
     btn: {
-        height: 10,
+        height: 40,
+        width: 80,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        alignContent: 'center'
+    },
+    btn_label: {
+        fontSize: 12,
         width: 30
     },
-    btn_label: {},
-    btn_info: {},
-    btn_success: {},
-    btn_danger: {},
-    btn_warning: {},
-    btn_label_info: {},
-    btn_label_success: {},
-    btn_label_danger: {},
-    btn_label_warning: {}
+    btn_info: {
+        backgroundColor: colors.info,
+    },
+    btn_success: {
+        backgroundColor: colors.success
+    },
+    btn_danger: {
+        backgroundColor: colors.danger
+    },
+    btn_warning: {
+        backgroundColor: colors.warn
+    },
+    btn_label_info: {
+        backgroundColor: colors.info
+    },
+    btn_label_success: {
+        color: colors.white
+    },
+    btn_label_danger: {
+        color: colors.white
+    },
+    btn_label_warning: {
+        color: colors.black
+    }
 });
 
 export default revisited_styles;

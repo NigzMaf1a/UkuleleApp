@@ -5,7 +5,7 @@ import storage from "../../../scripts/auth/storage";
 //components
 import ScrollScreen from "../../../components/ScrollScreen";
 import DashTray from "../../../sections/DashTray";
-import ListItem from "../../../sections/ListItem";
+import ListItemAdv from "../../../components/revisited/cutting edge/ListItemAdv";
 import DispText from "../../../components/DispText";
 
 //scripts
@@ -40,7 +40,7 @@ export default function InspectorDashboard() {
         <ScrollScreen>
             <DashTray>
                 {
-                    inspections.length > 0 ? inspections.map((i) => <ListItem key={i.inspectionid}
+                    inspections.length > 0 ? inspections.map((i) => <ListItemAdv key={i.inspectionid}
                         rowOneData={{ label: 'Inspection Id:', text: String(i.inspectionid) }}
                         rowTwoData={{ label: 'Date', text: String(i.inspectiondate) }}
                         rightSideText={describer(i.dcondition)}

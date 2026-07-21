@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
-import ListItem from '../../../sections/ListItem';
+import ListItemAdv from '../../../components/revisited/cutting edge/ListItemAdv';
 import DispText from '../../../components/DispText';
 
 
@@ -32,7 +32,7 @@ export default function InventoryReport() {
     return (
         <ScrollScreen>
             {
-                inventory.length > 0 ? inventory.map((i) => <ListItem key={i.equipmentid}
+                inventory.length > 0 ? inventory.map((i) => <ListItemAdv key={i.equipmentid}
                     rowOneData={{ label: 'ID', text: String(i.equipmentid) }}
                     rowTwoData={{ label: 'Type', text: i.description }}
                     rightSideText={i.availability}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 //components
@@ -14,8 +14,24 @@ interface LabelledTextProps {
 }
 
 export default function LabelledText({ label, text }: LabelledTextProps) {
+  const styling = useMemo(() => {
+    let current;
+    if (text?.length > 20) {
+      current = [
+        styles.common,
+        styles.column
+      ];
+      return current
+    } else {
+      current = [
+        styles.common,
+        styles.row
+      ];
+      return current;
+    }
+  }, [text])
   return (
-    <View style={styles.labelledText}>
+    <View style={styling}>
       <DispText text={label} variant='caption' textColor={colors.textCaption} />
       <DispText text={text} />
     </View>
@@ -23,11 +39,16 @@ export default function LabelledText({ label, text }: LabelledTextProps) {
 }
 
 const styles = StyleSheet.create({
-  labelledText: {
-    width: "100%",
-    flexDirection: "row",
+  common: {
     justifyContent: "space-between",
+    width: "100%"
+  },
+  row: {
+    flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs
+  },
+  column: {
+    flexDirection: "column"
   }
 });

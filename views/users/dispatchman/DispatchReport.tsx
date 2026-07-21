@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
 import DispText from '../../../components/DispText';
-import ListItem from '../../../sections/ListItem';
+import ListItemAdv from '../../../components/revisited/cutting edge/ListItemAdv';
 
 
 //scripts
@@ -37,7 +37,7 @@ export default function DispatchReport() {
     return (
         <ScrollScreen>
             {
-                dispatches.length > 0 ? dispatches.map((disp) => <ListItem key={disp.dispatchid}
+                dispatches.length > 0 ? dispatches.map((disp) => <ListItemAdv key={disp.dispatchid}
                     rowOneData={{ label: 'Date', text: String(disp.dispatchdate) }}
                     rowTwoData={{ label: 'Location', text: disp.dlocation }}
                     rightSideText={disp.dispatched}

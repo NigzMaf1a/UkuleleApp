@@ -9,7 +9,7 @@ import describer from "../../../scripts/utils/describer";
 //components
 import ScrollScreen from "../../../components/ScrollScreen";
 import DashTray from "../../../sections/DashTray";
-import ListItem from "../../../sections/ListItem";
+import ListItemAdv from "../../../components/revisited/cutting edge/ListItemAdv";
 import ListItemWithButton from "../../../sections/ListItemwithButton";
 import DispText from "../../../components/DispText";
 
@@ -42,7 +42,7 @@ export default function InventoryDashboard() {
             {
                 <DashTray>
                     {
-                        equipment.length > 0 ? equipment.map((e) => <ListItem key={e.equipmentid}
+                        equipment.length > 0 ? equipment.map((e) => <ListItemAdv key={e.equipmentid}
                             rowOneData={{ label: 'ID', text: String(e.equipmentid) }}
                             rowTwoData={{ label: 'Description', text: e.description }}
                             rightSideText={e.dcondition}

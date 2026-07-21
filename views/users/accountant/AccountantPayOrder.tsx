@@ -9,6 +9,7 @@ import MyModal from '../../../components/MyModal';
 import LabelledInput from '../../../sections/LabelledInput';
 import FormStrip from '../../../components/FormStript';
 import Button from '../../../components/Button';
+import FancyLoad from '../../../sections/FancyLoad';
 
 //interfaces
 import Order from '../../../scripts/interfaces/orders';
@@ -29,19 +30,31 @@ export default function AccountantPayOrder() {
     const [amount, setAmount] = useState<string>('');
     const [showModal, setShowModal] = useState<boolean>(false);
     const [paymentId, setPaymentId] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        (async () => {
-            const id = await storage.get.profile().then(prof => prof?.RegID);
-            const key = await storage.get.key().then(key => key);
-            if (typeof id === 'number' && typeof key === 'string') {
-                const acc = new Accountant(id, key);
-                const ord = await acc.getOrders();
 
-                setAccountant(acc);
-                setOrders(ord);
+        async function initialize() {
+            try {
+                setLoading(true);
+                const id = await storage.get.profile().then(prof => prof?.RegID);
+                const key = await storage.get.key().then(key => key);
+                if (typeof id === 'number' && typeof key === 'string') {
+                    const acc = new Accountant(id, key);
+                    const ord = await acc.getOrders();
+
+                    setAccountant(acc);
+                    setOrders(ord);
+                } else setOrders([]);
+            } catch (error) {
+                console.log('Error occurred while initializing', error);
+                setOrders([]);
+            } finally {
+                setLoading(false);
             }
-        })();
+        }
+
+        initialize();
     }, []);
 
     async function makePayment(id: number) {
@@ -54,16 +67,18 @@ export default function AccountantPayOrder() {
             toaster('Please enter a valid payment code', 'warn');
             return;
         }
+
         const payment: OrderPayment = {
             orderid: id,
             paymentcode: paymentCode,
             paymentdate: date(),
             amount: money
         };
+
         if (accountant) {
             await accountant.makeOrderPayment(payment);
             await accountant.changeOrderStatus(id);
-        }
+        } else return;
     }
 
     function setId(id: number) {
@@ -90,6 +105,7 @@ export default function AccountantPayOrder() {
 
     return (
         <ScrollScreen>
+            <FancyLoad loading={loading} />
             {orders.length > 0 ? (
                 orders.map((o) => (
                     <ListItemWithButtonAdv
