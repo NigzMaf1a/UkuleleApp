@@ -20,6 +20,9 @@ import LoginResponse from "../scripts/interfaces/login";
 import { colors } from "../styles/colors";
 import RegType from "../scripts/enums/regTypeTwo";
 
+//scripts
+import toaster from "../scripts/utils/toaster";
+
 interface LoginProps {
   setRole: (role: RegType | null) => void;
 }
@@ -61,9 +64,13 @@ export default function Login({ setRole }: LoginProps) {
       }}
     >
       <SmallForm>
-        <FormStrip>
-          <DispText text="Login" variant="h2" />
-        </FormStrip>
+
+        <DispText
+          text="Login"
+          variant="h2"
+          textColor={colors.theme}
+          textAlign="center"
+        />
 
         <LabelledInput
           label="Email"
@@ -97,9 +104,23 @@ export default function Login({ setRole }: LoginProps) {
         <FormStrip>
           <Button
             label="Login"
-            fun={handleLogin}
+            fun={async () => {
+              if (!email) {
+                toaster('Please enter an email', 'info');
+                setBtnClicked(false);
+                return;
+              }
+
+              if (!password) {
+                toaster('Please enter a password', 'info');
+                setBtnClicked(false);
+                return;
+              }
+
+              await handleLogin();
+            }}
             isClicked={btnClicked}
-            setIsClicked={() => setBtnClicked(true)}
+            setIsClicked={setBtnClicked}
           />
         </FormStrip>
       </SmallForm>

@@ -26,7 +26,7 @@ export default function LabelledDropdown({
 }: LabelledDropdownProps) {
     return (
         <View style={containerStyles.val}>
-            <DispText text={label} variant="caption" textColor={colors.textSecondary} />
+            <DispText text={label} variant="caption" textColor={colors.theme} />
             <DropDown
                 values={values}
                 selectedValue={selectedValue}

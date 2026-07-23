@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -10,8 +11,6 @@ import BigForm from '../../../components/BigForm';
 import SmallForm from '../../../components/SmallForm';
 import LabelledInput from '../../../sections/LabelledInput';
 import LabelledText from '../../../components/LabelledText';
-import FormStrip from '../../../components/FormStript';
-import Button from '../../../components/Button';
 import DashLabel from '../../../components/revisited/cutting edge/DashLabel';
 import FancyLoad from '../../../sections/FancyLoad';
 import LabelledButtonAdv from '../../../components/revisited/cutting edge/LabelledButtonAdv';
@@ -71,7 +70,8 @@ export default function CustomerPenalty() {
         [penalties]
     );
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
+        let timeout: ReturnType<typeof setTimeout>;
         async function initialize() {
             try {
                 setLoading(true);
@@ -84,31 +84,39 @@ export default function CustomerPenalty() {
                 if (typeof id === 'number' && typeof key === 'string') {
 
                     const cust = new Customer(id, key);
-
                     const pen = await cust.getPenaltyHistory();
 
                     setPenalties(pen);
-
                     setCustomer(cust);
-                } else setPenalties([]);
+
+                    setShowLabelOne(unpaid.length > 0);
+                    setShowLabelTwo(paid.length > 0);
+
+                    timeout = setTimeout(() => {
+                        setShowLabelOne(false);
+                        setShowLabelTwo(false);
+                    }, 3000);
+                } else {
+                    setPenalties([]);
+                }
 
             } catch (error) {
                 console.log('Error occurred while initializing the penalty screen', error);;
                 setPenalties([]);
             } finally {
                 setLoading(false);
-                !loading && unpaid.length > 0 && setShowLabelOne(true);
-                !loading && paid.length > 0 && setShowLabelTwo(true);
-
-                setTimeout(() => {
-                    showLabelOne && setShowLabelOne(false);
-                    showLabelTwo && setShowLabelTwo(false);
-                }, 3000);
             }
         }
 
         initialize();
-    }, []);
+
+        return () => {
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+        }
+    }, [])
+    );
 
     function toggleModal() {
         setShowModal(prev => !prev);
@@ -233,7 +241,10 @@ export default function CustomerPenalty() {
 
                         :
 
-                        <DispText text='No penalty records found' />
+                        <DispText
+                            text='No penalty records found'
+                            textAlign='center' textColor='info'
+                        />
 
                 }
 
@@ -272,7 +283,11 @@ export default function CustomerPenalty() {
 
                         :
 
-                        <DispText text='No paid penalties found' />
+                        <DispText
+                            text='No paid penalties found'
+                            textAlign='center'
+                            textColor='info'
+                        />
 
                 }
 

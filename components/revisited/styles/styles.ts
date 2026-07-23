@@ -94,14 +94,15 @@ const revisited_styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        alignContent: 'center'
+        alignContent: 'center',
+        padding: 0
     },
     btn_label: {
         fontSize: 12,
         width: 30
     },
     btn_info: {
-        backgroundColor: colors.info,
+        backgroundColor: colors.theme,
     },
     btn_success: {
         backgroundColor: colors.success
@@ -113,7 +114,7 @@ const revisited_styles = StyleSheet.create({
         backgroundColor: colors.warn
     },
     btn_label_info: {
-        backgroundColor: colors.info
+        color: colors.white
     },
     btn_label_success: {
         color: colors.white

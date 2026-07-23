@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import React, { useMemo } from 'react';
+import { TouchableOpacity, Text } from 'react-native';
 
 //scripts
 import toaster from '../scripts/utils/toaster';
@@ -9,16 +9,6 @@ import { buttonStyles, clicked_button_styles } from '../styles/buttonStyles';
 
 type Variant = 'primary' | 'secondary';
 
-interface ThemeStyles {
-  button: ViewStyle;
-  text: TextStyle;
-}
-
-interface ClickStyles {
-  button: ViewStyle;
-  text: TextStyle;
-}
-
 interface ButtonProps {
   label: string;
   fun: () => Promise<void> | void;
@@ -27,59 +17,53 @@ interface ButtonProps {
   setIsClicked?: (clicked: boolean) => void;
 }
 
-export default function Button(
-  {
-    label,
-    fun,
-    variant = 'primary',
-    isClicked = false,
-    setIsClicked
-  }: ButtonProps
-) {
+export default function Button({
+  label,
+  fun,
+  variant = 'primary',
+  isClicked = false,
+  setIsClicked
+}: ButtonProps) {
 
-  function getStyles(): StyleSheet.NamedStyles<ThemeStyles> {
+  const styles = useMemo(() => {
     switch (variant) {
       case 'secondary':
-        return StyleSheet.create({
+        return {
           button: buttonStyles.secondaryButton,
           text: buttonStyles.secondaryButtonText
-        });
+        };
+
       case 'primary':
       default:
-        return StyleSheet.create({
+        return {
           button: buttonStyles.primaryButton,
           text: buttonStyles.buttonText
-        });
+        };
     }
-  }
+  }, [variant]);
 
-
-  const styles = getStyles();
-
-  const click_styles = useMemo((): ClickStyles => {
-    return {
-      button: clicked_button_styles.button,
-      text: clicked_button_styles.label
-    };
-  }, []);
+  const clickStyles = useMemo(() => ({
+    button: clicked_button_styles.button,
+    text: clicked_button_styles.label
+  }), []);
 
   return (
     <TouchableOpacity
-      style={
-        isClicked === true ? [click_styles.button] : [styles.button]
-      }
-      onPress={() => {
-        if (isClicked === true) {
+      style={isClicked ? clickStyles.button : styles.button}
+      onPress={async () => {
+        if (isClicked) {
           toaster('Await current process', 'info');
+          return;
         }
-        setIsClicked && setIsClicked;
-        fun;
+
+        setIsClicked?.(true);
+        await fun();
       }}
     >
       <Text
-        style={isClicked === true ? [click_styles.text] : [styles.text]}
+        style={isClicked ? clickStyles.text : styles.text}
       >
-        {isClicked === false ? label : 'Wait...'}
+        {isClicked ? 'Wait...' : label}
       </Text>
     </TouchableOpacity>
   );

@@ -13,6 +13,7 @@ export default function HamburgerButton() {
     <Button
       label="☰"
       fun={() => navigation.openDrawer()}
+      variant="secondary"
     />
   )
 }

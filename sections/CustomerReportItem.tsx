@@ -37,7 +37,7 @@ export default function CustomerReportItem({ service }: CustomerReportProps) {
                     <LabelledButtonAdv
                         label='View'
                         onPress={() => toggleModal()}
-                        variant='success'
+                        variant='info'
                     />
                 </View>
             </View>
@@ -47,9 +47,9 @@ export default function CustomerReportItem({ service }: CustomerReportProps) {
                 onClose={toggleModal}
                 title="Service Details"
                 footer={
-                    <Strip>
+                    <>
                         <Button label='Close' fun={() => toggleModal()} />
-                    </Strip>
+                    </>
                 }
             >
                 <LabelledText label='Service ID' text={String(service.serviceid)} />

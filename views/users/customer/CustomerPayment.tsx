@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -49,7 +50,8 @@ export default function CustomerPayment() {
     const [modalBtnClicked, setModalBtnClicked] = useState<boolean>(false);
 
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
+        let timeout: ReturnType<typeof setTimeout>;
         async function initialize() {
             try {
                 setLoading(true);
@@ -64,28 +66,40 @@ export default function CustomerPayment() {
                 ) {
                     const c = new Customer(id, key);
                     setCustomer(c);
+
+                    if (!customer) return;
+
+                    await filterServices(customer);
+
+                    setShowLabelOne(pendingServices.length > 0);
+                    setShowLabelTwo(payments.length > 0);
+
+                    timeout = setTimeout(() => {
+                        setShowLabelOne(false);
+                        setShowLabelTwo(false);
+                    }, 3000);
+
+                } else {
+                    setShowLabelOne(false);
+                    setShowLabelTwo(false);
                 }
-
-                if (!customer) return;
-
-                await filterServices(customer);
             } catch (error) {
                 console.log('Error occurred while initializing payments');
                 setPendingServices([]);
             } finally {
                 setLoading(false);
-                !loading && pendingServices.length > 0 && setShowLabelOne(true);
-                !loading && payments.length > 0 && setShowLabelTwo(true);
-
-                setTimeout(() => {
-                    showLabelOne && setShowLabelOne(false);
-                    showLabelTwo && setShowLabelTwo(false);
-                }, 5000);
             }
         }
 
         initialize();
-    }, []);
+
+        return () => {
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+        };
+    }, [])
+    );
 
     function toggleModal() {
         setShowModal(prev => !prev);
@@ -139,12 +153,6 @@ export default function CustomerPayment() {
             setUser(thisUser);
         }
     }
-
-    useEffect(() => {
-        async function initialize() { }
-
-        initialize();
-    }, []);
 
     function mountModal(id: number) {
 
@@ -266,9 +274,11 @@ export default function CustomerPayment() {
                                 }}
                                 buttonLabel='Pay'
                                 fun={() => mountModal(s.serviceid as number)}
-                                btn_variant='success'
+                                btn_variant='info'
+                                label_one_variant='info'
+                                label_two_variant='info'
                                 isClicked={listBtnClicked}
-                                setIsClicked={() => setListBtnClicked(true)}
+                                setIsClicked={setListBtnClicked}
                             />
 
                         ))
@@ -277,6 +287,7 @@ export default function CustomerPayment() {
 
                         <DispText
                             text='No unpaid services found'
+                            textAlign='center'
                         />
 
                 }
@@ -307,6 +318,8 @@ export default function CustomerPayment() {
 
                         <DispText
                             text='No payment records found'
+                            textAlign='center'
+                            textColor='info'
                         />
 
                 }

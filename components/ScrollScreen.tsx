@@ -1,16 +1,28 @@
 import React, { ReactNode } from "react";
-import { ScrollView, StyleProp, ViewStyle } from "react-native";
+import { ScrollView, StyleProp, View, ViewStyle } from "react-native";
 
+//components
+import Input from "./Input";
+
+//styles
 import { containerStyles } from "../styles/containerStyles";
 
 interface ScreenProps {
   children: ReactNode;
   contentContainerStyle?: StyleProp<ViewStyle>;
+  showSearch?: boolean;
+  searchPlaceholder?: string;
+  query?: string;
+  setQuery?: (text: string) => void;
 }
 
 export default function ScrollScreen({
   children,
   contentContainerStyle,
+  showSearch = false,
+  searchPlaceholder = "Search...",
+  query = "",
+  setQuery,
 }: ScreenProps) {
   return (
     <ScrollView
@@ -22,6 +34,16 @@ export default function ScrollScreen({
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
     >
+      {showSearch && setQuery && (
+        <View>
+          <Input
+            value={query}
+            onChange={setQuery}
+            placeholder={searchPlaceholder}
+          />
+        </View>
+      )}
+
       {children}
     </ScrollView>
   );

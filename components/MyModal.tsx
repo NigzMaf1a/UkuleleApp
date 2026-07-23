@@ -77,7 +77,7 @@ export default function MyModal({
                       accessibilityRole="button"
                       accessibilityLabel="Close"
                     >
-                      <DispText text="✕" variant="h3" textColor={colors.textSecondary} />
+                      <DispText text="✕" variant="h3" textColor={colors.theme} />
                     </Pressable>
                   </View>
                 )}

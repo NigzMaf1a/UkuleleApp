@@ -14,7 +14,7 @@ export const colors = {
 
   danger: "#EF4444",
   success: "#10B981",
-  warn: "",
+  warn: " #8B8000",
   default: "",
 
   anim_one: "#FF0000",
@@ -22,7 +22,10 @@ export const colors = {
   anim_three: "#008000",
   white: "#FFFFFF",
   info: "",
-  black: "#000000"
+  black: "#000000",
+  lending: "",
+  booking: "",
+  theme: "#0D98BA"
 };
 
 export const gradients = {

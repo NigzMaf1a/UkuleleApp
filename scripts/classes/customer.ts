@@ -29,7 +29,6 @@ export default class Customer extends User {
                     body: JSON.stringify(service)
                 }
             );
-            this.toaster('Service request successful', 'success');
         } catch (error) {
             errorLogger(error);
         }

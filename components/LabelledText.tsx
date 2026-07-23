@@ -32,7 +32,7 @@ export default function LabelledText({ label, text }: LabelledTextProps) {
   }, [text])
   return (
     <View style={styling}>
-      <DispText text={label} variant='caption' textColor={colors.textCaption} />
+      <DispText text={label} variant='caption' textColor={colors.theme} />
       <DispText text={text} />
     </View>
   );

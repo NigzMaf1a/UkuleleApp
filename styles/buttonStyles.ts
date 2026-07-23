@@ -9,7 +9,7 @@ export const buttonStyles = StyleSheet.create({
     width: "100%",
     paddingVertical: scale(14),
     borderRadius: scale(8),
-    backgroundColor: colors.primary,
+    backgroundColor: colors.theme,
     justifyContent: "center",
     alignItems: "center"
   },

@@ -31,7 +31,7 @@ export default function CustomerFeedbackItem({ feedback }: FeedbackProps) {
                 buttonLabel='View'
                 fun={() => toggleModal()}
                 btn_variant={
-                    typeof feedback.response === null ? 'warning' : 'success'
+                    typeof feedback.response === null ? 'warning' : 'info'
                 }
             />
 
@@ -41,9 +41,9 @@ export default function CustomerFeedbackItem({ feedback }: FeedbackProps) {
                 animationType="slide"
                 title='Feedback Details'
                 footer={
-                    <Strip>
+                    <>
                         <Button label='Close' fun={() => toggleModal()} />
-                    </Strip>
+                    </>
                 }
             >
                 <LabelledText label='Name' text={feedback.name} />

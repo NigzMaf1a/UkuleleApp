@@ -92,7 +92,7 @@ export default function ListItemWithButtonAdv(
                         typography.body,
                         more_text_one_styles
                     ]}
-                    label_variant={label_one_variant}
+                    label_variant={label_one_variant ? label_one_variant : 'info'}
                     text_variant={text_one_variant}
                 />
 
@@ -108,7 +108,7 @@ export default function ListItemWithButtonAdv(
                         typography.body,
                         more_text_two_styles
                     ]}
-                    label_variant={label_two_variant}
+                    label_variant={label_two_variant ? label_two_variant : 'info'}
                     text_variant={text_two_variant}
                 />
             </View>
@@ -116,10 +116,15 @@ export default function ListItemWithButtonAdv(
             <View style={revisited_styles.right_cont}>
                 <LabelledButtonAdv
                     label={buttonLabel}
-                    onPress={fun}
+                    onPress={
+                        async () => {
+                            setIsClicked?.(true);
+                            await fun();
+                        }
+                    }
                     variant={btn_variant}
                     isClicked={isClicked}
-                    setIsClicked={setIsClicked && setIsClicked}
+                    setIsClicked={setIsClicked}
                 />
             </View>
         </View>

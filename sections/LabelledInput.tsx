@@ -36,7 +36,7 @@ export default function LabelledInput({
 }: LabelledInputProps) {
   return (
     <View style={[containerStyles.labelledInputContainer, { backgroundColor: colors.background }]}>
-      <DispText text={label} variant="caption" textColor={colors.textSecondary} />
+      <DispText text={label} variant="caption" textColor={colors.theme} />
       <Input
         placeholder={inputPlaceholder}
         value={value}

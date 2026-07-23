@@ -10,7 +10,7 @@ const menuStyles = StyleSheet.create({
 
   // labels used in drawer + tabs
   label: {
-    fontSize: 16
+    fontSize: 16,
   },
 
   // header styling
@@ -19,7 +19,8 @@ const menuStyles = StyleSheet.create({
   },
 
   headerTitle: {
-    fontWeight: "700"
+    fontWeight: "700",
+    color: colors.theme
   },
 
   // bottom tab navigation

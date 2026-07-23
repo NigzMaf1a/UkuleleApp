@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
 import BigForm from '../../../components/BigForm';
-import LabelledInput from '../../../sections/LabelledInput';
 import LabelledDropdown from '../../../components/LabelledDropdown';
 import LabelledText from '../../../components/LabelledText';
+import FancyLoad from '../../../sections/FancyLoad';
 
 //interfaces
 import Services from '../../../scripts/interfaces/services';
 import { DropDownItem } from '../../../components/DropDown';
-import Finance from '../../../scripts/interfaces/finance';
 
 //enums
 import { Genre, ServiceType, ServiceStatus, PaymentStatus } from '../../../scripts/enums/services';
-import { Status } from '../../../scripts/interfaces/finance';
 
 //scripts
 import Customer from '../../../scripts/classes/customer';
@@ -23,7 +22,6 @@ import stringToNumber from '../../../scripts/utils/stringToNumber';
 import { Charges, ChargeRates } from '../../../scripts/utils/charges';
 import errorLogger from '../../../scripts/utils/errorLogger';
 import toaster from '../../../scripts/utils/toaster';
-import date from '../../../scripts/utils/date';
 
 //data
 import hoursDropDownValues from '../../../scripts/utils/hours';
@@ -44,20 +42,34 @@ export default function CustomerServices() {
   const [genres] = useState<DropDownItem[]>(genreDropDownValues());
   const [services] = useState<DropDownItem[]>(serviceTypeDropDownValues());
   const [total, setTotal] = useState<number>(0);
+  const [btnClicked, setBtnClicked] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    (async () => {
-      const id = await storage.get.profile().then(prof => prof?.RegID);
-      const key = await storage.get.key().then(key => key);
+  useFocusEffect(useCallback(() => {
+    async function initialize() {
+      try {
+        setLoading(true);
+        const id = await storage.get.profile().then(prof => prof?.RegID);
+        const key = await storage.get.key().then(key => key);
 
-      if (typeof id === 'number' && typeof key === 'string') {
-        const cust = new Customer(id, key);
+        if (typeof id === 'number' && typeof key === 'string') {
+          const cust = new Customer(id, key);
 
-        setCustomer(cust);
-        setCustomerId(id);
+          setCustomer(cust);
+          setCustomerId(id);
+        } else {
+          setCustomerId(0);
+        }
+      } catch (error) {
+        errorLogger(error);
+        setCustomerId(0);
+      } finally {
+        setLoading(false);
       }
-    })();
-  }, []);
+    }
+
+    initialize();
+  }, []));
 
   function genreChargesExtractor(genre: Genre): number {
     if (genre === null) {
@@ -155,36 +167,31 @@ export default function CustomerServices() {
   }
 
   async function sendRequest() {
-    console.log("1. Button pressed");
+    try {
 
-    if (customer) {
-      console.log("2. Customer exists");
+      if (customer) {
+        toaster('Requesting.......', 'info');
+        const req = request();
 
-      toaster('Requesting.......', 'info');
+        await customer.requestService(req);
+        setHours('');
+        setGenre('');
+        setServiceType('');
 
-      console.log("3. Before request()");
-
-      const req = request();
-
-      console.log("4. Request object:", req);
-
-      await customer.requestService(req);
-      setHours('');
-      setGenre('');
-      setServiceType('');
-
-      console.log("5. After API call");
-
-      setTimeout(() => {
         toaster('Service request successful', 'success');
-      }, 3000);
-    } else {
-      console.log("Customer is undefined");
+      } else {
+        console.log("Customer is undefined");
+      }
+    } catch (error) {
+      console.log('Error occurred while requesting service');
+    } finally {
+      setBtnClicked(false);
     }
   }
 
   return (
     <ScrollScreen>
+      <FancyLoad loading={loading} />
       <BigForm>
         <LabelledDropdown
           label='Select Service Type'
@@ -214,7 +221,16 @@ export default function CustomerServices() {
 
         <Button
           label='Request'
-          fun={async () => await sendRequest()}
+          fun={async () => {
+            if (services && genres && bookingHours) {
+              await sendRequest();
+            } else toaster(
+              'Please fill in all the fields',
+              'info'
+            );
+          }}
+          isClicked={btnClicked}
+          setIsClicked={setBtnClicked}
         />
       </BigForm>
     </ScrollScreen>
