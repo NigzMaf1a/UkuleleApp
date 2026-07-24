@@ -8,7 +8,7 @@ import FancyLoad from '../../../sections/FancyLoad';
 
 //scripts
 import Accountant from '../../../scripts/classes/accountant';
-import Finance from '../../../scripts/interfaces/finance';
+import Finance, { Status } from '../../../scripts/interfaces/finance';
 
 //auth
 import storage from '../../../scripts/auth/storage';
@@ -49,6 +49,13 @@ export default function AccountantReport() {
                     rowOneData={{ label: 'Code', text: record.transactionname }}
                     rowTwoData={{ label: 'Amount', text: String(record.amount) }}
                     rightSideText={record.transactionstatus}
+                    label_one_variant='info'
+                    label_two_variant='info'
+                    text_three_variant={
+                        record.transactionstatus === Status.Approved ? 'success' :
+                            record.transactionstatus === Status.Pending ? 'warning' :
+                                'danger'
+                    }
                 />) : <DispText text={'No records to display'} />
             }
         </ScrollScreen>

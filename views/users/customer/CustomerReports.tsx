@@ -20,6 +20,7 @@ export default function CustomerReports() {
     const [services, setServices] = useState<Services[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [showRecent, setShowRecent] = useState<boolean>(false);
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
     useFocusEffect(useCallback(() => {
         let timeout: ReturnType<typeof setTimeout>;
@@ -68,11 +69,28 @@ export default function CustomerReports() {
     }, []));
 
 
+    const queriedReports = useMemo(() => {
+        const query = searchQuery.trim().toLowerCase();
+
+        if (!query) return services;
+
+        return services.filter((service) =>
+            Object.values(service).some((value) =>
+                String(value).toLowerCase().includes(query)
+            )
+        );
+    }, [services, searchQuery]);
+
     return (
-        <ScrollScreen>
+        <ScrollScreen
+            showSearch
+            query={searchQuery}
+            setQuery={setSearchQuery}
+            searchPlaceholder='Search reports....'
+        >
             <FancyLoad loading={loading} />
             {
-                services.length > 0 ? services.map((s) => <CustomerReportItem key={s.serviceid} service={s} />) : <DispText text='No service records found' />
+                queriedReports.length > 0 ? queriedReports.map((s) => <CustomerReportItem key={s.serviceid} service={s} />) : <DispText text='No service records found' />
             }
         </ScrollScreen>
     );

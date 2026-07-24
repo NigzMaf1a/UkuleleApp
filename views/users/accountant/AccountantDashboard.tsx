@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
+//auth
 import storage from "../../../scripts/auth/storage";
 
 //components
@@ -8,6 +10,7 @@ import DashTray from "../../../sections/DashTray";
 import ListItemAdv from "../../../components/revisited/cutting edge/ListItemAdv";
 import DashLabel from "../../../components/revisited/cutting edge/DashLabel";
 import FancyLoad from "../../../sections/FancyLoad";
+import DispText from "../../../components/DispText";
 
 //interfaces
 import Finance from "../../../scripts/interfaces/finance";
@@ -27,7 +30,9 @@ export default function AccountantDashboard() {
     const [loading, setLoading] = useState<boolean>(false);
     const [displayLabel, setDisplayLabel] = useState<boolean>(false);
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
+        let timeout: ReturnType<typeof setTimeout>;
+
         async function initialize() {
             try {
                 setLoading(true);
@@ -56,9 +61,15 @@ export default function AccountantDashboard() {
                     setServices(
                         serv.filter(s => s.paymentstatus === PaymentStatus.NotPaid)
                     );
+
+                    setDisplayLabel(payments.length > 0);
+
+                    timeout = setTimeout(() => setDisplayLabel(false), 3000);
+
                 } else {
                     setPayments([]);
                     setServices([]);
+                    setDisplayLabel(false);
                 }
             } catch (err) {
                 console.error('Failed to load inventory:', err);
@@ -66,13 +77,17 @@ export default function AccountantDashboard() {
                 setServices([]);
             } finally {
                 setLoading(false);
-                payments.length > 0 && setDisplayLabel(true);
-                displayLabel && setTimeout(() => setDisplayLabel(false), 5000);
             }
         }
 
         initialize();
-    }, []);
+
+        return () => {
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+        }
+    }, []));
 
     return (
         <ScrollScreen>
@@ -87,11 +102,16 @@ export default function AccountantDashboard() {
                 }
 
                 {
-                    payments.length > 0 && payments.map((p) => <ListItemAdv key={p.transactionid}
+                    payments.length > 0 ? payments.map((p) => <ListItemAdv key={p.transactionid}
                         rowOneData={{ label: 'Code', text: p.transactionname }}
                         rowTwoData={{ label: 'Date', text: String(p.transactiondate) }}
                         rightSideText={String(p.amount)}
-                    />)
+                    />) :
+                        <DispText
+                            text="No pending payments found"
+                            textAlign="center"
+                            textColor="info"
+                        />
                 }
             </DashTray>
         </ScrollScreen>

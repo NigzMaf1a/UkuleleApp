@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, TextInputProps } from 'react-native';
+import { TextInput, TextInputProps, StyleProp, ViewStyle } from 'react-native';
 
 import { inputStyles } from '../styles/inputStyles';
 import { colors } from '../styles/colors';
@@ -15,6 +15,7 @@ interface InputProps {
   returnKeyType?: TextInputProps['returnKeyType'];
   onSubmitEditing?: () => void;
   maxLength?: number;
+  style?: StyleProp<ViewStyle>;
 }
 
 export default function Input({
@@ -27,13 +28,18 @@ export default function Input({
   autoComplete = 'off',
   returnKeyType = 'done',
   onSubmitEditing,
-  maxLength
+  maxLength,
+  style
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
     <TextInput
-      style={[inputStyles.input, isFocused && inputStyles.inputFocused]}
+      style={[
+        inputStyles.input,
+        isFocused && inputStyles.inputFocused,
+        style && style
+      ]}
       placeholder={placeholder}
       placeholderTextColor={colors.textSecondary}
       value={value}
