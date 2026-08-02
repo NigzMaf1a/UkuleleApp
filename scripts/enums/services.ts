@@ -1,6 +1,6 @@
-export {Genre, ServiceType, ServiceStatus, PaymentStatus };
+export { Genre, ServiceType, ServiceStatus, PaymentStatus };
 
-const enum Genre{
+const enum Genre {
     Reggae = 'Reggae',
     Rhumba = 'Rhumba',
     Zilizopendwa = 'Zilizopendwa',
@@ -9,17 +9,17 @@ const enum Genre{
     RnB = 'RnB'
 }
 
-const enum ServiceType{
+const enum ServiceType {
     Lending = 'Lending',
     Booking = 'Booking'
 }
 
-const enum ServiceStatus{
-    Approved = 'Approved', 
+const enum ServiceStatus {
+    Approved = 'Approved',
     Pending = 'Pending'
 }
 
-const enum PaymentStatus{
+const enum PaymentStatus {
     Paid = 'Paid',
     NotPaid = 'Not Paid'
 }

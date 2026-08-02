@@ -69,7 +69,10 @@ export default function CustomerPayment() {
 
                     if (!customer) return;
 
-                    await filterServices(customer);
+                    setTimeout(
+                        async () => await filterServices(customer),
+                        1000
+                    );
 
                     setShowLabelOne(pendingServices.length > 0);
                     setShowLabelTwo(payments.length > 0);

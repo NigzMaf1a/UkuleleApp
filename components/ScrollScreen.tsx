@@ -41,7 +41,7 @@ export default function ScrollScreen({
           onChange={setQuery}
           placeholder={searchPlaceholder}
           style={{
-            marginBottom: 30,
+            marginBottom: 10,
             borderWidth: 2,
           }}
         />

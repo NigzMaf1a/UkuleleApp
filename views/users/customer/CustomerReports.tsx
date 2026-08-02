@@ -90,7 +90,17 @@ export default function CustomerReports() {
         >
             <FancyLoad loading={loading} />
             {
-                queriedReports.length > 0 ? queriedReports.map((s) => <CustomerReportItem key={s.serviceid} service={s} />) : <DispText text='No service records found' />
+                queriedReports.length > 0 ? queriedReports.map(
+                    (s) => <CustomerReportItem
+                        key={s.serviceid}
+                        service={s}
+                    />
+                ) :
+                    <DispText
+                        text='No service records found'
+                        textAlign='center'
+                        textColor='info'
+                    />
             }
         </ScrollScreen>
     );
