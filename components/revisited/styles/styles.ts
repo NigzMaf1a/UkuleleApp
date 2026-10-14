@@ -78,8 +78,10 @@ const revisited_styles = StyleSheet.create({
         fontSize: 12
     },
     label: {
-        width: 50,
+        width: 70,
         marginRight: 10,
+        fontSize: 11,
+        fontFamily: 'Georgia'
     },
 
     value: {

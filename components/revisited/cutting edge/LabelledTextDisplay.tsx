@@ -40,7 +40,7 @@ export default function LabelledTextDisplay(
         ]}>
             <TextDisplay
                 text={label}
-                text_variant={label_variant}
+                text_variant={'label'}
                 more_text_styles={[
                     revisited_styles.label,
                     more_label_styles

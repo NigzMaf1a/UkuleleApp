@@ -27,35 +27,30 @@ export default function TextDisplay({
         switch (text_variant) {
             case 'danger':
                 return [
-                    revisited_styles.text_default,
                     revisited_styles.text_danger,
                     more_text_styles,
                 ];
 
             case 'info':
                 return [
-                    revisited_styles.text_default,
                     revisited_styles.text_info,
                     more_text_styles,
                 ];
 
             case 'success':
                 return [
-                    revisited_styles.text_default,
                     revisited_styles.text_success,
                     more_text_styles,
                 ];
 
             case 'warning':
                 return [
-                    revisited_styles.text_default,
                     revisited_styles.text_warning,
                     more_text_styles,
                 ];
 
             case 'label':
                 return [
-                    revisited_styles.text_default,
                     revisited_styles.text_label,
                     more_text_styles,
                 ];

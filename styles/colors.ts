@@ -7,7 +7,7 @@ export const colors = {
 
   text: "#111827",
   textSecondary: "#6B7280",
-  textCaption: "#0000FF",
+  textCaption: "#29235C",
   rightSideText: "#1E90FF",
 
   border: "#E5E7EB",
@@ -15,7 +15,7 @@ export const colors = {
   danger: "#EF4444",
   success: "#10B981",
   warn: " #8B8000",
-  default: "",
+  default: "#0D9488",
 
   anim_one: "#FF0000",
   anim_two: "#FFD700",
