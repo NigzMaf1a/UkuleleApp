@@ -4,11 +4,11 @@ import { View } from 'react-native';
 //styles
 import { containerStyles } from '../styles/containerStyles';
 
-interface SmallFormProps{
-  children:React.ReactNode; 
+interface SmallFormProps {
+  children: React.ReactNode;
 }
 
-export default function FormStrip({children}:SmallFormProps) {
+export default function FormStrip({ children }: SmallFormProps) {
   return (
     <View style={containerStyles.formStrip}>
       {children}

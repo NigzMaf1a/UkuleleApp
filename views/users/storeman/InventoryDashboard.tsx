@@ -17,12 +17,7 @@ import DispText from "../../../components/DispText";
 import Inventory from "../../../scripts/interfaces/inventory";
 
 export default function InventoryDashboard() {
-    let [views, setViews] = useState<number>(1);
     const [equipment, setEquipment] = useState<Inventory[]>([]);
-
-    function reset() {
-        setViews(1);
-    }
 
     useEffect(() => {
         (async () => {

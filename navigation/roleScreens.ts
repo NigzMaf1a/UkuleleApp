@@ -86,6 +86,7 @@ import ServiceRecords from "../views/users/service manager/ServiceRecords";
 import InventoryDashboard from "../views/users/storeman/InventoryDashboard";
 import InventoryAddEquipment from "../views/users/storeman/InventoryAddEquipment";
 import InventoryInventory from "../views/users/storeman/InventoryInventory";
+import InventoryAllocationFlow from "../views/users/storeman/InventoryAllocationFlow";
 import InventorySupplies from "../views/users/storeman/InventorySupplies";
 import InventoryOrders from "../views/users/storeman/InventoryOrders";
 import InventoryReport from "../views/users/storeman/InventoryReport";
@@ -105,24 +106,6 @@ const commonScreens: DrawerScreenConfig[] = [
         title: "Profile",
         icon: "person-outline",
         component: Profile
-    },
-    {
-        name: "About",
-        title: "About Us",
-        icon: "information-circle-outline",
-        component: AboutUs
-    },
-    {
-        name: "Contact",
-        title: "Contact Us",
-        icon: "call-outline",
-        component: ContactUs
-    },
-    {
-        name: "Help",
-        title: "Help",
-        icon: "help-circle-outline",
-        component: Help
     }
 ];
 
@@ -447,6 +430,12 @@ export const roleScreens: RoleDrawerConfig = {
             title: "Inventory",
             icon: "cube-outline",
             component: InventoryInventory
+        },
+        {
+            name: "StoreAllocate",
+            title: "Inventory",
+            icon: "cube-outline",
+            component: InventoryAllocationFlow
         },
         {
             name: "StoreSupplies",

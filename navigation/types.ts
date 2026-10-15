@@ -18,9 +18,6 @@ export type RootDrawerParamList = {
 
   // Shared screens
   Profile: undefined;
-  About: undefined;
-  Contact: undefined;
-  Help: undefined;
   Logout: undefined;
 
 
@@ -86,6 +83,7 @@ export type RootDrawerParamList = {
   StoreDashboard: undefined;
   StoreAddEquipment: undefined;
   StoreInventory: undefined;
+  StoreAllocate: undefined;
   StoreSupplies: undefined;
   StoreOrders: undefined;
   StoreReports: undefined;
