@@ -3,7 +3,7 @@ export default interface AllocatedEquipment {
     equipmentid?: number
     serviceid: number
     regid: number
-    alloc_status: 'Pending' | 'Allocated' | 'Cancelled'
+    alloc_status: 'Pending' | 'Allocated' | 'Hauled' | 'Parked' | 'Returned' | 'Cancelled'
     conditionatalloc: 'CAT1' | 'CAT2' | 'CAT3' | 'CAT4'
     allocdate: Date
     returndate: Date
