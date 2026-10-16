@@ -5,6 +5,7 @@ export default interface AllocatedEquipment {
     regid: number
     alloc_status: 'Pending' | 'Allocated' | 'Hauled' | 'Parked' | 'Returned' | 'Cancelled'
     conditionatalloc: 'CAT1' | 'CAT2' | 'CAT3' | 'CAT4'
+    conditionatreturn: undefined | 'CAT1' | 'CAT2' | 'CAT3' | 'CAT4'
     allocdate: Date
-    returndate: Date
+    returndate: Date | undefined
 }

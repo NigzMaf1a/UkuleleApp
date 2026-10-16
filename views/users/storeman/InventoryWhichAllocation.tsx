@@ -22,7 +22,12 @@ export default function InventoryWhichAllocation() {
                 loading ? <TextDisplay text={'Loading'} text_variant='info' /> :
                     error ? <TextDisplay text={'An error occurred while loading service requests'} text_variant='danger' /> :
                         services.length > 0 ? services.map(
-                            (s) => <ListItemWithButtonAdv />
+                            (s) => <ListItemWithButtonAdv
+                                rowOneData={{ label: 'Service type', text: s.servicetype }}
+                                rowTwoData={{ label: 'Service Id', text: s.serviceid as number }}
+                                buttonLabel='allocate'
+                                fun={toggleAllocation}
+                            />
                         ) : <TextDisplay text={'No service requests found'} text_variant='info' />
             }
         </ScrollScreen>
