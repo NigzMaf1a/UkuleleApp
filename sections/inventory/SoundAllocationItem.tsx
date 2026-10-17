@@ -17,16 +17,20 @@ interface Props {
     equipment: Inventory
     selected: Inventory[]
     clickedEquipmentId: number
+    setClickedEquipmentId: (id: number) => void
     fun: (equipment: Inventory) => void
 }
 
-export default function SoundAllocationItem({ rowOneData, rowTwoData, selected, equipment, clickedEquipmentId, fun }: Props) {
+export default function SoundAllocationItem({ rowOneData, rowTwoData, selected, equipment, clickedEquipmentId, setClickedEquipmentId, fun }: Props) {
     const clicked = clickedEquipmentId === equipment.equipmentid as number
     const itemSelected: boolean = selected.includes(equipment)
     const label: string = !itemSelected ? 'add' : 'remove'
 
     return (
-        <View style={[allocItemStyles.body]}>
+        <View
+            style={[allocItemStyles.body]}
+            onFocus={() => setClickedEquipmentId(equipment.equipmentid as number)}
+        >
             <View style={[allocItemStyles.left_cont]}>
                 <View style={[allocItemStyles.row]}>
                     <TextDisplay text={rowOneData.label} />

@@ -124,8 +124,16 @@ const endpoints = {
     addOrderItem: '/api/orderItem/add',
     getOrderItem: '/api/orderItem/get',
     getOrderItemById: (id: number) => `/api/orderItem/get/${id}`,
-    updateOrderItem: (id: number) => `/api/orderItem/update/${id}`
+    updateOrderItem: (id: number) => `/api/orderItem/update/${id}`,
 
+    //allocations equip
+    alloc_equip_add: '/api/allocequip/add',
+    alloc_equip_get: '/api/allocequip/get',
+    alloc_equip_patch: (id: number) => `/api/allocequip/patch/${id}`,
 
+    //allocations instruments
+    alloc_inst_add: '/api/allocequip/add',
+    alloc_inst_get: '/api/allocequip/get',
+    alloc_inst_patch: (id: number) => `/api/allocequip/patch/${id}`
 };
 export default endpoints;

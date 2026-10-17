@@ -6,6 +6,8 @@ import Inventory from "../interfaces/inventory";
 import Supply from "../interfaces/supply";
 import Order from "../interfaces/orders";
 import SupplyOrder from "../interfaces/supplyOrder";
+import AllocatedEquipment, { AllocatedEquipmentPatch } from "../interfaces/equip_alloc";
+import AllocatedInstrument, { AllocatedInstrumentPatch } from "../interfaces/inst_alloc";
 
 //utils
 import errorLogger from "../utils/errorLogger";
@@ -100,6 +102,66 @@ export default class Storeman extends User {
             this.toaster('Order updated successfully', 'success');
         } catch (err) {
             errorLogger(err);
+        }
+    }
+
+    async allocateEquipment(alloc_equip: AllocatedEquipment): Promise<void> {
+        try {
+            await this.apiFetch(this.endpoints.alloc_equip_add,
+                {
+                    method: "PUT",
+                    body: JSON.stringify(alloc_equip)
+                }
+            )
+        } catch (error) {
+            errorLogger(error)
+        }
+    }
+
+    async getAllocatedEquipment(): Promise<AllocatedEquipment[]> {
+        return this.apiFetch<AllocatedEquipment[]>(this.endpoints.alloc_equip_get)
+    }
+
+    async patchAllocatedEquipmentStatus(id: number, patch: AllocatedEquipmentPatch): Promise<void> {
+        try {
+            await this.apiFetch(this.endpoints.alloc_equip_patch(id),
+                {
+                    method: "PATCH",
+                    body: JSON.stringify(patch)
+                }
+            )
+        } catch (error) {
+            errorLogger(error)
+        }
+    }
+
+    async allocateInstrument(alloc_inst: AllocatedInstrument): Promise<void> {
+        try {
+            await this.apiFetch(this.endpoints.alloc_inst_add,
+                {
+                    method: "PUT",
+                    body: JSON.stringify(alloc_inst)
+                }
+            )
+        } catch (error) {
+            errorLogger(error)
+        }
+    }
+
+    async getAllocatedInstruments(): Promise<AllocatedInstrument[]> {
+        return this.apiFetch<AllocatedInstrument[]>(this.endpoints.alloc_inst_get)
+    }
+
+    async patchAllocatedInstrumentStatus(id: number, patch: AllocatedInstrumentPatch): Promise<void> {
+        try {
+            await this.apiFetch(this.endpoints.alloc_inst_patch(id),
+                {
+                    method: "PATCH",
+                    body: JSON.stringify(patch)
+                }
+            )
+        } catch (error) {
+            errorLogger(error)
         }
     }
 }

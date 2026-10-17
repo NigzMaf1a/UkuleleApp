@@ -17,16 +17,20 @@ interface Props {
     instrument: Instrument
     selected: Instrument[]
     clickedInstrumentId: number
+    setClickedInstrumentId: (id: number) => void
     fun: (instrument: Instrument) => void
 }
 
-export default function InstrumentAllocationItem({ rowOneData, rowTwoData, instrument, selected, clickedInstrumentId, fun }: Props) {
+export default function InstrumentAllocationItem({ rowOneData, rowTwoData, instrument, selected, clickedInstrumentId, setClickedInstrumentId, fun }: Props) {
     const clicked = clickedInstrumentId === instrument.instrumentid as number
     const itemSelected: boolean = selected.includes(instrument)
     const label: string = !itemSelected ? 'add' : 'remove'
 
     return (
-        <View style={[allocItemStyles.body]}>
+        <View
+            style={[allocItemStyles.body]}
+            onFocus={() => setClickedInstrumentId(instrument.instrumentid as number)}
+        >
             <View style={[allocItemStyles.left_cont]}>
                 <View style={[allocItemStyles.row]}>
                     <TextDisplay text={rowOneData.label} />
