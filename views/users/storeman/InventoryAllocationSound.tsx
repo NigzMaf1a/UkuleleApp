@@ -3,6 +3,7 @@ import useWhichAllocation from '../../../hooks/useWhichAllocation'
 import useAllocationMethods from '../../../hooks/useAllocationMethods'
 
 import ScrollScreen from '../../../components/ScrollScreen'
+import Screen from '../../../components/Screen'
 import SoundAllocationItem from '../../../sections/inventory/SoundAllocationItem'
 import TextDisplay from '../../../components/revisited/cutting edge/TextDisplay'
 
@@ -17,22 +18,24 @@ export default function InventoryAllocationSound() {
     const { selectedEquipment, modEquipment } = useAllocationMethods()
 
     return (
-        <ScrollScreen>
-            {
-                loading ? <TextDisplay text={'Loading'} text_variant='info' /> :
-                    error ? <TextDisplay text={'An error occurred while loading data'} text_variant='danger' /> :
-                        inventory.length > 0 ? inventory.map(
-                            (i) => <SoundAllocationItem
-                                rowOneData={{ label: 'Description', text: i.description }}
-                                rowTwoData={{ label: 'Condition', text: describer(i.dcondition as EquipmentCondition) }}
-                                equipment={i}
-                                selected={[...selectedEquipment]}
-                                clickedEquipmentId={clickedEquipmentId}
-                                setClickedEquipmentId={setClickedEquipmentId}
-                                fun={modEquipment}
-                            />
-                        ) : <TextDisplay text={'No equipment found'} text_variant='info' />
-            }
-        </ScrollScreen>
+        <Screen>
+            <ScrollScreen>
+                {
+                    loading ? <TextDisplay text={'Loading'} text_variant='info' /> :
+                        error ? <TextDisplay text={'An error occurred while loading data'} text_variant='danger' /> :
+                            inventory.length > 0 ? inventory.map(
+                                (i) => <SoundAllocationItem
+                                    rowOneData={{ label: 'Description', text: i.description }}
+                                    rowTwoData={{ label: 'Condition', text: describer(i.dcondition as EquipmentCondition) }}
+                                    equipment={i}
+                                    selected={[...selectedEquipment]}
+                                    clickedEquipmentId={clickedEquipmentId}
+                                    setClickedEquipmentId={setClickedEquipmentId}
+                                    fun={modEquipment}
+                                />
+                            ) : <TextDisplay text={'No equipment found'} text_variant='info' />
+                }
+            </ScrollScreen>
+        </Screen>
     )
 }
