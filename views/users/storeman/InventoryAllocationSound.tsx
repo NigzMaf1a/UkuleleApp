@@ -6,6 +6,7 @@ import ScrollScreen from '../../../components/ScrollScreen'
 import Screen from '../../../components/Screen'
 import SoundAllocationItem from '../../../sections/inventory/SoundAllocationItem'
 import TextDisplay from '../../../components/revisited/cutting edge/TextDisplay'
+import Button from '../../../components/Button'
 
 import describer from '../../../scripts/utils/describer'
 import { EquipmentCondition } from '../../../scripts/enums/equipment'
@@ -13,9 +14,10 @@ import { EquipmentCondition } from '../../../scripts/enums/equipment'
 export default function InventoryAllocationSound() {
 
     const [clickedEquipmentId, setClickedEquipmentId] = useState<number>(0)
+    const [btnClicked, setBtnClicked] = useState<boolean>(false)
 
-    const { loading, error, inventory } = useWhichAllocation()
-    const { selectedEquipment, modEquipment } = useAllocationMethods()
+    const { loading, error, inventory, selectedService } = useWhichAllocation()
+    const { selectedEquipment, modEquipment, allocateInstruments } = useAllocationMethods()
 
     return (
         <Screen>
@@ -36,6 +38,13 @@ export default function InventoryAllocationSound() {
                             ) : <TextDisplay text={'No equipment found'} text_variant='info' />
                 }
             </ScrollScreen>
+
+            <Button
+                label='allocate'
+                fun={async () => await allocateInstruments(selectedService)}
+                isClicked={btnClicked}
+                setIsClicked={setBtnClicked}
+            />
         </Screen>
     )
 }
