@@ -5,6 +5,7 @@ import { View } from 'react-native'
 import useWhichAllocation from '../../../hooks/useWhichAllocation'
 
 import ScrollScreen from '../../../components/ScrollScreen'
+import Screen from '../../../components/Screen'
 import TextDisplay from '../../../components/revisited/cutting edge/TextDisplay'
 import WhichAllocationItem from '../../../sections/inventory/WhichAllocationItem'
 
@@ -17,20 +18,22 @@ export default function InventoryWhichAllocation() {
     }
 
     return (
-        <ScrollScreen>
-            {
-                loading ? <TextDisplay text={'Loading'} text_variant='info' /> :
-                    error ? <TextDisplay text={'An error occurred while loading service requests'} text_variant='danger' /> :
-                        services.length > 0 ? services.map(
-                            (s) => <WhichAllocationItem
-                                rowOneData={{ label: 'Service type', text: s.servicetype }}
-                                rowTwoData={{ label: 'Service Id', text: s.serviceid as number }}
-                                btnLabel='allocate'
-                                service={s}
-                                fun={toggleAllocation}
-                            />
-                        ) : <TextDisplay text={'No service requests found'} text_variant='info' />
-            }
-        </ScrollScreen>
+        <Screen>
+            <ScrollScreen>
+                {
+                    loading ? <TextDisplay text={'Loading'} text_variant='info' /> :
+                        error ? <TextDisplay text={'An error occurred while loading service requests'} text_variant='danger' /> :
+                            services.length > 0 ? services.map(
+                                (s) => <WhichAllocationItem
+                                    rowOneData={{ label: 'Service type', text: s.servicetype }}
+                                    rowTwoData={{ label: 'Service Id', text: s.serviceid as number }}
+                                    btnLabel='allocate'
+                                    service={s}
+                                    fun={toggleAllocation}
+                                />
+                            ) : <TextDisplay text={'No service requests found'} text_variant='info' />
+                }
+            </ScrollScreen>
+        </Screen>
     )
 }

@@ -15,6 +15,8 @@ interface AllocationData {
     bookings: Booking[]
     inventory: Inventory[]
     instruments: Instrument[]
+    selectedService: Services
+    updateSelectedService: (service: Services) => void
 }
 
 export default function useWhichAllocation(): AllocationData {
@@ -25,6 +27,7 @@ export default function useWhichAllocation(): AllocationData {
     const [bookings, setBookings] = useState<Booking[]>([])
     const [inventory, setInventory] = useState<Inventory[]>([])
     const [instrument, setInstrument] = useState<Instrument[]>([])
+    const [selectedService, setSelectedService] = useState<Services>()
 
     useEffect(() => {
         async function init() {
@@ -54,6 +57,10 @@ export default function useWhichAllocation(): AllocationData {
         lendings: lendings,
         bookings: bookings,
         inventory: inventory,
-        instruments: instrument
+        instruments: instrument,
+        selectedService: selectedService as Services,
+        updateSelectedService: function (service: Services) {
+            setSelectedService(service)
+        }
     }
 }

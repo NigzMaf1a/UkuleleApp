@@ -4,6 +4,7 @@ import type Inventory from '../scripts/interfaces/inventory'
 import type Instrument from '../scripts/interfaces/instrument'
 import type AllocatedEquipment from '../scripts/interfaces/equip_alloc'
 import type AllocatedInstrument from '../scripts/interfaces/inst_alloc'
+import Services from '../scripts/interfaces/services'
 
 import Storeman from '../scripts/classes/storeman'
 import storage from '../scripts/auth/storage'
@@ -11,25 +12,15 @@ import storage from '../scripts/auth/storage'
 interface Allocation {
     allocatedEquipment: Set<AllocatedEquipment>
     allocatedInstruments: Set<AllocatedInstrument>
-    allocateSound: () => Promise<void>
-    allocateInstruments: () => Promise<void>
+    selectedEquipment: Set<Inventory>
+    selectedInstruments: Set<Instrument>
+    allocateSound: (service: Services) => Promise<void>
+    allocateInstruments: (service: Services) => Promise<void>
     modEquipment: (equipment: Inventory) => void
     modInstruments: (instrument: Instrument) => void
 }
 
-interface AllocationConfig {
-    serviceid: number
-    regid: number
-    equipmentEndpoint: string
-    instrumentEndpoint: string
-}
-
-export default function useAllocationMethods({
-    serviceid,
-    regid,
-    equipmentEndpoint,
-    instrumentEndpoint
-}: AllocationConfig): Allocation {
+export default function useAllocationMethods(): Allocation {
     const [allocatedEquipment, setAllocatedEquipment] = useState<Set<AllocatedEquipment>>(
         () => new Set()
     )
@@ -99,7 +90,7 @@ export default function useAllocationMethods({
         })
     }
 
-    async function allocateSound(): Promise<void> {
+    async function allocateSound(service: Services): Promise<void> {
         const selected = [...addedEquip]
 
         if (selected.length === 0) {
@@ -110,14 +101,14 @@ export default function useAllocationMethods({
             throw new Error('Every selected equipment item must have an equipmentid')
         }
 
-        const created = await Promise.all(
+        await Promise.all(
             selected.map(async (equipment): Promise<void> => {
 
                 await storeman.allocateInstrument(
                     {
                         instrumentid: equipment.equipmentid,
-                        serviceid,
-                        regid,
+                        serviceid: service.serviceid as number,
+                        regid: service.customerid,
                         alloc_status: 'Pending',
                         conditionatalloc: equipment.dcondition,
                         conditionatreturn: undefined,
@@ -139,7 +130,7 @@ export default function useAllocationMethods({
         })
     }
 
-    async function allocateInstruments(): Promise<void> {
+    async function allocateInstruments(service: Services): Promise<void> {
         const selected = [...addedInst]
 
         if (selected.length === 0) {
@@ -156,8 +147,8 @@ export default function useAllocationMethods({
                 await storeman.allocateInstrument(
                     {
                         instrumentid: instrument.instrumentid,
-                        serviceid,
-                        regid,
+                        serviceid: service.serviceid as number,
+                        regid: service.customerid,
                         alloc_status: 'Pending',
                         conditionatalloc: instrument.dcondition,
                         conditionatreturn: undefined,
@@ -180,8 +171,10 @@ export default function useAllocationMethods({
     }
 
     return {
-        allocatedEquipment,
-        allocatedInstruments,
+        allocatedEquipment: allocatedEquipment,
+        allocatedInstruments: allocatedInstruments,
+        selectedEquipment: addedEquip,
+        selectedInstruments: addedInst,
         allocateSound,
         allocateInstruments,
         modEquipment,
