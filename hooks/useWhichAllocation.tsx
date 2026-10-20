@@ -1,11 +1,16 @@
+
 import { useEffect, useState } from "react"
 
-//types
+// types
 import Services from "../scripts/interfaces/services"
 import Lending from "../scripts/interfaces/lending"
 import Booking from "../scripts/interfaces/booking"
 import Inventory from "../scripts/interfaces/inventory"
 import Instrument from "../scripts/interfaces/instrument"
+
+// classes and utilities
+import Storeman from "../scripts/classes/storeman"
+import storage from "../scripts/auth/storage"
 
 interface AllocationData {
     loading: boolean
@@ -15,51 +20,98 @@ interface AllocationData {
     bookings: Booking[]
     inventory: Inventory[]
     instruments: Instrument[]
-    selectedService: Services
+    selectedService: Services | undefined
     updateSelectedService: (service: Services) => void
 }
 
 export default function useWhichAllocation(): AllocationData {
-    const [loading, setLoading] = useState<boolean>(false)
-    const [error, setError] = useState<unknown>()
+    const [loading, setLoading] = useState<boolean>(true)
+    const [error, setError] = useState<unknown>(undefined)
+
     const [services, setServices] = useState<Services[]>([])
     const [lendings, setLendings] = useState<Lending[]>([])
     const [bookings, setBookings] = useState<Booking[]>([])
     const [inventory, setInventory] = useState<Inventory[]>([])
-    const [instrument, setInstrument] = useState<Instrument[]>([])
-    const [selectedService, setSelectedService] = useState<Services>()
+    const [instruments, setInstruments] = useState<Instrument[]>([])
+    const [selectedService, setSelectedService] =
+        useState<Services | undefined>(undefined)
 
     useEffect(() => {
-        async function init() {
+        let active = true
+
+        async function init(): Promise<void> {
             try {
                 setLoading(true)
+                setError(undefined)
 
-            } catch (error) {
+                const [token, profile] = await Promise.all([
+                    storage.get.key(),
+                    storage.get.profile()
+                ])
+
+                const regID = profile?.RegID
+
+                if (!token || !regID || regID <= 0) {
+                    throw new Error("No valid user session found")
+                }
+
+                const storeman = new Storeman(regID, token)
+
+                const [
+                    fetchedServices,
+                    fetchedLendings,
+                    fetchedBookings,
+                    fetchedInventory
+                ] = await Promise.all([
+                    storeman.getServices(),
+                    storeman.getLendings(),
+                    storeman.getBookings(),
+                    storeman.getEquipment()
+                ])
+
+                if (!active) return
+
+                setServices(fetchedServices)
+                setLendings(fetchedLendings)
+                setBookings(fetchedBookings)
+                setInventory(fetchedInventory)
+
+                // Instrument retrieval will be added when its API is ready.
+                setInstruments([])
+            } catch (error: unknown) {
+                if (!active) return
+
                 setError(error)
                 setServices([])
                 setLendings([])
                 setBookings([])
                 setInventory([])
-                setInstrument([])
+                setInstruments([])
+                setSelectedService(undefined)
             } finally {
-                setLoading(false)
-                return
+                if (active) {
+                    setLoading(false)
+                }
             }
         }
 
-        init()
+        void init()
+
+        return () => {
+            active = false
+        }
     }, [])
 
     return {
-        loading: loading,
-        error: error,
-        services: services,
-        lendings: lendings,
-        bookings: bookings,
-        inventory: inventory,
-        instruments: instrument,
-        selectedService: selectedService as Services,
-        updateSelectedService: function (service: Services) {
+        loading,
+        error,
+        services,
+        lendings,
+        bookings,
+        inventory,
+        instruments,
+        selectedService,
+        updateSelectedService: (service: Services): void => {
             setSelectedService(service)
         }
     }

@@ -6,6 +6,9 @@ import Inventory from "../interfaces/inventory";
 import Supply from "../interfaces/supply";
 import Order from "../interfaces/orders";
 import SupplyOrder from "../interfaces/supplyOrder";
+import Services from "../interfaces/services";
+import Booking from "../interfaces/booking";
+import Lending from "../interfaces/lending";
 import AllocatedEquipment, { AllocatedEquipmentPatch } from "../interfaces/equip_alloc";
 import AllocatedInstrument, { AllocatedInstrumentPatch } from "../interfaces/inst_alloc";
 
@@ -164,4 +167,38 @@ export default class Storeman extends User {
             errorLogger(error)
         }
     }
+
+
+    async getServices(): Promise<Services[]> {
+        try {
+            this.toaster('Services fetched successfully', 'info')
+            return await this.apiFetch<Services[]>(this.endpoints.getAllServices)
+        } catch (error) {
+            errorLogger(error)
+            return []
+        }
+    }
+
+    async getBookings(): Promise<Booking[]> {
+        try {
+            this.toaster('Bookings fetched successfully', 'info')
+            return await this.apiFetch<Booking[]>(this.endpoints.getAllBookings)
+        } catch (error) {
+            errorLogger(error)
+            return []
+        }
+    }
+
+    async getLendings(): Promise<Lending[]> {
+        try {
+            this.toaster('Lendings fetched successfully', 'info')
+            return await this.apiFetch<Lending[]>(
+                this.endpoints.getAllLendingRequests
+            )
+        } catch (error) {
+            errorLogger(error)
+            return []
+        }
+    }
+
 }
