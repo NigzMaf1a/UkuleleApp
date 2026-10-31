@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 //components
 import ScrollScreen from '../../../components/ScrollScreen';
@@ -22,6 +22,7 @@ export default function InventoryOrders() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [supplies, setSupplies] = useState<Supply[]>([]);
     const [storeman, setStoreman] = useState<Storeman>();
+    const [query, setQuery] = useState<string>('')
 
     useEffect(() => {
         (async () => {
@@ -43,10 +44,25 @@ export default function InventoryOrders() {
         await storeman?.updateOrder(id);
     }
 
+    const queriedOrders: Order[] = useMemo(() => {
+        const processedQuery = query.trim().toLowerCase()
+
+        if (!processedQuery) {
+            return orders
+        }
+
+        return orders.filter(o => Object.values(o).includes(processedQuery))
+
+    }, [query, orders])
+
     return (
-        <ScrollScreen>
+        <ScrollScreen
+            showSearch={orders.length > 5}
+            query={query}
+            setQuery={setQuery}
+        >
             {
-                orders.length > 0 ? orders.map((o) => <OrderListItem key={o.orderid} order={o} supplies={supplies} fun={() => markSupplyDelivered(o.orderid)} />) : <DispText text='No hauled supplies found' />
+                queriedOrders.length > 0 ? queriedOrders.map((o) => <OrderListItem key={o.orderid} order={o} supplies={supplies} fun={() => markSupplyDelivered(o.orderid)} />) : <DispText text='No hauled supplies found' />
             }
         </ScrollScreen>
     );

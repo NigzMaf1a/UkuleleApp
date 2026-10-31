@@ -2,6 +2,7 @@ import React from 'react'
 import { View, TouchableOpacity } from 'react-native'
 
 import TextDisplay from '../../components/revisited/cutting edge/TextDisplay'
+import Button from '../../components/Button'
 
 import { allocItemStyles } from '../../styles/alloc/alloc_item'
 import Inventory from '../../scripts/interfaces/inventory'
@@ -43,18 +44,9 @@ export default function SoundAllocationItem({ rowOneData, rowTwoData, selected, 
                 </View>
             </View>
 
-            <View
-                style={[allocItemStyles.right_cont]}
-            >
-                <TouchableOpacity
-                    style={[allocItemStyles.btn]}
-                    onPress={() => {
-                        fun(equipment)
-                    }}
-                >
-                    {label}
-                </TouchableOpacity>
-            </View>
+            <Button fun={() => {
+                fun(equipment)
+            }} variant='secondary' label={label} />
         </View>
     )
 }

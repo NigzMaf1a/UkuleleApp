@@ -12,13 +12,15 @@ import TextDisplay from "../../../components/revisited/cutting edge/TextDisplay"
 import ListItemWithButtonAdv from "../../../components/revisited/cutting edge/ListItemWithButtonAdv"
 import InstrumentForm from "../../../sections/inventory/InstrumentForm"
 
+//styles
+import toggleScreenStyles from "../../../styles/inventory/toggle_screen"
+
 import Instrument from "../../../scripts/interfaces/instrument"
 
 type CurrentScreen = 'add' | 'view'
 
 export default function InventoryInstrument() {
     const [screen, setScreen] = useState<CurrentScreen>('view')
-    const [newInstrument, setNewInstrument] = useState<Instrument>()
 
     const { instruments, loading, error } = useSoundAndInstruments()
     const { select } = useShowInstrument()
@@ -27,14 +29,35 @@ export default function InventoryInstrument() {
         setScreen(screen)
     }
 
+
+
     return (
         <Screen>
-            <View>
-                <TouchableOpacity onPress={() => toggleScreen('view')}>view</TouchableOpacity>
-                <TouchableOpacity onPress={() => toggleScreen('add')}>add</TouchableOpacity>
+            <View style={[toggleScreenStyles.container]}>
+                <TouchableOpacity
+                    onPress={() => toggleScreen('view')}
+                    style={[
+                        toggleScreenStyles.btn,
+                        screen === 'view' ? toggleScreenStyles.clicked : toggleScreenStyles.notClicked
+                    ]}
+                >
+                    view
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    onPress={() => toggleScreen('add')}
+                    style={[
+                        toggleScreenStyles.btn,
+                        screen === 'add' ? toggleScreenStyles.clicked : toggleScreenStyles.notClicked
+                    ]}
+                >
+                    add
+                </TouchableOpacity>
             </View>
 
-            <ScrollScreen>
+            <ScrollScreen contentContainerStyle={[
+                screen === 'add' && { justifyContent: "center" }
+            ]}>
                 {
                     screen === 'view' ? loading ? <TextDisplay text={'Loading'} /> :
                         error ? <TextDisplay text={'An error occurred please try again'} /> :

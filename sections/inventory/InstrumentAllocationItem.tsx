@@ -2,6 +2,7 @@ import React from 'react'
 import { View, TouchableOpacity } from 'react-native'
 
 import TextDisplay from '../../components/revisited/cutting edge/TextDisplay'
+import Button from '../../components/Button'
 
 import { allocItemStyles } from '../../styles/alloc/alloc_item'
 import Instrument from '../../scripts/interfaces/instrument'
@@ -43,16 +44,10 @@ export default function InstrumentAllocationItem({ rowOneData, rowTwoData, instr
                 </View>
             </View>
 
-            <View style={[allocItemStyles.right_cont]}>
-                <TouchableOpacity
-                    style={[allocItemStyles.btn]}
-                    onPress={() => {
-                        fun(instrument)
-                    }}
-                >
-                    {label}
-                </TouchableOpacity>
-            </View>
+            <Button label={label} fun={() => {
+                fun(instrument)
+            }} variant='secondary' />
+
         </View>
     )
 }

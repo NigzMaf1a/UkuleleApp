@@ -2,6 +2,7 @@ import React from 'react'
 import { View, TouchableOpacity } from 'react-native'
 
 import TextDisplay from '../components/revisited/cutting edge/TextDisplay'
+import Button from '../components/Button'
 
 import { allocItemStyles } from '../styles/alloc/alloc_item'
 
@@ -32,9 +33,7 @@ function AllocItem({ item, alloc_fun }: Props) {
                 </View>
             </View>
 
-            <View style={[allocItemStyles.right_cont]}>
-                <TouchableOpacity style={[allocItemStyles.btn]} onPress={() => alloc_fun(item)}>allocate</TouchableOpacity>
-            </View>
+            <Button label={'allocate'} fun={() => alloc_fun(item)} variant='secondary' />
         </View>
     )
 }
