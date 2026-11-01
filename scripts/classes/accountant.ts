@@ -22,23 +22,15 @@ export default class Accountant extends User {
     }
 
     async approvePayment(id: number): Promise<void> {
-
-        console.log('Transaction being approved', id);
-
-        const service_id = await this.getPaymentServiceID(id);
-
         try {
-            await this.apiFetch(this.endpoints.updateFinance(id),
-                {
-                    method: "PUT"
-                }
-            );
+            await this.apiFetch(this.endpoints.updateFinance(id), {
+                method: "PUT"
+            })
 
-            if (typeof service_id === 'number') await this.approveServicePaymentStatus(service_id);
-            this.toaster('Payment approved successfully', 'success');
-
+            this.toaster("Payment approved successfully", "success")
         } catch (error) {
-            console.error("Error approving payment:", error);
+            console.error("Error approving payment:", error)
+            throw error
         }
     }
 
@@ -152,10 +144,17 @@ export default class Accountant extends User {
     }
 
     public async getPaymentServiceID(pay_id: number) {
-        const allPayments = await this.getAllFinanceRecords();
-        const service_id = allPayments.find(p => p.transactionid === pay_id)?.serviceid;
-        this.toaster('Payment service id fetched successfully', 'info');
-        return service_id;
+        const allPayments = await this.getAllFinanceRecords()
+
+        const payment = allPayments.find(p => Number(p.transactionid) === pay_id)
+        const service_id = payment?.serviceid
+
+        console.log('Matched payment:', payment)
+        console.log('Service ID:', service_id, typeof service_id)
+
+        this.toaster('Payment service id fetched successfully', 'info')
+
+        return service_id
     }
 
     public async approveServicePaymentStatus(service_id: number) {
