@@ -22,14 +22,16 @@ export default class Accountant extends User {
     }
 
     async approvePayment(id: number): Promise<void> {
+        console.log('Frontend approving transaction:', id, typeof id)
+
         try {
             await this.apiFetch(this.endpoints.updateFinance(id), {
-                method: "PUT"
+                method: 'PUT'
             })
 
-            this.toaster("Payment approved successfully", "success")
+            this.toaster('Payment approved successfully', 'success')
         } catch (error) {
-            console.error("Error approving payment:", error)
+            console.error('Error approving payment:', error)
             throw error
         }
     }

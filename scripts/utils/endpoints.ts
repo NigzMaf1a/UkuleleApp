@@ -25,9 +25,9 @@ const endpoints = {
     getAllServices: '/api/services/get',
     getServiceById: (id: number) => `/api/services/get/byid/${id}`,
     updateService: (id: number) => `/api/services/put/${id}`,
-    updateServiceStatus: '/api/services/',
     updatePaymentStatus: '/api/services/',
     deleteService: (id: number) => `/api/services/delete/${id}`,
+    updateServiceStatus: (id: number) => `/api/services/${id}/status`,
 
     //booking
     bookBand: '/api/booking/add',
